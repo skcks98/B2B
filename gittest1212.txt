@@ -1,6 +1,5 @@
-<<<<<<< HEAD
+
 현철123
-=======
 
 안녕하세dy
 
@@ -13,7 +12,7 @@
 깃테스트12123434565678789090MKJ
 
 
->>>>>>> a822c4aefbb4390c36026be2c786b6c4dd54249a
 
 
 dddddddddddddddddddddddddddddddddddd
+aw23213212
