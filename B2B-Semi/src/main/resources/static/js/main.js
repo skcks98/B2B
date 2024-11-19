@@ -93,6 +93,7 @@ if(loginForm != null) {
 const selectMemberList = document.querySelector("#selectMemberList");
 const resetPw = document.querySelector("#resetPw");
 const restorationBtn = document.querySelector("#restorationBtn");
+const insertBook = document.querySelector("#insertBook");
 
 if(selectMemberList != null) {
 
@@ -250,4 +251,27 @@ if(restorationBtn != null) {
 
   });
 
+}
+
+if(insertBook != null) {
+	console.log(1111);
+
+  insertBook.addEventListener("click", e => {
+
+    fetch("/book/insertBook", {
+      method : "POST",
+      headers : {"Content-Type" : "application/json"},
+    })
+    .then( resp => resp.text() )
+    .then( result => {
+
+      console.log("success");
+
+      // 모든 작업이 완료후 input값을 비워준다
+      memberNo.value = "";
+      
+    });
+
+  });
+  
 }
