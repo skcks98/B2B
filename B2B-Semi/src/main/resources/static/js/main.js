@@ -1,4 +1,4 @@
-console.log("main.js loaded..");
+const myPageBtn = document.querySelector("#myPageBtn")
 
 // 쿠키에 저장된 이메일 input 창에 뿌려놓기
 // 로그인이 안된 경우에 수행
@@ -330,3 +330,7 @@ if(srchBookList != null) {
 	});
 	
 } 
+
+myPageBtn.addEventListener("click", ()=>{
+  location.href= "/myPage-info"
+});
