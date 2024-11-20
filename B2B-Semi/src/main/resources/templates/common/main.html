@@ -10,41 +10,143 @@
 	<th:block th:replace="~{common/common}"></th:block>
 </head>
 
-
-
 <body>
 	<!-- common/header.html 을 조각으로 추가 -->
 	<th:block th:replace="~{common/header}"></th:block>
-	<main>
+	<main class="main-content">
+		<section class="hero-section">
+			<h1 class="hero-title">당신의 독서 여정을 함께합니다</h1>
+			<p class="hero-subtitle">수만 권의 도서와 독자들의 이야기가 여러분을 기다립니다</p>
+		</section>
+
+		<section class="ranking-section">
+			<h2 class="section-title">
+				<i class="fas fa-crown"></i>
+				주간 인기 도서
+			</h2>
+			<div class="swiper">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<div class="book-card">
+							<img src="/api/placeholder/140/200" alt="Book cover" class="book-cover">
+							<div class="book-title">인기도서 1</div>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="book-card">
+							<img src="/api/placeholder/140/200" alt="Book cover" class="book-cover">
+							<div class="book-title">인기도서 2</div>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="book-card">
+							<img src="/api/placeholder/140/200" alt="Book cover" class="book-cover">
+							<div class="book-title">인기도서 3</div>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+		</section>
+
+		<section class="genre-section">
+			<h2 class="section-title">
+				<i class="fas fa-tags"></i>
+				장르별 퀵 액세스
+			</h2>
+			<div class="genre-grid">
+				<div class="genre-card">소설</div>
+				<div class="genre-card">시/에세이</div>
+				<div class="genre-card">인문</div>
+				<div class="genre-card">자기계발</div>
+			</div>
+		</section>
+
+		<section class="community-section">
+			<div class="community-card">
+				<h2 class="section-title">
+					<i class="fas fa-comments"></i>
+					자유게시판
+				</h2>
+				<ul class="post-list">
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">이번 달 독서 모임 후기</a>
+					</li>
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">추천 도서 공유합니다</a>
+					</li>
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">신간 리뷰 모음</a>
+					</li>
+				</ul>
+			</div>
+			<div class="community-card">
+				<h2 class="section-title">
+					<i class="fas fa-star"></i>
+					추천게시판
+				</h2>
+				<ul class="post-list">
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">이달의 베스트 추천작</a>
+					</li>
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">장르별 추천 도서</a>
+					</li>
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">입문자를 위한 추천</a>
+					</li>
+				</ul>
+			</div>
+		</section>
 
 		<!-- 메인 페이지 내용  -->
 		<div class="container">
-
-			<div class="layout">
-
-				
-				
-	
-
-				 <!-- 내 정보 수정 페이지로 이동할 수 있는 링크 -->
-				 <a href="/myPage/info" class="btn btn-primary">내 정보 수정</a>
-
-
-
-
-			</div>
-
-	
-
-			<!-- 원하는 섹션 추가 -->
+			<!-- 내 정보 수정 페이지로 이동할 수 있는 링크 -->
+			<a href="/myPage/info" class="btn btn-primary">내 정보 수정</a>
 		</div>
-
 	</main>
 
 	<!-- common/footer 추가-->
 	<th:block th:replace="~{common/footer}"></th:block>
 
 	<!-- script 추가-->
+	<script>
+		const swiper = new Swiper('.swiper', {
+			slidesPerView: 4,
+			spaceBetween: 20,
+			pagination: {
+				el: '.swiper-pagination',
+				clickable: true,
+			},
+			autoplay: {
+				delay: 3000,
+			},
+			breakpoints: {
+				320: {
+					slidesPerView: 1,
+					spaceBetween: 10
+				},
+				480: {
+					slidesPerView: 2,
+					spaceBetween: 20
+				},
+				768: {
+					slidesPerView: 3,
+					spaceBetween: 20
+				},
+				1024: {
+					slidesPerView: 4,
+					spaceBetween: 20
+				}
+			}
+		});
+	</script>
 	<script src="/js/main.js"></script>
 
 </body>
