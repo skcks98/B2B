@@ -1,3 +1,18 @@
+:root {
+	--primary-color: #4F46E5;
+	--secondary-color: #6B7280;
+	--accent-color: #818CF8;
+	--light-bg: #F3F4F6;
+	--dark-text: #1F2937;
+	--sidebar-width: 280px;
+	--primary: #7C3AED;
+	--primary-light: #DDD6FE;
+	--text-primary: #1F2937;
+	--text-secondary: #6B7280;
+	--background: #F9FAFB;
+	--card-bg: #FFFFFF;
+}
+
 /* 헤더 Styles */
 header {
 	position: relative;
