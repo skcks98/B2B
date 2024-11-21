@@ -1,75 +1,254 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Page</title>
+  <title>내 정보</title>
 
   <!-- 공용 css/js 추가 -->
   <th:block th:replace="~{common/common}"></th:block>
 
-  <!-- myPage 전용 CSS -->
-  <link rel="stylesheet" href="/css/myPage/myPage-style.css">
+  <style>
+    /* 기본 전체 설정 시작 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --background: #ffffff;
+      --text-primary: #1f2937;
+      --text-secondary: #4b5563;
+      --card-background: #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background-color: #F9FAFB;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* 기본 전체 설정 끝 */
+
+
+    /* Main Content Styles */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      min-height: 75vh;
+      padding: 2rem;
+      flex-grow: 1;
+    }
+
+
+    /* 타이틀 시작 */
+    .ranking-header {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
+    }
+
+    .ranking-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--dark-text);
+      margin-bottom: 1.5rem;
+    }
+
+    /* 타이틀 끝 */
+
+
+    /* 부제목 시작 */
+    .genre-section {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
+    }
+
+    .genre-header {
+      display: flex;
+
+      justify-content: space-evenly; /* 양쪽 끝에 요소 배치 */
+      align-items: center; /* 폼과 제목을 위쪽 기준으로 정렬 */
+
+
+      
+      /* 가로 중앙 정렬 */
+      /* 폼과 제목을 위쪽 기준으로 정렬 */
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--light-bg);
+      gap: 2rem;
+      /* 요소 간 간격 */
+    }
+
+
+
+    .genre-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--dark-text);
+    }
+
+
+
+    .myPage-subject {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+
+    }
+
+
+
+    .myPage-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.5rem;
+    }
+
+    .myPage-row label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .myPage-row input {
+      padding: 0.75rem 1rem;
+      border: 1px solid #D1D5DB;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    .myPage-submit {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 5rem;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .myPage-submit:hover {
+      background-color: var(--primary-hover);
+    }
+
+
+
+    .changePw-form {
+      display: flex;
+      flex-direction: column;
+      /* 폼 내부 항목을 세로 정렬 */
+      gap: 1rem;
+      /* 항목 간 간격 */
+      width: 100%;
+      /* 폼 너비를 100%로 확장 */
+      max-width: 400px;
+      /* 최대 너비 제한 */
+      margin: 0 auto;
+      /* 수평 중앙 정렬 */
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /* 부제목 끝 */
+  </style>
 </head>
+
 <body>
 
-  <main>
+  <body>
+    <div class="wrapper">
+      <!-- 헤더 추가 -->
+      <th:block th:replace="~{common/header}"></th:block>
 
-    <!-- 헤더 추가 -->
-    <th:block th:replace="~{common/header}"></th:block>
-
-    <section class="myPage-content">
-
-      <!-- 사이드 메뉴(왼쪽) 추가 -->
+      <!-- 사이드 추가 -->
       <th:block th:replace="~{myPage/sideMenu}"></th:block>
 
-      <!-- 마이페이지 본문(오른쪽) -->
-      <section class="myPage-main">
+      <main class="main-content">
+        <!--제목-->
+        <section class="ranking-header">
+          <h1 class="ranking-title">
+            <i class="fas fa-crown me-2" style="color: #FFD700;"></i>
+            비밀번호 변경
+          </h1>
+        </section>
 
-        <h1 class="myPage-title">비밀번호 변경</h1>
-        <span class="myPage-subject">
-          현재 비밀번호가 일치하는 경우 
-          새 비밀번호로 변경할 수 있습니다.
-        </span>
 
-        <!-- action : 상대 경로가 작성되어 있음
-            현재 주소 : /myPage/changePw
-            목표 주소 : /myPage/changePw (POST)
-        -->
+        <!--부제목-->
+        <div class="genre-section">
+          <div class="genre-header">
 
-        <form action="changePw" method="POST" name="myPageFrm" id="changePw">
+            <span class="myPage-subject">
+              비밀번호 변경
+            </span>
 
-          <div class="myPage-row">
-              <label>현재 비밀번호</label>
-              <input type="password" name="currentPw" id="currentPw" maxlength="30" >              
+            <!-- action : 상대 경로가 작성되어 있음
+              현재 주소 : /myPage/changePw
+              목표 주소 : /myPage/changePw (POST)
+          -->
+
+            <form action="changePw" method="POST" name="myPageFrm" id="changePw">
+
+              <div class="myPage-row">
+                <label>현재 비밀번호</label>
+                <input type="password" name="currentPw" id="currentPw" maxlength="30">
+              </div>
+
+              <div class="myPage-row">
+                <label>새 비밀번호</label>
+                <input type="password" name="newPw" id="newPw" maxlength="30">
+              </div>
+
+              <div class="myPage-row">
+                <label>새 비밀번호 확인</label>
+                <input type="password" name="newPwConfirm" id="newPwConfirm" maxlength="30">
+              </div>
+
+              <button class="myPage-submit">변경하기</button>
+
+            </form>
           </div>
+        </div>
 
-          <div class="myPage-row">
-              <label>새 비밀번호</label>
-              <input type="password" name="newPw" id="newPw" maxlength="30">              
-          </div>
 
-          <div class="myPage-row">
-              <label>새 비밀번호 확인</label>
-              <input type="password" name="newPwConfirm" id="newPwConfirm" maxlength="30">              
-          </div>
+      </main>
 
-          <button class="myPage-submit">변경하기</button>
+      <!-- 푸터 추가-->
+      <th:block th:replace="~{common/footer}"></th:block>
 
-      </form>
+    </div>
 
 
 
+    <script src="/js/myPage/myPage.js"></script>
+  </body>
 
-      </section>
-
-    </section>
-
-  </main>
-
-   <!-- 푸터 추가 -->
-   <th:block th:replace="~{common/footer}"></th:block>
-  
-   <script src="/js/myPage/myPage.js"></script>
-</body>
 </html>
