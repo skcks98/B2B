@@ -41,15 +41,7 @@ public class MyPageController {
 	}
 	
 	
-	@GetMapping("login")
-	public String login() {
-		return "header-footer-side";
-	}
-	
-	@GetMapping("signup")
-	public String signup() {
-		return "header-footer";
-	}
+
 	
 
 }
