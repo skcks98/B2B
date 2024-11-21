@@ -8,48 +8,71 @@
 
 	<!-- templates/common/common.html 조각으로 추가 -->
 	<th:block th:replace="~{common/common}"></th:block>
-	<link rel="stylesheet" href="/css/member/signup-style.css">
+	<link rel="stylesheet" href="/css/member/signUp.css">
 
 	<style>
 		body {
 			background-color: #F9FAFB;
 		}
 	</style>
+  <th:block th:replace="~{common/header}"></th:block>
 </head>
-
 <body>
-	<!-- common/header.html 을 조각으로 추가 -->
-	<th:block th:replace="~{common/header}"></th:block>
-	<main class="main-content">
+  <div class="split-container">
+      <div class="left-section">
+          <h1 class="login-title">이메일 인증</h1>
+      </div>
+      <div class="right-section">
+          <div class="login-container">
+            <!-- 이메일 인증 폼 -->
+              <form id="email-form">
+                  <div class="input-group">
+                      <label for="userEmail">이메일</label>
+                      <input type="email" id="userEmail" class="input-field" placeholder="이메일을 입력하세요" required>
+                      <span class="signUp-message" id="emailMessage">메일을 받을 수 있는 이메일을 입력해주세요.</span>
+                  </div>
+                  <div class="input-group">
+                      <label for="verificationCode">인증 번호</label>
+                      <input type="text" id="verificationCode" class="input-field" placeholder="인증 번호를 입력하세요" required>
+                  </div>
+                  <div class="button-group">
+                      <button type="submit" class="submit-button">확인</button>
+                      <button type="button" id="cancelButton" class="cancel-button" onclick="window.history.back()">취소</button>
+                  </div>
+              </form>
+              <!-- 회원가입 폼 -->
+              <div class="login-container">
+                <form action="/member/firstProfile" method="POST" name="signUpForm" id="signUpForm">
+                    <div class="input-group">
+                        <label for="userId">아이디</label>
+                        <input type="text" id="userId" class="input-field" placeholder="아이디를 입력하세요">
+                    </div>
+                    <div class="input-group">
+                        <label for="userPw">비밀번호</label>
+                        <input type="password" id="uesrPw" class="input-field" placeholder="비밀번호를 입력하세요">
+                    </div>
+                    <div class="input-group">
+                      <label for="userId">비밀번호 확인</label>
+                      <input type="password" id="userPwCheck" class="input-field" placeholder="비밀번호를 한번 더 입력하세요">
+                  </div>
+                  <div class="input-group">
+                      <label for="userPw">닉네임</label>
+                      <input type="text" id="uesrNickname" class="input-field" placeholder="닉네임을 입력하세요">
+                  </div>
+                  <div class="input-group">
+                    <label for="userId">선호 장르</label>
+                    <input type="text" id="userId" class="input-field" placeholder="선호장르를 검색하세요">
+                </div>
+                    <div class="button-group">
+                        <button type="submit" id="signupBtn">회원가입</button>
+                        <button type="button" id="cancelButton">취소</button>
+                    </div>
+                </form>
+            </div>
+          </div>
+      </div>
+  </div>
+  <th:block th:replace="~{common/footer}"></th:block>
 
-		<div class="split-container">
-			<div class="left-section">
-				<h1 class="signUp-title">로그인</h1>
-			</div>
-			<div class="right-section">
-				<div class="login-container">
-					<form id="loginForm">
-						<div class="input-group">
-							<label for="userId">아이디</label>
-							<input type="text" id="userId" class="input-field" placeholder="아이디를 입력하세요">
-						</div>
-						<div class="input-group">
-							<label for="userPw">비밀번호</label>
-							<input type="password" id="uesrPw" class="input-field" placeholder="비밀번호를 입력하세요">
-							<div class="button-group">
-								<button type="submit" id="signupButton">회원가입</button>
-								<button type="button" id="cancelButton">취소</button>
-							</div>
-					</form>
-				</div>
-			</div>
-		</div>
-
-	</main>
-
-	<!-- common/footer 추가-->
-	<th:block th:replace="~{common/footer}"></th:block>
-
-</body>
-
-</html>
+  <script src="/js/member/signup.js"></script>
+  </body>
