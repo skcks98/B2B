@@ -28,14 +28,8 @@ public class MyPageController {
 	// 내정보 화면 이동
 	@GetMapping("info") // /myPage/info GET 방식 요청
 	public String info() {
-
-		
-		
 		return "myPage/myPage-info";
 	}
-
-	
-	
 	
 	@PostMapping("info")
 	public String updateInfo() {
@@ -45,5 +39,17 @@ public class MyPageController {
 
 		return "redirect:/myPage/info"; // POST 후 다시 GET 요청으로 리다이렉트 (정보 갱신 후 내 정보 페이지로 돌아감)
 	}
+	
+	
+	@GetMapping("login")
+	public String login() {
+		return "header-footer-side";
+	}
+	
+	@GetMapping("signup")
+	public String signup() {
+		return "header-footer";
+	}
+	
 
 }
