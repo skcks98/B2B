@@ -49,6 +49,7 @@ header {
 
 .login-btn:hover {
 	background-color: var(--accent-color) !important;
+	color: black !important;
 	transform: translateY(-1px);
 }
 
