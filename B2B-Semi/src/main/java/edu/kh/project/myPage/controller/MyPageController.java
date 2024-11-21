@@ -86,18 +86,6 @@ public class MyPageController {
 		return "redirect:/myPage/info"; // POST 후 다시 GET 요청으로 리다이렉트 (정보 갱신 후 내 정보 페이지로 돌아감)
 	}
 	
-	// 로그인
-	@GetMapping("login")
-	public String login() {
-		return "header-footer-side";
-	}
-	//회원가입
-	@GetMapping("signup")
-	public String signup() {
-		return "header-footer";
-	}
-	
-	
 	
 	/** 찜한 도서 목록 출력
 	 * @return
