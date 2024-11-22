@@ -41,4 +41,125 @@
     </insert>
 
 
+	<!-- 도서 목록 개수 조회 -->
+	<select id="bookCount">
+		SELECT COUNT(*)
+		FROM "TB_BOOKS"
+		WHERE IS_DELETED = 'N'
+	</select>
+	
+	
+	<!-- 도서 목록 조회 -->
+	<select id="bookList" resultType="Book">
+		SELECT
+    		BOOK_ID,
+		    CASE 
+		        WHEN INSTR(TITLE, '-') > 0 THEN SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1)
+		        ELSE TITLE
+		    END AS TITLE,
+		    CASE 
+		        WHEN INSTR(AUTHOR, ',') > 0 THEN SUBSTR(AUTHOR, 1, INSTR(AUTHOR, ',') - 1)
+		        ELSE AUTHOR
+		    END AS AUTHOR,
+		    FIRST_CATEGORY,
+		    TO_CHAR(PUB_DATE, 'YYYY-MM-DD') AS PUB_DATE,
+		    CUSTOMER_REVIEW_RANK
+		FROM TB_BOOKS
+		ORDER BY TITLE
+	</select>
+	
+	
+	<!-- 도서 목록 검색 개수 조회 -->
+	<select id="bookSearchCount">
+		SELECT COUNT(*)
+		FROM "TB_BOOKS"
+		WHERE IS_DELETED = 'N'
+		<choose>
+			<when test='searchType == "title"'>
+				AND SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1) LIKE '%' || #{searchInput} || '%'
+			</when>
+			<when test='searchType == "author"'>
+				AND AUTHOR LIKE '%' || #{searchInput} || '%'
+			</when>
+			<when test='searchType == "genre"'>
+				AND (
+					FIRST_CATEGORY LIKE '%' || #{searchInput} || '%'
+					OR
+					SECOND_CATEGORY LIKE '%' || #{searchInput} || '%'
+				)
+			</when>
+		</choose>
+		<if test='genreFilter != "all" and genreFilter != ""'>
+			AND (
+				FIRST_CATEGORY LIKE '%' || #{genreFilter} || '%'
+				OR
+				SECOND_CATEGORY LIKE '%' || #{genreFilter} || '%'
+			)
+		</if>
+		<if test='ratingFilter != ""'>
+			<![CDATA[
+				AND CUSTOMER_REVIEW_RANK >= ${ratingFilter} AND CUSTOMER_REVIEW_RANK < ${nextRatingFilter}
+			]]>
+		</if>
+	</select>
+	
+	
+	<!-- 도서 목록 조회 -->
+	<select id="bookSearchList" resultType="Book">
+		SELECT 
+		    ROWNUM AS ROW_NUM,
+		    BOOK_ID,
+		    TITLE,
+		    AUTHOR,
+		    FIRST_CATEGORY,
+		    PUB_DATE,
+		    CUSTOMER_REVIEW_RANK
+		FROM 
+		(SELECT
+    		BOOK_ID,
+		    CASE 
+		        WHEN INSTR(TITLE, '-') > 0 THEN SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1)
+		        ELSE TITLE
+		    END AS TITLE,
+		    CASE 
+		        WHEN INSTR(AUTHOR, ',') > 0 THEN SUBSTR(AUTHOR, 1, INSTR(AUTHOR, ',') - 1)
+		        ELSE AUTHOR
+		    END AS AUTHOR,
+		    FIRST_CATEGORY,
+		    TO_CHAR(PUB_DATE, 'YYYY-MM-DD') AS PUB_DATE,
+		    CUSTOMER_REVIEW_RANK
+		FROM TB_BOOKS
+		WHERE IS_DELETED = 'N'
+		<choose>
+			<when test='searchType == "title"'>
+				AND SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1) LIKE '%' || #{searchInput} || '%'
+			</when>
+			<when test='searchType == "author"'>
+				AND AUTHOR LIKE '%' || #{searchInput} || '%'
+			</when>
+			<when test='searchType == "genre"'>
+				AND (
+					FIRST_CATEGORY LIKE '%' || #{searchInput} || '%'
+					OR
+					SECOND_CATEGORY LIKE '%' || #{searchInput} || '%'
+				)
+			</when>
+		</choose>
+		<if test='genreFilter != "all" and genreFilter != ""'>
+			AND (
+				FIRST_CATEGORY LIKE '%' || #{genreFilter} || '%'
+				OR
+				SECOND_CATEGORY LIKE '%' || #{genreFilter} || '%'
+			)
+		</if>
+		<if test='ratingFilter != ""'>
+			<![CDATA[
+				AND CUSTOMER_REVIEW_RANK >= ${ratingFilter} AND CUSTOMER_REVIEW_RANK < ${nextRatingFilter}
+			]]>
+		</if>
+		ORDER BY TITLE
+		) BOOK
+	</select>
+
+
 </mapper>
