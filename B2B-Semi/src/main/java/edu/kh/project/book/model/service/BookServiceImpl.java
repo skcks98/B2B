@@ -21,6 +21,7 @@ public class BookServiceImpl implements BookService{
 
 	private final BookMapper mapper;
 	
+	// 도서 등록
 	@Override
 	public int insertBook() {
 		RestTemplate restTemplate = new RestTemplate();
@@ -89,6 +90,8 @@ public class BookServiceImpl implements BookService{
 		return 0;
 	}
 
+	
+	// 도서 검색
 	@Override
 	public List<Book> srchBookList(String title) {
 		

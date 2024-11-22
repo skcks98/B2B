@@ -127,7 +127,7 @@ public class DBConfig {
 		// sessionFactoryBean.setTypeAliasesPackage("edu.kh.project.member.model.dto");
 		
 		// setTypeAliasesPackage("패키지") 이용시
-		// 킁래스 파일명이 별칭으로 등록
+		// 클래스 파일명이 별칭으로 등록
 		
 		
 		sessionFactoryBean.setTypeAliasesPackage("edu.kh.project");

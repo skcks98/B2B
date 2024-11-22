@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 찾기 - Book Community</title>
+    <link rel="stylesheet" href="/css/member/searchId.css">
+</head>
+<body>
+    <div class="split-container">
+        <div class="left-section">
+            <h1 class="login-title">아이디 찾기</h1>
+        </div>
+        <div class="right-section">
+            <div class="login-container">
+                <!-- 이메일 인증 폼 -->
+                <form id="email-form">
+                    <div class="input-group">
+                        <label for="userEmail">이메일</label>
+                        <input type="email" id="userEmail" class="input-field" placeholder="이메일을 입력하세요" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="verificationCode">인증 번호</label>
+                        <input type="text" id="verificationCode" class="input-field" placeholder="인증 번호를 입력하세요" required>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="submit-button">확인</button>
+                        <button type="button" id="cancelButton" class="cancel-button" onclick="window.history.back()">취소</button>
+                    </div>
+                </form>
+                <div id="result-message">
+                    <!-- 아이디 확인 파트 -->
+                    <div class="result-label">
+                        회원님의 아이디는<br> <span id="found-id"></span><br> 입니다
+                    </div>
+                    <button class="login-button" onclick="location.href='login.html'">
+                        로그인 페이지로 이동
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('email-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('email-form').style.display = 'none';
+            document.getElementById('result-message').style.display = 'block';
+        });
+        document.querySelectorAll('#cancelButton').forEach(button => {
+            button.addEventListener('click', function() {
+              if(confirm("로그인 페이지로 이동 하시겠습니까?")) {
+                window.location.href = '/member/login';
+      } 
+    });
+        });
+    </script>
+</body>
+</html>

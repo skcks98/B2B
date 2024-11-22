@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 재설정 - Book Community</title>
+    <link rel="stylesheet" href="/css/member/searchPw.css">
+</head>
+<body>
+    <div class="split-container">
+        <div class="left-section">
+            <h1 class="form-title">비밀번호 재설정</h1>
+        </div>
+        <div class="right-section">
+            <div class="form-container">
+                <!-- 이메일 인증 단계 -->
+                <form id="emailVerificationForm" class="form-step active">
+                    <div class="input-group">
+                        <label for="email">이메일</label>
+                        <input type="email" id="email" class="input-field" placeholder="이메일을 입력하세요." required>
+                    </div>
+                    <div class="input-group">
+                        <label for="verificationCode">인증번호</label>
+                        <input type="text" id="verificationCode" class="input-field" placeholder="인증 번호를 입력하세요." required>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="btn-submit">인증</button>
+                        <button type="button" class="btn-cancel">취소</button>
+                    </div>
+                </form>
+
+                <!-- 비밀번호 재설정 단계 -->
+                <form id="passwordResetForm" class="form-step">
+                    <div class="input-group">
+                        <label for="newPassword">새 비밀번호</label>
+                        <input type="password" id="newPassword" class="input-field" placeholder="새로운 비밀번호를 입력해 주세요." required>
+                    </div>
+                    <div class="input-group">
+                        <label for="confirmPassword">비밀번호 확인</label>
+                        <input type="password" id="confirmPassword" class="input-field" placeholder="비밀번호를 한번 더 입력해 주세요." required>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="btn-submit">비밀번호 재설정</button>
+                        <button type="button" class="btn-cancel">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('emailVerificationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // 이메일 인증 로직 구현
+            document.getElementById('emailVerificationForm').classList.remove('active');
+            document.getElementById('passwordResetForm').classList.add('active');
+        });
+
+        document.getElementById('passwordResetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // 비밀번호 재설정 로직 구현
+        });
+
+        // 취소 버튼 처리
+        document.querySelectorAll('.btn-cancel').forEach(button => {
+            button.addEventListener('click', function() {
+                window.location.href = '/'; // 메인 페이지로 이동
+            });
+        });
+    </script>
+</body>
+</html>

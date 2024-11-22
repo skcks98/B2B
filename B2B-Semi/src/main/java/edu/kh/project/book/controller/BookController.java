@@ -1,4 +1,4 @@
-package edu.kh.project.book;
+package edu.kh.project.book.controller;
 
 import java.util.List;
 
