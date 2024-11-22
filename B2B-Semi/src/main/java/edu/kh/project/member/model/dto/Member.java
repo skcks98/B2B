@@ -27,10 +27,5 @@ public class Member {
 	private String memberDelFl;
 	private int memberAuth;
 	private String memberBookCategory;
-	
-	
-	
-	
-	
-	
+
 }
