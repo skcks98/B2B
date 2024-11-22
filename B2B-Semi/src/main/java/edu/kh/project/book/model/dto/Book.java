@@ -29,5 +29,6 @@ public class Book {
 	private String createdAt;
 	private String updatedAt;
 	private int customerReviewRank;
+	private int rowNum;
 	
 }

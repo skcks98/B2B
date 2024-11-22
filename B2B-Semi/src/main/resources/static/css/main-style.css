@@ -238,7 +238,6 @@ body {
 	word-break: break-word;
 }
 
-
 /* 책저자 일정 크기 이상시 hover로 풀네임 출력 */
 .book-author:hover::after {
 	content: attr(data-full-author);
@@ -254,6 +253,26 @@ body {
 	max-width: 200px;
 	font-size: 14px;
 	word-break: break-word;
+}
+
+body {
+    background-color: #F9FAFB;
+}
+.swiper-button-prev {
+    left: 0px;
+}
+
+.swiper-button-next {
+    right: 0px;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+	color: black;
+}
+
+.swiper-pagination-bullet-active {
+	background: black;
 }
 
 
