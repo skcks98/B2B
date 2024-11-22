@@ -1,27 +1,39 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>북셰어 프로필</title>
     <link rel="stylesheet" href="/css/member/firstProfile.css">
+    <th:block th:replace="~{common/common}"></th:block>
+    <th:block th:replace="~{common/header}"></th:block>
 </head>
 <body>
-    <main class="main-content">
-        <div class="profile-wrapper">
-            <div class="profile-image-section">
-                <img src="/default-profile.png" alt="프로필 이미지" class="profile-image">
+    <!-- 사이드 메뉴 -->
+    <div th:replace="~{common/sideMenu}"></div>
+    
+    <!-- 메인 래퍼 -->
+    <div class="main-wrapper">
+        <!-- 메인 컨텐츠 -->
+        <main class="main-content">
+            <div class="profile-wrapper">
+                <div class="profile-image-section">
+                    <img src="/default-profile.png" alt="프로필 이미지" class="profile-image">
+                </div>
+                <div class="profile-info">
+                    <h2 class="profile-title">환영합니다 nickname 님!</h2>
+                    <p class="profile-subtitle">리뷰 쓰기 · 사진 등록 · 별점 주기</p>
+                    <p class="profile-description">친구를 초대해 북셰어하세요!</p>
+                </div>
+                <div class="button-group">
+                    <button class="home-btn">홈으로</button>
+                    <button class="profile-btn">프로필 사진 등록</button>
+                </div>
             </div>
-            <div class="profile-info">
-                <h2 class="profile-title">환영합니다 nickname 님!</h2>
-                <p class="profile-subtitle">리뷰 쓰기 · 사진 등록 · 별점 주기</p>
-                <p class="profile-description">친구를 초대해 북셰어하세요!</p>
-            </div>
-            <div class="button-group">
-                <button class="home-btn">홈으로</button>
-                <button class="profile-btn">프로필 사진 등록</button>
-            </div>
-        </div>
-    </main>
+        </main>
+        
+        <!-- 푸터 -->
+        <footer th:replace="~{common/footer}" class="footer"></footer>
+    </div>
 </body>
 </html>

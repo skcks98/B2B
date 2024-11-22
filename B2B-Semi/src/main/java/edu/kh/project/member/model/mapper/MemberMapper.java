@@ -7,4 +7,6 @@ import edu.kh.project.member.model.dto.Member;
 @Mapper
 public interface MemberMapper {
 
+	Member login(String memberId);
+
 }

@@ -9,17 +9,41 @@ body {
     background-color: #ffffff;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+}
+
+/* 사이드 메뉴 스타일 */
+.side-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 240px;
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    z-index: 10;
+}
+
+/* 메인 컨텐츠 영역 스타일 */
+.main-wrapper {
+    margin-left: 240px; /* 사이드메뉴 너비만큼 여백 */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .main-content {
-    width: 100%;
-    max-width: 600px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
 }
 
 .profile-wrapper {
+    width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -98,4 +122,12 @@ body {
 
 .profile-btn:hover {
     background-color: #4338ca;
+}
+
+/* 푸터 스타일 */
+.footer {
+    margin-top: auto;
+    background-color: #f9fafb;
+    padding: 20px;
+    text-align: center;
 }
