@@ -8,38 +8,15 @@
 
   <!-- 공용 css/js 추가 -->
   <th:block th:replace="~{common/common}"></th:block>
-
+  
   <style>
     /* 기본 전체 설정 시작 */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    :root {
-      --primary-color: #4f46e5;
-      --primary-hover: #4338ca;
-      --background: #ffffff;
-      --text-primary: #1f2937;
-      --text-secondary: #4b5563;
-      --card-background: #ffffff;
-    }
-
-    body {
-      font-family: 'Segoe UI', 'Arial', sans-serif;
-      background-color: #F9FAFB;
-    }
-
     .wrapper {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
-
     /* 기본 전체 설정 끝 */
-
 
     /* Main Content Styles */
     .main-content {
@@ -48,7 +25,6 @@
       padding: 2rem;
       flex-grow: 1;
     }
-
 
     /* 타이틀 시작 */
     .ranking-header {
@@ -94,6 +70,93 @@
     }
 
     /* 부제목 끝 */
+
+    /* 도서 목록*/
+    .book-grid {
+      display: grid;
+      justify-content: space-around;
+      grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .book-card {
+      background: #F3F4F6;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .book-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 30px;
+      height: 30px;
+      background-color: #6366f1;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .book-cover {
+      width: 100px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .book-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .book-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .book-author {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .book-stats {
+      display: flex;
+      gap: 16px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .star-icon {
+      color: #fbbf24;
+    }
+
+    .comment-icon,
+    .heart-icon {
+      color: #6366f1;
+    }
   </style>
 
 </head>
@@ -104,7 +167,8 @@
     <th:block th:replace="~{common/header}"></th:block>
 
     <!-- 사이드 추가 -->
-    <th:block th:replace="~{myPage/sideMenu}"></th:block>
+
+    <th:block th:replace="~{sideMenu/sideMenu-myPage}"></th:block>
 
     <main class="main-content">
       <!--제목-->
@@ -119,11 +183,89 @@
       <!--부제목-->
       <section class="genre-section">
         <div class="genre-header">
-          <h2 class="genre-title">부제목</h2>
+          <div class="book-grid">
+            <!-- Book Card 1 -->
+            <div class="book-card">
+              <div class="rank-badge">1</div>
+              <img src="placeholder.jpg" alt="아침의 문" class="book-cover">
+              <div class="book-info">
+                <div>
+                  <h3 class="book-title">아침의 문</h3>
+                  <p class="book-author">김진각</p>
+                </div>
+                <div class="book-stats">
+                  <div class="stat-item">
+                    <span class="star-icon">★</span>
+                    <span>4.8</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="comment-icon">💬</span>
+                    <span>1,234</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="heart-icon">♥</span>
+                    <span>5,678</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Book Card 2 -->
+            <div class="book-card">
+              <div class="rank-badge">2</div>
+              <img src="placeholder.jpg" alt="소년이 온다" class="book-cover">
+              <div class="book-info">
+                <div>
+                  <h3 class="book-title">소년이 온다</h3>
+                  <p class="book-author">이은솔</p>
+                </div>
+                <div class="book-stats">
+                  <div class="stat-item">
+                    <span class="star-icon">★</span>
+                    <span>4.7</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="comment-icon">💬</span>
+                    <span>987</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="heart-icon">♥</span>
+                    <span>4,321</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Book Card 3 -->
+            <div class="book-card">
+              <div class="rank-badge">3</div>
+              <img src="placeholder.jpg" alt="트럼프 2.0 시대" class="book-cover">
+              <div class="book-info">
+                <div>
+                  <h3 class="book-title">트럼프 2.0 시대</h3>
+                  <p class="book-author">박하늘</p>
+                </div>
+                <div class="book-stats">
+                  <div class="stat-item">
+                    <span class="star-icon">★</span>
+                    <span>4.6</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="comment-icon">💬</span>
+                    <span>856</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="heart-icon">♥</span>
+                    <span>3,987</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      
+
     </main>
 
     <!-- 푸터 추가-->

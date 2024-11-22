@@ -50,6 +50,7 @@ if(updateInfo != null) {
         // 가장 먼저 기본 이벤트 동작 중단
         e.preventDefault();
 
+        const memberId = document.querySelector("#memberId")
         const memberNickname = document.querySelector("#memberNickname");
         const memberTel = document.querySelector("#memberTel");
         const memberAddress = document.querySelectorAll("[name='memberAddress']");
