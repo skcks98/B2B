@@ -66,9 +66,14 @@ body {
   color: var(--text-secondary);
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
+  position: relative;
 }
 
-.input-field {
+.input-field,
+.signUp-input-area input[type="text"],
+#postcode,
+#address,
+#detailAddress {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 2px solid #e5e7eb;
@@ -76,19 +81,41 @@ body {
   font-size: 1rem;
   transition: all 0.2s ease;
   background: #f9fafb;
+  margin-bottom: 0.5rem;
 }
 
-.input-field:focus {
+.input-field:focus,
+.signUp-input-area input[type="text"]:focus,
+#postcode:focus,
+#address:focus,
+#detailAddress:focus {
   outline: none;
   border-color: var(--primary-color);
   background: #ffffff;
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
 }
 
-#button-group {
+.signUp-input-area {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#searchAddress {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--primary-color);
+  color: white;
+  white-space: nowrap;
+}
+
+#searchAddress:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
 }
 
 .button-group {
@@ -107,12 +134,16 @@ body {
   transition: all 0.2s ease;
 }
 
-.submit-button {
+.submit-button,
+.login-button,
+#signupBtn {
   background: var(--primary-color);
   color: white;
 }
 
-.submit-button:hover {
+.submit-button:hover,
+.login-button:hover,
+#signupBtn:hover {
   background: var(--primary-hover);
   transform: translateY(-1px);
 }
@@ -124,6 +155,31 @@ body {
 
 .cancel-button:hover {
   background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+#sendAuthKeyBtn {
+    display: flex;
+    gap: 1rem;
+    margin-top: 60px;
+}
+
+#sendAuthKeyBtn {
+  display: block;  /* flex에서 block으로 변경 */
+  width: 100%;    /* 추가 */
+  margin-top: 0.5rem;  /* 60px에서 0.5rem으로 변경 */
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--primary-color);
+  color: white;
+}
+
+#sendAuthKeyBtn:hover{
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
@@ -150,63 +206,48 @@ body {
 }
 
 #signUpForm {
-display: none;
+  display: none;
 }
 
-.login-button {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: var(--primary-color);
-  color: white;
+.signUp-message{
+  display: block;  /* 추가 */
+  margin-bottom: 0.5rem; 
+  font-size: 14px;
+  letter-spacing: -1px;
 }
 
-.login-button:hover {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
-}
+.confirm{ color : green; }
+.error{ color : red; }
 
-#signupBtn {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: var(--primary-color);
-  color: white;
-}
-
-#signupBtn:hover {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
-}
 
 
 @media (max-width: 768px) {
   .split-container {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   .left-section {
-      padding: 2rem;
-      justify-content: flex-start;
+    padding: 2rem;
+    justify-content: flex-start;
   }
 
   .right-section {
-      padding: 2rem;
+    padding: 2rem;
   }
 
   .login-container {
-      padding: 0;
+    padding: 0;
   }
 
   .button-group {
-      flex-direction: column;
+    flex-direction: column;
+  }
+  
+  .signUp-input-area {
+    flex-direction: column;
+  }
+
+  #searchAddress {
+    width: 100%;
   }
 }
