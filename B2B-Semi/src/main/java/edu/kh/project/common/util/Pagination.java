@@ -1,4 +1,4 @@
-package edu.kh.project.book.model.dto;
+package edu.kh.project.common.util;
 
 /*
  * Pagination 뜻 : 목록을 일정 페이지로 분할 해서

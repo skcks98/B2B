@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import edu.kh.project.book.model.dto.Book;
-import edu.kh.project.book.model.dto.Pagination;
 import edu.kh.project.book.model.mapper.BookMapper;
+import edu.kh.project.common.util.Pagination;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
