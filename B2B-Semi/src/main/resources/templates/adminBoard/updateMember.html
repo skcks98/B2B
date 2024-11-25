@@ -206,14 +206,14 @@
     <th:block th:replace="~{common/header}"></th:block>
 
     <!-- 사이드 추가 -->
-    <th:block th:replace="~{sideMenu/sideMenu-myPage}"></th:block>
+    <th:block th:replace="~{sideMenu/sideMenu-admin}"></th:block>
 
     <main class="main-content">
 
       <section class="ranking-header">
         <h1 class="ranking-title">
           <i class="fas fa-crown me-2" style="color: #FFD700;"></i>
-          내 정보 수정
+          회원 정보 수정
         </h1>
       </section>
 
@@ -226,11 +226,11 @@
             </div>
 
             <form action="info" method="POST" name="myPageFrm" id="updateInfo">
-
+			<input type="hidden" name="memberId" th:value="${member.memberId}">
               <div class="myPage-row">
                 <label>닉네임</label>
 
-                <input type="text" name="memberNickname" maxlength="10" id="memberNickname">
+                <input type="text" name="memberNickname" maxlength="10" id="memberNickname" th:value="${member.memberNickname}">
                 <!-- th:value="${session.loginMember.memberNickname}" -->
 
                 <input type="hidden" id="currentNickname"> <!-- th:value="${session.loginMember.memberNickname}" -->
@@ -238,10 +238,10 @@
 
               <div class="myPage-row">
                 <label>전화번호</label>
-                <input type="text" name="memberTel" maxlength="11" id="memberTel">
+                <input type="text" name="memberTel" maxlength="11" id="memberTel" th:value="${member.memberTel}">
                 <!-- th:value="${session.loginMember.memberTel}" -->
               </div>
-			  
+
               <!-- 주소 -->
               <div class="myPage-row info-title">
                 <span>주소</span>
@@ -286,7 +286,7 @@
   <!-- 다음 주소 API 추가 -->
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <!-- js 추가 -->
-  <script src="/B2B-Project/B2B-Semi/src/main/resources/static/js/myPage/myPage.js"></script>
+  <script src="/js/adminBoard/memberManage.js"></script>
 
 </body>
 

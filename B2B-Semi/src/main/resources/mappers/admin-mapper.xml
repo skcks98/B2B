@@ -51,8 +51,18 @@
 	</select>
 
 
+	<update id="updateInfo">
+		UPDATE TB_MEMBER SET
+		MEMBER_NICKNAME = #{memberNickname},
+		MEMBER_TEL = #{memberTel},
+		MEMBER_ADDRESS = #{memberAddress}
+		WHERE MEMBER_ID = #{memberId}
+	</update>
 
-
+	<select id="selectedMember">
+		SELECT * FROM TB_MEMBER
+		WHERE MEMBER_ID = #{memberId}
+	</select>
 
 
 

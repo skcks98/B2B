@@ -32,4 +32,14 @@ public interface AdminMapper {
 
 	List<Member> selectMemberList();
 
+	/** 회원 정보 수정(관리자)
+	 * @param inputMember
+	 * @return
+	 */
+	int updateMember(Member inputMember);
+
+	int updateInfo(Member inputMember);
+
+	Member selectedMember(String memberId);
+
 }

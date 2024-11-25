@@ -67,5 +67,33 @@ public class AdminServiceImpl implements AdminService{
 		return mapper.selectMemberList();
 	}
 	
+	@Override
+	public int updateMember(Member inputMember) {
+		
+		return mapper.updateMember(inputMember);
+	}
+	
+	
+	@Override
+	public int updateInfo(Member inputMember, String[] memberAddress) {
+
+		if(memberAddress == null || memberAddress.length == 0) {
+			inputMember.setMemberAddress(null);
+		}
+		
+		else {
+			String address = String.join("^^^", memberAddress);
+			inputMember.setMemberAddress(address);
+		}
+		
+		return mapper.updateInfo(inputMember);
+	}
+	
+	
+	@Override
+	public Member selectedMember(String memberId) {
+
+		return mapper.selectedMember(memberId);
+	}
 	
 }

@@ -100,7 +100,7 @@
   
   <div class="wrapper">
     <!-- 헤더 추가 -->
-    <th:block th:replace="~{header/header-login-admin}"></th:block>
+    <th:block th:replace="~{common/header}"></th:block>
   
   <main>
 
@@ -111,14 +111,13 @@
 
       <section class="ranking-header">
         <h1 class="ranking-title">
-          <i class="fas fa-crown me-2" style="color: #FFD700;"></i>
-          내 정보
+      		회원 관리
         </h1>
       </section>
 
       <section class="ranking-header">
         <select name="key" id="searchKey">
-          <option value="name">이름</option>
+          <option value="id">아이디</option>
           <option value="nickname">닉네임</option>
           <option value="delfl">탈퇴 여부</option>
         </select>
@@ -131,13 +130,12 @@
         <table border="1" style="border-collapse: collapse;">
   
           <thead>
-            <th>번호</th>
+            <th>회원 아이디</th>
             <th>닉네임</th>
-            <th>이름</th>
             <th>가입일</th>
             <th>탈퇴 여부</th>
             <th>회원 수정</th>
-            <th><input type="checkbox" id="checkAll" name="checking"></th>
+            <th><input type="checkbox" id="theadCheckAll"></th>
           </thead>
   
           <tbody id="tbody">

@@ -19,4 +19,14 @@ public interface AdminService {
 
 	public List<Member> selectMemberList();
 
+	/** 회원 수정 버튼 클릭 시.
+	 * @param inputMember
+	 * @return
+	 */
+	public int updateMember(Member inputMember);
+
+	public int updateInfo(Member inputMember, String[] memberAddress);
+
+	public Member selectedMember(String memberId);
+
 }
