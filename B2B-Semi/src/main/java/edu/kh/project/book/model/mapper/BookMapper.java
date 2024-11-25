@@ -38,6 +38,25 @@ public interface BookMapper {
 	 * @return
 	 */
 	List<Book> bookSearchList(RowBounds rowBounds, Map<String, Object> paramMap);
+
+	/** 해당 도서 리뷰 목록 조회
+	 * @param bookId
+	 * @return
+	 */
+	List<Map<String, Object>> selectReviewList(int bookId);
+
+	/** 해당 멤버의 도서 리뷰작성 여부 조회
+	 * @param map
+	 * @return
+	 */
+	int selectReviewMember(Map<String, Object> map);
+	
+	/** 책 리뷰 작성
+	 * @param paramMap
+	 * @return
+	 */
+	int insertBookReview(Map<String, Object> paramMap);
+
 	
 	
 }
