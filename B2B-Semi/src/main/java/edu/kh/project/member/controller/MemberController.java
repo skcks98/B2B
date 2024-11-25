@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
@@ -13,10 +14,13 @@ import edu.kh.project.member.model.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("member")
 @RequiredArgsConstructor
+@SessionAttributes("loginMember")
+@Slf4j
 public class MemberController {
 
 	private final MemberService service;
@@ -55,7 +59,7 @@ public class MemberController {
 			// 이메일 저장 
 			
 			// 쿠키 객체 생성 (K:V)
-			Cookie cookie = new Cookie("saveId", loginMember.getMemberEmail());
+			Cookie cookie = new Cookie("saveId", loginMember.getMemberId());
 			// saveId=user01@kh.or.kr
 			
 			// 쿠키가 적용될 경로 설정
@@ -78,6 +82,7 @@ public class MemberController {
 			
 		}
 		
+		log.debug("loginMember" + loginMember);
 		
 		return "redirect:/"; // 메인페이지 재요청
 	}
