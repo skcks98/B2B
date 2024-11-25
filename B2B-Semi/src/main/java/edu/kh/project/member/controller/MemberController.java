@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("member")
+@SessionAttributes({"loginMember"})
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -25,6 +27,7 @@ public class MemberController {
 	public String login() {
 		return "/member/login";
 	}
+	
 	@PostMapping("login")
 	public String login(/*@ModelAttribute*/ Member inputMember, 
 						RedirectAttributes ra,
@@ -55,7 +58,7 @@ public class MemberController {
 			// 이메일 저장 
 			
 			// 쿠키 객체 생성 (K:V)
-			Cookie cookie = new Cookie("saveId", loginMember.getMemberEmail());
+			Cookie cookie = new Cookie("saveId", loginMember.getMemberId());
 			// saveId=user01@kh.or.kr
 			
 			// 쿠키가 적용될 경로 설정
@@ -66,12 +69,7 @@ public class MemberController {
 			cookie.setPath("/");
 			
 			// 쿠키의 만료 기간 지정
-			if(saveId != null) { // 아이디 저장 체크 시
-				cookie.setMaxAge(60 * 60 * 24 * 30); // 30일 (초 단위로 지정)
-				
-			} else { // 미체크 시 
-				cookie.setMaxAge(0); // 0초 (클라이언트 쿠키 삭제)
-			}
+			cookie.setMaxAge(60 * 60 * 24 * 30); // 30일 (초 단위로 지정)
 			
 			// 응답 객체에 쿠키 추가 -> 클라이언트 전달
 			resp.addCookie(cookie);

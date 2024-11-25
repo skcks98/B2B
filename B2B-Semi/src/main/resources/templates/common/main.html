@@ -11,34 +11,12 @@
 	<!-- templates/common/common.html 조각으로 추가 -->
 	<th:block th:replace="~{common/common}"></th:block>
 	
-	<style>
-        body {
-            background-color: #F9FAFB;
-        }
-		.swiper-button-prev {
-		    left: 0px;
-		}
-
-		.swiper-button-next {
-		    right: 0px;
-		}
-		
-		.swiper-button-next,
-		.swiper-button-prev {
-			color: black;
-		}
-
-		.swiper-pagination-bullet-active {
-			background: black;
-		}
-    </style>
 </head>
 
 <body>
 	<!-- common/header.html 을 조각으로 추가 -->
 	<th:block th:replace="~{common/header}"></th:block>
 	<main class="main-content">
-		
 		<section class="hero-section">
 			<h1 class="hero-title">당신의 독서 여정을 함께합니다</h1>
 			<p class="hero-subtitle">수만 권의 도서와 독자들의 이야기가 여러분을 기다립니다</p>
@@ -248,8 +226,12 @@
 					</li>
 				</ul>
 			</div>
+
+
 		</section>
-		<a href="/myPage/info" class="btn btn-primary" style="height : 30px;">내 정보 수정</a>
+		
+			 <!-- 내 정보 수정 페이지로 이동할 수 있는 링크 -->
+			 <a href="/myPage/info" class="btn btn-primary">내 정보 수정</a>
 	</main>
 
 	<!-- common/footer 추가-->
@@ -274,6 +256,8 @@
 				disableOnInteraction: false,
 			}
 		});
+		
+		console.log(/*[[${loginMember}]]*/);
 	</script>
 	<script src="/js/main.js"></script>
 

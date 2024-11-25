@@ -61,6 +61,8 @@ public class MyPageController {
 		// 모델에 데이터 추가
 		model.addAttribute("favoriteBooks", favoriteBooks);
 		
+		String message = null;
+		
 		
 
 		return "myPage/myPage-favBook";

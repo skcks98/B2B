@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.kh.project.board.model.dto.Board;
-import edu.kh.project.board.model.dto.Pagination;
 import edu.kh.project.book.model.dto.Book;
+import edu.kh.project.common.util.Pagination;
 import edu.kh.project.member.model.dto.Member;
 import edu.kh.project.member.model.mapper.AdminMapper;
 import lombok.RequiredArgsConstructor;

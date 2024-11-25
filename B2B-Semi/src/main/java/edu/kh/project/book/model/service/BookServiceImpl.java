@@ -1,15 +1,18 @@
 package edu.kh.project.book.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import edu.kh.project.book.model.dto.Book;
 import edu.kh.project.book.model.mapper.BookMapper;
+import edu.kh.project.common.util.Pagination;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -156,6 +159,64 @@ public class BookServiceImpl implements BookService{
 	    log.debug("bookList : " + bookList);
 		
 		return bookList;
+	}
+
+
+	// 도서 목록 조회
+	@Override
+	public Map<String, Object> bookList(int cp) {
+		
+		// 도서 목록 개수 조회
+		int bookCount = mapper.bookCount();
+		
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.bookList(rowBounds); 
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("bookList", bookList);
+		
+		return map;
+	}
+	
+	// 도서 목록 검색 조회
+	@Override
+	public Map<String, Object> bookSearchList(int cp, Map<String, Object> paramMap) {
+		
+		// 평점 선택이 안 비어 있을때
+		if(paramMap.get("ratingFilter") != "" && paramMap.get("ratingFilter") != null) {
+			
+			int ratingFilter = Integer.parseInt((String) paramMap.get("ratingFilter"));
+			int nextRatingFilter = ratingFilter + 1;
+			paramMap.put("nextRatingFilter", nextRatingFilter);
+			
+		}
+		
+		// 도서 목록 개수 조회
+		int bookCount = mapper.bookSearchCount(paramMap);
+		
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.bookSearchList(rowBounds, paramMap); 
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("bookList", bookList);
+		
+		return map;
 	}
 	
 }
