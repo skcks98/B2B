@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
@@ -14,11 +15,13 @@ import edu.kh.project.member.model.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("member")
 @SessionAttributes({"loginMember"})
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
 	private final MemberService service;
@@ -76,6 +79,7 @@ public class MemberController {
 			
 		}
 		
+		log.debug("loginMember" + loginMember);
 		
 		return "redirect:/"; // 메인페이지 재요청
 	}
@@ -95,5 +99,13 @@ public class MemberController {
 		return "/member/signUp";
 	}
 	
+	@GetMapping("logout")
+	public String logout(SessionStatus status) {
+		
+		status.setComplete();
+		
+		return "redirect:/";
+	}
+
 	
 }
