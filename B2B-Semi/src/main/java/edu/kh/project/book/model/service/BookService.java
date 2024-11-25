@@ -30,4 +30,17 @@ public interface BookService {
 	 */
 	Map<String, Object> bookSearchList(int cp, Map<String, Object> paramMap);
 
+	/** 해당 도서 리뷰 목록 조회
+	 * @param bookId
+	 * @return
+	 */
+	List<Map<String, Object>> selectReviewList(int bookId);
+	
+	/** 책 리뷰 작성
+	 * @param paramMap
+	 * @return
+	 */
+	int insertBookReview(Map<String, Object> paramMap);
+
+
 }
