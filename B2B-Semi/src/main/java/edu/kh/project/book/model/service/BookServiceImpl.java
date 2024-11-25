@@ -219,4 +219,41 @@ public class BookServiceImpl implements BookService{
 		return map;
 	}
 	
+	
+	// 해당 도서 리뷰 목록 조회
+	@Override
+	public List<Map<String, Object>> selectReviewList(int bookId) {
+		return mapper.selectReviewList(bookId);
+	}
+
+
+	// 책 리뷰 작성
+	@Override
+	public int insertBookReview(Map<String, Object> paramMap) {
+		
+		// 맵 객체 생성
+		Map<String, Object> map = new HashMap<>();
+		
+		
+		// 해당 map에 유저번호, 도서번호 대입
+		map.put("memberNo", paramMap.get("memberNo"));
+		map.put("bookId", paramMap.get("bookId"));
+		
+		// 해당 유저가 해당 도서번호에 작성한 리뷰가 있는지 확인
+		int result = mapper.selectReviewMember(map);
+		
+		// 리뷰가 1개이상 있을 경우
+		if(result > 0) {
+			// 리턴0 반환
+			return 0;
+		
+		} else {
+			// 리뷰가 없을경우 insert 진행
+			return mapper.insertBookReview(paramMap);
+			
+		}
+		
+	}
+
+
 }
