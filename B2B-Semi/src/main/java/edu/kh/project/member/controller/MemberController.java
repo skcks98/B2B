@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("member")
+@SessionAttributes({"loginMember"})
 @RequiredArgsConstructor
 @SessionAttributes("loginMember")
 @Slf4j
@@ -29,6 +30,7 @@ public class MemberController {
 	public String login() {
 		return "/member/login";
 	}
+	
 	@PostMapping("login")
 	public String login(/*@ModelAttribute*/ Member inputMember, 
 						RedirectAttributes ra,
@@ -70,12 +72,7 @@ public class MemberController {
 			cookie.setPath("/");
 			
 			// 쿠키의 만료 기간 지정
-			if(saveId != null) { // 아이디 저장 체크 시
-				cookie.setMaxAge(60 * 60 * 24 * 30); // 30일 (초 단위로 지정)
-				
-			} else { // 미체크 시 
-				cookie.setMaxAge(0); // 0초 (클라이언트 쿠키 삭제)
-			}
+			cookie.setMaxAge(60 * 60 * 24 * 30); // 30일 (초 단위로 지정)
 			
 			// 응답 객체에 쿠키 추가 -> 클라이언트 전달
 			resp.addCookie(cookie);
