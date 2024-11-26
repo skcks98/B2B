@@ -116,14 +116,20 @@
       </section>
 
       <section class="ranking-header">
-        <select name="key" id="searchKey">
-          <option value="id">아이디</option>
-          <option value="nickname">닉네임</option>
-          <option value="delfl">탈퇴 여부</option>
-        </select>
-        
-        <input type="text" placeholder="검색어를 입력하세요." id="searchInput" name="search">
-        <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i>검색</button>
+
+        <form action="/adminBoard/searchMember" method="get" id="memberSearch">
+	        <select name="key" id="searchKey">
+	          <option value="id">아이디</option>
+	          <option value="nickname">닉네임</option>
+	          <option value="delflY">탈퇴</option>
+	          <option value="delflN">활성</option>
+  			  
+	        </select>
+			
+	        <input type="text" placeholder="검색어를 입력하세요." id="searchInput" name="search">
+        	<button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i>검색</button>
+		</form>
+ 
       </section>
 
       <section class="memberList-tb">
@@ -135,14 +141,30 @@
             <th>가입일</th>
             <th>탈퇴 여부</th>
             <th>회원 수정</th>
-            <th><input type="checkbox" id="theadCheckAll"></th>
+            <th><input type="checkbox" class="checkbox" id="theadCheckAll"></th>
           </thead>
   
           <tbody id="tbody">
-  
+  			<tr th:each="member : ${memberList}">
+				<td th:text="${member.memberId}"></td>
+				<td th:text="${member.memberNickname}"></td>
+				<td th:text="${member.enrollDate}"></td>
+				<td th:text="${member.memberDelFl ? '탈퇴' : '활성'}"></td>
+				<td>
+				    <button class="updateMemberBtn" data-member-id="${member.memberId}">회원 수정</button>
+				</td>
+				<td>
+				    <input class="checkbox" type="checkbox" value="${member.memberId}">
+				</td>
+			</tr>
+			
           </tbody>
         </table>
   
+		<div class="btn-area">
+			<button id="updateDelFlY">회원 추방</button>
+			<button id="updateDelFlN">탈퇴 복구</button>
+		</div>
       </section>
       
     </main>

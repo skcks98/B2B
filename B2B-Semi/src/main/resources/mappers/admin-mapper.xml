@@ -64,9 +64,36 @@
 		WHERE MEMBER_ID = #{memberId}
 	</select>
 
+	
+	<select id="searchMember" parameterType="map" resultType="Member">
+		SELECT MEMBER_ID, MEMBER_NICKNAME, TO_CHAR(ENROLL_DATE, 'YYYY"년" MM"월" DD"일"') ENROLL_DATE, MEMBER_DEL_FL
+		FROM TB_MEMBER
+		WHERE
+		<choose>
+			<when test='key == "id"'>
+				MEMBER_ID LIKE '%' || #{search} || '%'
+			</when>
+			<when test='key == "nickname"'>
+				MEMBER_NICKNAME LIKE '%' || #{search} || '%'
+			</when>
+			<when test='key == "delflY"'>
+				MEMBER_DEL_FL = 'Y'
+			</when>
+			<when test='key == "delflN"'>
+				MEMBER_DEL_FL = 'N'
+			</when>
+		</choose>
+	</select>
 
 
-
+	<update id="updateStatus">
+		UPDATE TB_MEMBER
+		SET MEMBER_DEL_FL = #{status}
+		WHERE MEMBER_ID IN
+		<foreach collection="memberIds" item="memberId" open="(" close=")" separator=",">
+			#{memberId}
+		</foreach>
+	</update>
 
 
 

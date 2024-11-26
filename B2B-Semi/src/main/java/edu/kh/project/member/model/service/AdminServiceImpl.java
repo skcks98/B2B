@@ -96,4 +96,21 @@ public class AdminServiceImpl implements AdminService{
 		return mapper.selectedMember(memberId);
 	}
 	
+	@Override
+	public List<Member> searchMember(Map<String, Object> paramMap) {
+		
+//		Map<String, Object> map = new HashMap<>();
+//		
+//		map.put("key", paramMap.get("key"));
+//		map.put("search", paramMap.get("search"));
+
+		return mapper.searchMember(paramMap);
+	}
+	
+	@Override
+	public int updateStatus(List<String> memberIds, boolean updateY) {
+		String status = updateY ? "Y" : "N";
+		
+		return mapper.updateStatus(memberIds, status);
+	}
 }

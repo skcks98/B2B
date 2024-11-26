@@ -29,4 +29,8 @@ public interface AdminService {
 
 	public Member selectedMember(String memberId);
 
+	public List<Member> searchMember(Map<String, Object> paramMap);
+
+	public int updateStatus(List<String> memberIds, boolean updateY);
+
 }
