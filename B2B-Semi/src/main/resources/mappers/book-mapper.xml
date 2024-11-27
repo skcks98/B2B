@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.kh.project.book.model.mapper.BookMapper">
+
+
+	<!-- 다중 Book 객체 삽입 -->
+    <insert id="insertBook" parameterType="Book">
+        INSERT INTO TB_BOOKS (
+            BOOK_ID,
+            TITLE,
+            ISBN,
+            AUTHOR,
+            PUBLISHER,
+            PUB_DATE,
+            DESCRIPTION,
+            COVER_URL,
+            FIRST_CATEGORY,
+            SECOND_CATEGORY,
+            IS_DELETED,
+            CREATED_AT,
+            UPDATED_AT,
+            CUSTOMER_REVIEW_RANK
+        )
+        VALUES
+        (
+            #{bookId},
+            #{title},
+            #{isbn},
+            #{author},
+            #{publisher},
+            #{pubDate},
+            #{description},
+            #{coverUrl},
+            #{firstCategory},
+            #{secondCategory},
+            DEFAULT,
+            DEFAULT,
+            #{updatedAt},
+            #{customerReviewRank}
+        )
+    </insert>
+
+
+	<!-- 도서 목록 개수 조회 -->
+	<select id="bookCount">
+		SELECT COUNT(*)
+		FROM "TB_BOOKS"
+		WHERE IS_DELETED = 'N'
+	</select>
+	
+	
+	<!-- 도서 목록 조회 -->
+	<select id="bookList" resultType="Book">
+		SELECT
+			ROWNUM AS ROW_NUM,
+    		BOOK_ID,
+    		COVER_URL,
+		    TITLE,
+		    AUTHOR,
+		    DESCRIPTION,
+		    FIRST_CATEGORY,
+		    SECOND_CATEGORY,
+		    GENRES,
+		    PUB_DATE,
+		    CUSTOMER_REVIEW_RANK,
+		    (
+		    	SELECT COUNT(*) 
+		    	FROM TB_STARPOINT TBS 
+		    	WHERE TBS.BOOK_ID = BOOK.BOOK_ID
+		    ) AS REVIEWCOUNT
+		FROM 
+		(SELECT
+    		BOOK_ID,
+    		COVER_URL,
+		    CASE 
+		        WHEN INSTR(TITLE, '-') > 0 THEN SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1)
+		        ELSE TITLE
+		    END AS TITLE,
+		    CASE 
+		        WHEN INSTR(AUTHOR, ',') > 0 THEN SUBSTR(AUTHOR, 1, INSTR(AUTHOR, ',') - 1)
+		        ELSE AUTHOR
+		    END AS AUTHOR,
+		    DESCRIPTION,
+		    FIRST_CATEGORY,
+		    SECOND_CATEGORY,
+		    CONCAT(FIRST_CATEGORY, CONCAT(',', SECOND_CATEGORY)) GENRES,
+		    TO_CHAR(PUB_DATE, 'YYYY-MM-DD') AS PUB_DATE,
+		    CUSTOMER_REVIEW_RANK
+		FROM TB_BOOKS
+		WHERE IS_DELETED = 'N'
+		ORDER BY TITLE) BOOK
+	</select>
+	
+	
+	<!-- 도서 목록 검색 개수 조회 -->
+	<select id="bookSearchCount">
+		SELECT COUNT(*)
+		FROM "TB_BOOKS"
+		WHERE IS_DELETED = 'N'
+		<choose>
+			<when test='searchType == "title"'>
+				AND SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1) LIKE '%' || #{searchInput} || '%'
+			</when>
+			<when test='searchType == "author"'>
+				AND AUTHOR LIKE '%' || #{searchInput} || '%'
+			</when>
+			<when test='searchType == "genre"'>
+				AND (
+					FIRST_CATEGORY LIKE '%' || #{searchInput} || '%'
+					OR
+					SECOND_CATEGORY LIKE '%' || #{searchInput} || '%'
+				)
+			</when>
+		</choose>
+		<if test='genreFilter != "all" and genreFilter != ""'>
+			AND (
+				FIRST_CATEGORY LIKE '%' || #{genreFilter} || '%'
+				OR
+				SECOND_CATEGORY LIKE '%' || #{genreFilter} || '%'
+			)
+		</if>
+		<if test='ratingFilter != ""'>
+			<![CDATA[
+				AND CUSTOMER_REVIEW_RANK >= ${ratingFilter} AND CUSTOMER_REVIEW_RANK < ${nextRatingFilter}
+			]]>
+		</if>
+	</select>
+	
+	
+	<!-- 도서 목록 조회 -->
+	<select id="bookSearchList" resultType="Book">
+		SELECT 
+		    ROWNUM AS ROW_NUM,
+		    BOOK_ID,
+		    COVER_URL,
+		    TITLE,
+		    AUTHOR,
+		    CONCAT(FIRST_CATEGORY, CONCAT(',', SECOND_CATEGORY)) GENRES,
+		    DESCRIPTION,
+		    FIRST_CATEGORY,
+		    SECOND_CATEGORY,
+		    PUB_DATE,
+		    CUSTOMER_REVIEW_RANK,
+		    (
+		    	SELECT COUNT(*) 
+		    	FROM TB_STARPOINT TBS 
+		    	WHERE TBS.BOOK_ID = BOOK.BOOK_ID
+		    ) AS REVIEWCOUNT
+		FROM 
+		(SELECT
+    		BOOK_ID,
+    		COVER_URL,
+		    CASE 
+		        WHEN INSTR(TITLE, '-') > 0 THEN SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1)
+		        ELSE TITLE
+		    END AS TITLE,
+		    CASE 
+		        WHEN INSTR(AUTHOR, ',') > 0 THEN SUBSTR(AUTHOR, 1, INSTR(AUTHOR, ',') - 1)
+		        ELSE AUTHOR
+		    END AS AUTHOR,
+		    DESCRIPTION,
+		    FIRST_CATEGORY,
+		    SECOND_CATEGORY,
+		    TO_CHAR(PUB_DATE, 'YYYY-MM-DD') AS PUB_DATE,
+		    CUSTOMER_REVIEW_RANK
+		FROM TB_BOOKS
+		WHERE IS_DELETED = 'N'
+		<choose>
+			<when test='searchType == "title"'>
+				AND SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1) LIKE '%' || #{searchInput} || '%'
+			</when>
+			<when test='searchType == "author"'>
+				AND AUTHOR LIKE '%' || #{searchInput} || '%'
+			</when>
+			<when test='searchType == "genre"'>
+				AND (
+					FIRST_CATEGORY LIKE '%' || #{searchInput} || '%'
+					OR
+					SECOND_CATEGORY LIKE '%' || #{searchInput} || '%'
+				)
+			</when>
+		</choose>
+		<if test='genreFilter != "all" and genreFilter != ""'>
+			AND (
+				FIRST_CATEGORY LIKE '%' || #{genreFilter} || '%'
+				OR
+				SECOND_CATEGORY LIKE '%' || #{genreFilter} || '%'
+			)
+		</if>
+		<if test='ratingFilter != ""'>
+			<![CDATA[
+				AND CUSTOMER_REVIEW_RANK >= ${ratingFilter} AND CUSTOMER_REVIEW_RANK < ${nextRatingFilter}
+			]]>
+		</if>
+		ORDER BY TITLE
+		) BOOK
+	</select>
+	
+	
+	<!-- 해당 도서 리뷰 목록 조회 -->
+	<select id="selectReviewList">
+		SELECT 
+			"COMMENT",
+			TO_CHAR(COMMENT_WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE,
+			STAR_POINT,
+			MEMBER_NICKNAME,
+			PROFILE_IMG
+		FROM "TB_STARPOINT"
+		JOIN "TB_MEMBER" USING(MEMBER_NO)
+		WHERE BOOK_ID = #{bookId}
+	</select>
+	
+	
+	<!-- 해당 멤버의 도서 리뷰작성 여부 조회 -->
+	<select id="selectReviewMember">
+		SELECT 
+			COUNT(*)
+		FROM "TB_STARPOINT"
+		JOIN "TB_MEMBER" USING(MEMBER_NO)
+		WHERE BOOK_ID = #{bookId}
+		AND MEMBER_NO = #{memberNo}
+	</select>
+	
+	
+	<!-- 책 리뷰 작성 -->
+	<insert id="insertBookReview">
+		INSERT INTO "TB_STARPOINT"
+		VALUES(
+			#{memberNo},
+			#{bookId},
+			#{starPoint},
+			#{comment},
+			DEFAULT,
+			NULL,
+			DEFAULT			
+		)
+		
+	</insert>
+
+
+</mapper>

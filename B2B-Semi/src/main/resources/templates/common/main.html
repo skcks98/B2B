@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Book Community 메인페이지</title>
+	
+	<link rel="stylesheet" href="/css/main-style.css">
+
+	<!-- templates/common/common.html 조각으로 추가 -->
+	<th:block th:replace="~{common/common}"></th:block>
+	
+</head>
+
+<body>
+	<!-- common/header.html 을 조각으로 추가 -->
+	<th:block th:replace="~{common/header}"></th:block>
+	<main class="main-content">
+		<section class="hero-section">
+			<h1 class="hero-title">당신의 독서 여정을 함께합니다</h1>
+			<p class="hero-subtitle">수만 권의 도서와 독자들의 이야기가 여러분을 기다립니다</p>
+		</section>
+
+		<section class="genre-carousel">
+			<div class="swiper">
+				<h1 class="ranking-title">장르별 도서 랭킹</h1>
+				<div class="swiper-wrapper">
+					<!-- 소설 장르 -->
+					<div class="swiper-slide">
+						<div class="genre-slide">
+							<div class="genre-header">
+								<h2 class="genre-title">소설</h2>
+							</div>
+							<div class="books-grid">
+								<div class="book-card">
+									<div class="rank-badge">1</div>
+									<img src="https://image.aladin.co.kr/product/34474/76/coversum/k292932634_3.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="이중 하나는 거짓말">이중 하나는 거짓말</div>
+										<div class="book-author" data-full-author="김애란 (지은이)">김애란 (지은이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">4.8</span></span>
+											<span class="stat-item">리뷰: 9,233</span>
+										</div>
+									</div>
+								</div>
+								<div class="book-card">
+									<div class="rank-badge">2</div>
+									<img src="https://image.aladin.co.kr/product/33711/13/coversum/8954638740_2.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="희랍어 시간 - 2024 노벨문학상 수상작가">희랍어 시간 - 2024 노벨문학상 수상작가</div>
+										<div class="book-author" data-full-author="김멜라, 공현진, 김기태, 김남숙, 김지연, 성해나, 전지영 (지은이)">김멜라, 공현진, 김기태, 김남숙, 김지연, 성해나, 전지영 (지은이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">4.7</span></span>
+											<span class="stat-item">리뷰: 8,233</span>
+										</div>
+									</div>
+								</div>
+								<div class="book-card">
+									<div class="rank-badge">3</div>
+									<img src="https://image.aladin.co.kr/product/1384/91/coversum/8954616518_2.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="소년이 온다 - 2024 노벨문학상 수상작가">소년이 온다 - 2024 노벨문학상 수상작가</div>
+										<div class="book-author" data-full-author="한강 (지은이)">한강 (지은이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">4.2</span></span>
+											<span class="stat-item">리뷰: 4,550</span>
+										</div>
+									</div>
+								</div>
+								<div class="book-card">
+									<div class="rank-badge">4</div>
+									<img src="https://image.aladin.co.kr/product/4086/97/coversum/8936434128_2.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="작별하지 않는다 - 2024 노벨문학상 수상작가, 한강 장편소설">작별하지 않는다 - 2024 노벨문학상 수상작가, 한강 장편소설</div>
+										<div class="book-author" data-full-author="한강 (지은이)">한강 (지은이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">4.0</span></span>
+											<span class="stat-item">리뷰: 1,234</span>
+										</div>
+									</div>
+								</div>
+								<div class="book-card">
+									<div class="rank-badge">5</div>
+									<img src="https://image.aladin.co.kr/product/217/37/coversum/8954605818_2.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="눈물상자 - 2024 노벨문학상 수상작가">눈물상자 - 2024 노벨문학상 수상작가</div>
+										<div class="book-author" data-full-author="한강 (지은이), 봄로야 (그림)">한강 (지은이), 봄로야 (그림)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">3.9</span></span>
+											<span class="stat-item">리뷰: 997</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="genre-slide">
+							<div class="genre-header">
+								<h2 class="genre-title">건강정보</h2>
+							</div>
+							<div class="books-grid">
+								<div class="book-card">
+									<div class="rank-badge">1</div>
+									<img src="https://image.aladin.co.kr/product/35040/32/coversum/k312934981_1.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="365 느리게 나이 드는 습관 일력 (스프링)">365 느리게 나이 드는 습관 일력 (스프링)</div>
+										<div class="book-author" data-full-author="정희원 (지은이)">정희원 (지은이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">4.9</span></span>
+											<span class="stat-item">리뷰: 9,233</span>
+										</div>
+									</div>
+								</div>
+								<div class="book-card">
+									<div class="rank-badge">2</div>
+									<img src="https://image.aladin.co.kr/product/34331/64/coversum/k332932798_1.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="저속노화 식사법 - 노년내과 의사가 알려주는 기적의 식단 혁명">저속노화 식사법 - 노년내과 의사가 알려주는 기적의 식단 혁명</div>
+										<div class="book-author" data-full-author=">정희원 (지은이)">정희원 (지은이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">4.5</span></span>
+											<span class="stat-item">리뷰: 8,233</span>
+										</div>
+									</div>
+								</div>
+								<div class="book-card">
+									<div class="rank-badge">3</div>
+									<img src="https://image.aladin.co.kr/product/32941/79/coversum/k032936148_2.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="느리게 나이 드는 습관 - 노년내과 의사가 알려주는 감속노화 실천법">느리게 나이 드는 습관 - 노년내과 의사가 알려주는 감속노화 실천법</div>
+										<div class="book-author" data-full-author="정희원 (지은이)">정희원 (지은이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">4.0</span></span>
+											<span class="stat-item">리뷰: 4,550</span>
+										</div>
+									</div>
+								</div>
+								<div class="book-card">
+									<div class="rank-badge">4</div>
+									<img src="https://image.aladin.co.kr/product/34206/77/coversum/8901285142_1.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="해독 혁명 - 질병 없는 몸을 위한 5단계 독소 해방">해독 혁명 - 질병 없는 몸을 위한 5단계 독소 해방</div>
+										<div class="book-author" data-full-author="닥터 라이블리(최지영) (지은이)">닥터 라이블리(최지영) (지은이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">3.5</span></span>
+											<span class="stat-item">리뷰: 1,234</span>
+										</div>
+									</div>
+								</div>
+								<div class="book-card">
+									<div class="rank-badge">5</div>
+									<img src="https://image.aladin.co.kr/product/35086/14/coversum/k342934498_1.jpg" alt="Book cover" class="book-cover">
+									<div class="book-info">
+										<div class="book-title" data-full-title="3분만 바라보면 뇌가 젊어진다 - 뇌의 노화를 예방하는 ‘기적의 그림 훈련법’">3분만 바라보면 뇌가 젊어진다 - 뇌의 노화를 예방하는 ‘기적의 그림 훈련법’</div>
+										<div class="book-author" data-full-author="히라마쓰 루이 (지은이), 김윤희 (옮긴이)">히라마쓰 루이 (지은이), 김윤희 (옮긴이)</div>
+										<div class="book-stats">
+											<span class="stat-item">평점: <span class="rating">3.2</span></span>
+											<span class="stat-item">리뷰: 1,234</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-pagination"></div>
+				<div class="swiper-button-prev"></div>
+				<div class="swiper-button-next"></div>
+			</div>
+		</section>
+
+		<section class="genre-section">
+			<h2 class="section-title">
+				<i class="fas fa-tags"></i>
+				장르별 퀵 액세스
+			</h2>
+			<div class="genre-grid">
+				<div class="genre-card">소설</div>
+				<div class="genre-card">시/에세이</div>
+				<div class="genre-card">인문</div>
+				<div class="genre-card">자기계발</div>
+			</div>
+		</section>
+
+		<section class="community-section">
+			<div class="community-card">
+				<h2 class="section-title">
+					<i class="fas fa-comments"></i>
+					자유게시판
+				</h2>
+				<ul class="post-list">
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">이번 달 독서 모임 후기</a>
+					</li>
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">추천 도서 공유합니다</a>
+					</li>
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">신간 리뷰 모음</a>
+					</li>
+				</ul>
+			</div>
+			<div class="community-card">
+				<h2 class="section-title">
+					<i class="fas fa-star"></i>
+					추천게시판
+				</h2>
+				<ul class="post-list">
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">이달의 베스트 추천작</a>
+					</li>
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">장르별 추천 도서</a>
+					</li>
+					<li class="post-item">
+						<i class="fas fa-pen"></i>
+						<a href="#" class="post-link">입문자를 위한 추천</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</main>
+
+	<!-- common/footer 추가-->
+	<th:block th:replace="~{common/footer}"></th:block>
+
+	<!-- script 추가-->
+	<script>
+		const swiper = new Swiper('.swiper', {
+			slidesPerView: 1,
+			spaceBetween: 30,
+			loop: true,
+			pagination: {
+				el: '.swiper-pagination',
+				clickable: true,
+			},
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+			autoplay: {
+				delay: 5000,
+				disableOnInteraction: false,
+			}
+		});
+		
+		console.log(/*[[${loginMember}]]*/);
+	</script>
+	<script src="/js/main.js"></script>
+
+</body>
+
+</html>

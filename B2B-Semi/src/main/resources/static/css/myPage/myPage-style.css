@@ -1,0 +1,41 @@
+/* myPage-content 전체 레이아웃 설정 */
+.myPage-content {
+  display: flex; /* flexbox를 사용하여 좌우 배치 */
+  flex-direction: row; /* 기본값, 가로 방향으로 배치 */
+  width: 100%;
+  min-height: 80vh; /* 화면 높이 기준으로 콘텐츠 영역 높이 설정 */
+  background-color: #f9f9f9; /* 배경색 설정 (필요에 따라 변경) */
+}
+
+
+/* 오른쪽 본문 스타일 */
+.myPage-main {
+  width: 80%; /* 본문이 화면의 80%를 차지 */
+  padding: 20px; /* 내부 여백 */
+  background-color: #fff; /* 배경 흰색 */
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 1700px) {
+  main {
+      max-width: 100%;
+  }
+  
+  .container {
+      max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+      flex-direction: column;
+  }
+  
+  main {
+      padding: 10px;
+  }
+  
+  .container {
+      padding: 0 10px;
+  }
+}
