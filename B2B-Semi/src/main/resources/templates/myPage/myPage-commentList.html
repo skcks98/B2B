@@ -9,72 +9,8 @@
   <!-- 공용 css/js 추가 -->
   <th:block th:replace="~{common/common}"></th:block>
 
-  <style>
-    /* 기본 전체 설정 시작 */
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    /* 기본 전체 설정 끝 */
-
-
-    /* Main Content Styles */
-    .main-content {
-      margin-left: var(--sidebar-width);
-      min-height: 75vh;
-      padding: 2rem;
-      flex-grow: 1;
-    }
-
-
-    /* 타이틀 시작 */
-    .ranking-header {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      margin-bottom: 2rem;
-    }
-
-    .ranking-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--dark-text);
-      margin-bottom: 1.5rem;
-    }
-
-    /* 타이틀 끝 */
-
-
-    /* 부제목 시작 */
-    .genre-section {
-      background: white;
-      border-radius: 15px;
-      padding: 2rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      margin-bottom: 2rem;
-    }
-
-    .genre-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--light-bg);
-    }
-
-    .genre-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--dark-text);
-    }
-
-    /* 부제목 끝 */
-  </style>
-
+  <link rel="stylesheet" href="/css/myPage/myPage-commentList.css">
+  
 
 </head>
 
@@ -100,11 +36,103 @@
 
         <!--부제목-->
         <section class="genre-section">
-          <div class="genre-header">
-            <h2 class="genre-title">작성한 댓글 목록</h2>
+          <form th:action="@{/boardList}" method="get" id="boardSearch">
+            <div class="search-section">
+              <div class="search-wrapper">
+  
+                <div class="input-group flex-grow-1">
+                  <select class="form-select" name="searchType" style="border-radius: 8px;" th:value="${searchType}">
+                    <option th:value="title" th:selected="${searchType == 'title'}">제목</option>
+                    <option th:value="content" th:selected="${searchType == 'content'}">내용</option>
+                  </select>
+                  <input type="text" class="form-control" name="searchInput" placeholder="검색어를 입력하세요"
+                    style="border-radius: 8px;" th:value="${searchInput}">
+                </div>
+  
+  
+  
+                <button class="search-button">
+                  <i class="fas fa-search"></i>검색
+                </button>
+  
+              </div>
+            </div>
+          </form>
+        </section>
+  
+        <section class="genre-section">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">
+                    구분
+                    <span class="sort-icon">
+                      <i class="fas fa-sort"></i>
+                    </span>
+                  </th>
+  
+                  <th style="width: 40%;">
+                    제목
+                    <span class="sort-icon">
+                      <i class="fas fa-sort"></i>
+                    </span>
+                  </th>
+  
+                  <th style="width: 27.5%;">
+                    작성자
+                    <span class="sort-icon">
+                      <i class="fas fa-sort"></i>
+                    </span>
+                  </th>
+  
+                  <th style="width: 22.5%;">
+                    작성일
+                    <span class="sort-icon">
+                      <i class="fas fa-sort"></i>
+                    </span>
+                  </th>
+  
+  
+                </tr>
+              </thead>
+              <tbody id="commentList">
+                <th:block th:if="${#lists.isEmpty(commentList)}">
+                  <tr>
+                    <td colspan="4" style="text-align: center;">게시글이 존재하지 않습니다.</td>
+                  </tr>
+                </th:block>
+  
+                <!-- 게시글 목록이 있을 때 -->
+                <th:block th:unless="${#lists.isEmpty(commentList)}">
+                  <tr th:each="comment : ${commentList}">
+                    <!-- 게시글 구분 -->
+                    <td th:text="${comment.commentNo}">댓글 번호</td>
+  
+                    <!-- 게시글 제목 -->
+                    <td>
+                      <div class="comment-content" th:data-full-text="${comment.commentContent}"
+                        onmousemove="showTooltip(event, this)">
+                        <a th:href="@{/comment/detail(id=${comment.boardNo})}" th:text="${comment.boardTitle}">댓글 내용</a>
+                      </div>
+                    </td>
+  
+                    <!-- 작성자 -->
+                    <td th:text="${comment.memberNickname}">작성자</td>
+  
+                    <!-- 작성일 -->
+                    <td th:text="${comment.commentWriteDate}">작성일</td>
+                  </tr>
+                </th:block>
+              </tbody>
+            </table>
+  
+            <!--페이지 네이션 해야함-->
+  
+  
+           
           </div>
         </section>
-
 
       </main>
 
