@@ -52,6 +52,12 @@ public class AdminServiceImpl implements AdminService{
 		return map;
 	}
 
+	@Override
+	public Board selectOne(Map<String, Integer> map) {
+
+		return mapper.selectOne(map);
+	}
+	
 
 
 	@Override

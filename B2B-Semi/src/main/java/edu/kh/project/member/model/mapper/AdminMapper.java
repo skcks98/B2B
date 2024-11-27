@@ -48,5 +48,7 @@ public interface AdminMapper {
 
 	int updateStatus(@Param("memberIds")List<String> memberIds, @Param("status") String status);
 
+	Board selectOne(Map<String, Integer> map);
+
 
 }

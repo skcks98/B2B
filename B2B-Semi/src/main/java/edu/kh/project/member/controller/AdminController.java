@@ -1,5 +1,6 @@
 package edu.kh.project.member.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import edu.kh.project.board.model.dto.Board;
 import edu.kh.project.book.model.dto.Book;
 import edu.kh.project.member.model.dto.Member;
 import edu.kh.project.member.model.service.AdminService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -106,6 +110,36 @@ public class AdminController {
 		return "adminBoard/boardManage";
 	}
 	
+	@GetMapping("{boardCode:[0-9]+}/{boardNo:[0-9]+}")
+	public String boardDetail(@PathVariable("boardCode") int boardCode, @PathVariable("boardNo") int boardNo, Model model, RedirectAttributes ra, HttpServletRequest req, HttpServletResponse resp) {
+		
+		Map<String, Integer> map = new HashMap<>();
+		map.put("boardCode", boardCode);
+		map.put("boardNo", boardNo);
+		
+		Board board = Adservice.selectOne(map);
+		
+		String path = null;
+		
+		if(board == null) {
+			path = "redirect:/adminBoard/boardManage" + boardCode;
+			ra.addFlashAttribute("message", "게시글이 존재하지 않습니다.");
+		}
+		path = "adminBoard/boardManage";
+		
+		model.addAttribute("board", board);
+		
+		return path;
+	}
+
+	
+	
+	
+	/** 회원 정보 수정
+	 * @param memberId
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("updateMember")
 	public String updateMember(@RequestParam("memberId") String memberId, Model model) {
 		
@@ -132,6 +166,13 @@ public class AdminController {
 		return path;
 	}
 	
+	/** 회원 정보 수정
+	 * @param ra
+	 * @param inputMember
+	 * @param memberId
+	 * @param memberAddress
+	 * @return
+	 */
 	@PostMapping("info")
 	public String updateInfo(RedirectAttributes ra,Member inputMember, @RequestParam(value="memberId") String memberId, @RequestParam("memberAddress") String[] memberAddress) {
 
@@ -152,6 +193,11 @@ public class AdminController {
 		return "redirect:memberManage";
 	}
 	
+	/** 검색을 통한 회원 검색
+	 * @param paramMap
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("searchMember")
 	public String searchMember(@RequestParam Map<String, Object> paramMap, Model model) {
 		
@@ -164,6 +210,11 @@ public class AdminController {
 		return "adminBoard/memberManage";
 	}
 	
+	
+	/** 활성/탈퇴 복구
+	 * @param paramMap
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("updateStatus")
 	public ResponseEntity<?> updateStatus(@RequestBody Map<String, Object> paramMap) {

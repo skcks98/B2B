@@ -3,6 +3,7 @@ package edu.kh.project.member.model.service;
 import java.util.List;
 import java.util.Map;
 
+import edu.kh.project.board.model.dto.Board;
 import edu.kh.project.book.model.dto.Book;
 import edu.kh.project.member.model.dto.Member;
 
@@ -32,5 +33,7 @@ public interface AdminService {
 	public List<Member> searchMember(Map<String, Object> paramMap);
 
 	public int updateStatus(List<String> memberIds, boolean updateY);
+
+	public Board selectOne(Map<String, Integer> map);
 
 }
