@@ -52,6 +52,12 @@ public class AdminServiceImpl implements AdminService{
 		return map;
 	}
 
+	@Override
+	public Board selectOne(Map<String, Integer> map) {
+
+		return mapper.selectOne(map);
+	}
+	
 
 
 	@Override
@@ -67,5 +73,50 @@ public class AdminServiceImpl implements AdminService{
 		return mapper.selectMemberList();
 	}
 	
+	@Override
+	public int updateMember(Member inputMember) {
+		
+		return mapper.updateMember(inputMember);
+	}
 	
+	
+	@Override
+	public int updateInfo(Member inputMember, String[] memberAddress) {
+
+		if(memberAddress == null || memberAddress.length == 0) {
+			inputMember.setMemberAddress(null);
+		}
+		
+		else {
+			String address = String.join("^^^", memberAddress);
+			inputMember.setMemberAddress(address);
+		}
+		
+		return mapper.updateInfo(inputMember);
+	}
+	
+	
+	@Override
+	public Member selectedMember(String memberId) {
+
+		return mapper.selectedMember(memberId);
+	}
+	
+	@Override
+	public List<Member> searchMember(Map<String, Object> paramMap) {
+		
+//		Map<String, Object> map = new HashMap<>();
+//		
+//		map.put("key", paramMap.get("key"));
+//		map.put("search", paramMap.get("search"));
+
+		return mapper.searchMember(paramMap);
+	}
+	
+	@Override
+	public int updateStatus(List<String> memberIds, boolean updateY) {
+		String status = updateY ? "Y" : "N";
+		
+		return mapper.updateStatus(memberIds, status);
+	}
 }
