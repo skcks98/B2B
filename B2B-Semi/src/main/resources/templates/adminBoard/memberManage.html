@@ -100,7 +100,7 @@
   
   <div class="wrapper">
     <!-- 헤더 추가 -->
-    <th:block th:replace="~{header/header-login-admin}"></th:block>
+    <th:block th:replace="~{common/header}"></th:block>
   
   <main>
 
@@ -111,40 +111,60 @@
 
       <section class="ranking-header">
         <h1 class="ranking-title">
-          <i class="fas fa-crown me-2" style="color: #FFD700;"></i>
-          내 정보
+      		회원 관리
         </h1>
       </section>
 
       <section class="ranking-header">
-        <select name="key" id="searchKey">
-          <option value="name">이름</option>
-          <option value="nickname">닉네임</option>
-          <option value="delfl">탈퇴 여부</option>
-        </select>
-        
-        <input type="text" placeholder="검색어를 입력하세요." id="searchInput" name="search">
-        <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i>검색</button>
+
+        <form action="/adminBoard/searchMember" method="get" id="memberSearch">
+	        <select name="key" id="searchKey">
+	          <option value="id">아이디</option>
+	          <option value="nickname">닉네임</option>
+	          <option value="delflY">탈퇴</option>
+	          <option value="delflN">활성</option>
+  			  
+	        </select>
+			
+	        <input type="text" placeholder="검색어를 입력하세요." id="searchInput" name="search">
+        	<button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i>검색</button>
+		</form>
+ 
       </section>
 
       <section class="memberList-tb">
         <table border="1" style="border-collapse: collapse;">
   
           <thead>
-            <th>번호</th>
+            <th>회원 아이디</th>
             <th>닉네임</th>
-            <th>이름</th>
             <th>가입일</th>
             <th>탈퇴 여부</th>
             <th>회원 수정</th>
-            <th><input type="checkbox" id="checkAll" name="checking"></th>
+            <th><input type="checkbox" class="checkbox" id="theadCheckAll"></th>
           </thead>
   
           <tbody id="tbody">
-  
+  			<tr th:each="member : ${memberList}">
+				<td th:text="${member.memberId}"></td>
+				<td th:text="${member.memberNickname}"></td>
+				<td th:text="${member.enrollDate}"></td>
+				<td th:text="${member.memberDelFl ? '탈퇴' : '활성'}"></td>
+				<td>
+				    <button class="updateMemberBtn" data-member-id="${member.memberId}">회원 수정</button>
+				</td>
+				<td>
+				    <input class="checkbox" type="checkbox" value="${member.memberId}">
+				</td>
+			</tr>
+			
           </tbody>
         </table>
   
+		<div class="btn-area">
+			<button id="updateDelFlY">회원 추방</button>
+			<button id="updateDelFlN">탈퇴 복구</button>
+		</div>
       </section>
       
     </main>

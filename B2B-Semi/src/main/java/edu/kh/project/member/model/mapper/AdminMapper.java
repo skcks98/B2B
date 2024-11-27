@@ -1,8 +1,10 @@
 package edu.kh.project.member.model.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import edu.kh.project.board.model.dto.Board;
@@ -31,5 +33,22 @@ public interface AdminMapper {
 	List<Board> selectBoardList(int boardCode, RowBounds rowBounds);
 
 	List<Member> selectMemberList();
+
+	/** 회원 정보 수정(관리자)
+	 * @param inputMember
+	 * @return
+	 */
+	int updateMember(Member inputMember);
+
+	int updateInfo(Member inputMember);
+
+	Member selectedMember(String memberId);
+
+	List<Member> searchMember(Map<String, Object> map);
+
+	int updateStatus(@Param("memberIds")List<String> memberIds, @Param("status") String status);
+
+	Board selectOne(Map<String, Integer> map);
+
 
 }
