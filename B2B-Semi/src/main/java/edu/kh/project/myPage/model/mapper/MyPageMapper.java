@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import edu.kh.project.board.model.dto.Board;
+import edu.kh.project.board.model.dto.Comment;
 import edu.kh.project.book.model.dto.Book;
 import edu.kh.project.common.util.Pagination;
 import edu.kh.project.member.model.dto.Member;
@@ -66,7 +67,7 @@ public interface MyPageMapper {
 
 	
 	
-	/** 전체 게시글 목록 조회
+	/** 게시글 목록 조회
 	 * @param paramMap
 	 * @param pagination
 	 * @return
@@ -81,6 +82,13 @@ public interface MyPageMapper {
 	 * @return
 	 */
 	Map<String, Object> searchBoardList(int cp, Map<String, Object> paramMap);
+
+
+	/** 댓글 목록 조회
+	 * @param memberNo
+	 * @return
+	 */
+	List<Comment> selectAllCommentList(int memberNo);
 
 
 	

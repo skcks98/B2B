@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.board.model.dto.Board;
+import edu.kh.project.board.model.dto.Comment;
 import edu.kh.project.book.model.dto.Book;
 import edu.kh.project.common.util.Pagination;
 import edu.kh.project.member.model.dto.Member;
@@ -142,7 +143,7 @@ public class MyPageController {
 	    
 	    
 	    
-	    Map<String, Object> SearchList = null;
+	    Map<String, Object> boardSearch = null;
 		
 		
 	    List<Board> boardList = null;
@@ -163,7 +164,7 @@ public class MyPageController {
 			// 검색 조건이 있을 경우
 			// 게시글 목록 검색 조회
 			 log.debug("사용자가 작성한 게시글 검색 요청, 조건: {}", paramMap);
-			 SearchList  = service.boardSearchList(cp,paramMap);
+			 boardSearch  = service.boardSearchList(cp,paramMap);
 			
 		}
 		
@@ -204,7 +205,65 @@ public class MyPageController {
 	
 	// 댓글 목록 이동
 	@GetMapping("commentList") // /myPage/commentList GET 방식 요청
-	public String commentList() {
+	public String commentList(
+			@SessionAttribute("loginMember") Member loginMember,
+			@RequestParam(value = "cp", required = false, defaultValue = "1") int cp,
+			Model model,
+			@RequestParam Map<String, Object> paramMap 
+			) {
+		
+		// 1. 로그인한 사용자의 회원 번호
+	    int memberNo = loginMember.getMemberNo();
+	    
+
+	    Map<String, Object> commentSearch = null;
+		
+	    List<Comment> commentList = null;
+		
+		if (!paramMap.isEmpty()) {
+		    paramMap.remove("cp"); // paramMap에서 cp 제거
+		}
+		
+		
+		if(paramMap.isEmpty()) { 
+			// 검색 조건이 없을 경우
+			// 게시글 목록 조회
+			log.debug("사용자가 작성한 전체 댓글 조회 요청");
+			commentList  = service.selectCommentList(memberNo);
+			
+		} else {
+			paramMap.put("memberNo", memberNo);
+			// 검색 조건이 있을 경우
+			// 게시글 목록 검색 조회
+			 log.debug("사용자가 작성한 댓글 검색 요청, 조건: {}", paramMap);
+			 commentSearch  = service.commentSearchList(cp,paramMap);
+			
+		}
+		
+		
+	  
+	    
+		
+	    // Pagination 객체를 직접 전달
+	    //Pagination pagination = (Pagination) map.get("pagination");
+		
+		// 데이터 전달
+	    // model.addAttribute("pagination", pagination);
+	    model.addAttribute("commentList", commentList);
+		
+		
+		// 검색 데이터 전달
+		model.addAttribute("paramMap", paramMap); // 검색 조건 및 파라미터
+		
+		//log.debug("rowNum : " + map.get("boardList"));
+		
+		
+		log.debug("paramMap: {}", paramMap);
+		log.debug("commentList: {}", commentList);
+		
+		
+		
+		
 		return "myPage/myPage-commentList";
 	}
 

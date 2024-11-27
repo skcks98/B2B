@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import edu.kh.project.board.model.dto.Board;
+import edu.kh.project.board.model.dto.Comment;
 import edu.kh.project.book.model.dto.Book;
 import edu.kh.project.common.util.Pagination;
 import edu.kh.project.common.util.Utility;
@@ -206,6 +207,22 @@ public class MyPageServiceImpl implements MyPageService {
 	public Map<String, Object> boardSearchList(int cp, Map<String, Object> paramMap) {
 
 		return mapper.searchBoardList(cp,paramMap);
+	}
+
+	
+	
+	// 댓글 목록 조회
+	@Override
+	public List<Comment> selectCommentList(int memberNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectAllCommentList(memberNo);
+	}
+
+	// 댓글 목록 검색 조회
+	@Override
+	public Map<String, Object> commentSearchList(int cp, Map<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

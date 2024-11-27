@@ -66,8 +66,18 @@
 	</select>
 
 
-	<select id="searchBoardList">
-		
+	<select id="selectAllCommentList" resultType="Comment">
+		SELECT
+		c.COMMENT_NO,
+		c.COMMENT_TEXT,
+		c.COMMENT_DEL_FL,
+		c.COMMENT_REGI_DATE,
+		c.PARENT_COMMENT_NO,
+		m.MEMBER_NICKNAME AS MEMBER_NICKNAME	
+		FROM "TB_COMMENT" c
+		JOIN TB_MEMBER m ON c.MEMBER_NO = m.MEMBER_NO
+		WHERE c.MEMBER_NO = #{memberNo}
+		ORDER BY c.COMMENT_NO DESC
 	</select>
 
 
