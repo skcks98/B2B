@@ -35,8 +35,6 @@
 										<!-- 각 그룹 내의 책들 순회 -->
 										<th:block th:each="book, iterStat : ${group}">
 											<div class="book-card">
-												<!-- 책 순번 -->
-												<div class="rank-badge" th:text="${iterStat.count}"></div>
 												<!-- 책 커버 이미지 -->
 												<img th:src="${book.coverUrl}" alt="Book cover" class="book-cover">
 												<div class="book-info">
@@ -73,10 +71,12 @@
 				장르별 퀵 액세스
 			</h2>
 			<div class="genre-grid">
-				<div class="genre-card">소설</div>
-				<div class="genre-card">시/에세이</div>
-				<div class="genre-card">인문</div>
+				<div class="genre-card">외국어</div>
+				<div class="genre-card">어린이</div>
+				<div class="genre-card">과학</div>
 				<div class="genre-card">자기계발</div>
+				<div class="genre-card">경제경영</div>
+				<div class="genre-card">만화</div>
 			</div>
 		</section>
 

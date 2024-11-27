@@ -142,16 +142,23 @@ public class BookController {
 	}
 	
 	
-	/** 장르별 베스트 top10
+	/** 장르 선택별 베스트 top10 페이지
 	 * @param model
 	 * @return
 	 */
 	@GetMapping("bestCategoryList")
-	public String bestCategoryList(Model model) {
+	public String bestCategoryList(@RequestParam(value="category", required = false, defaultValue = "") String category,
+			Model model) {
 		
 		// 장르별 베스트 top10 페이지 장르 목록
 		List<Map<String, Object>> map = service.selectCategoryList();
 		model.addAttribute("map", map);
+		
+		// 선택된 장르가 있는 경우, 해당 장르의 Top10 도서 조회
+	    if (category != null && !category.isEmpty()) {
+	        List<Book> topBooks = service.selectCategortBestBook(category);
+	        model.addAttribute("topBooks", topBooks);
+	    }
 		
 		return "book/bestCategoryList";
 	}

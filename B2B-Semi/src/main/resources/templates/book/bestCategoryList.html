@@ -45,7 +45,31 @@
 
 			<section class="genre-section">
 				<div class="book-list" id="bookList">
-				
+					<th:block th:unless="${#lists.isEmpty(topBooks)}">
+						<div class="book-card" th:each="book, iterStat : ${topBooks}" th:object="${topBooks}">
+							<div class="rank-badge" th:text="${iterStat.count}"></div>
+				            <img th:src="${book.coverUrl}" th:alt="${book.title}" class="book-cover">
+				            <div class="book-info"
+								th:data-bookId="${book.bookId}" th:data-title="${book.fullTitle}"
+								th:data-coverUrl="${book.coverUrl}" th:data-author="${book.author}"
+								th:data-rating="${book.customerReviewRank}" th:data-genres="${book.genres}"
+								th:data-description="${book.description}" th:data-reviewCount="${book.reviewCount}">
+				                <h3 class="book-title" th:text="${book.title}">
+				                </h3>
+				                <p class="book-author" th:text="${book.author}"></p>
+				                <div class="book-stats">
+				                    <div class="stat-item">
+				                        <span class="stat-value" th:text="${book.customerReviewRank}"></span>
+				                        <span class="stat-label">평점</span>
+				                    </div>
+				                    <div class="stat-item">
+				                        <span class="stat-value" th:text="${book.reviewCount}"></span>
+				                        <span class="stat-label">리뷰</span>
+				                    </div>
+				                </div>
+				            </div>
+						</div>
+					</th:block>
 				</div>
 				
 			</section>

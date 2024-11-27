@@ -1,11 +1,33 @@
+// URL에서 category 파라미터 값 가져오기
+const params = new URLSearchParams(window.location.search);
+const selectedCategory = params.get("category"); // 선택된 카테고리 값
+
 // 버튼의 해당 장르 도서목록 조회
 const categoryButton = document.querySelectorAll(".categoryButton");
 const bookList = document.querySelector("#bookList");
+
+// 버튼 배경색 설정
+categoryButton.forEach(button => {
+    if (button.getAttribute("value") === selectedCategory) {
+        button.style.backgroundColor = "#DDD6FE"; // 선택된 버튼 강조
+    } else {
+        button.style.backgroundColor = "#f3f4f6"; // 다른 버튼은 초기화
+    }
+});
 
 // 선택된 요소들에 대해 반복 처리
 categoryButton.forEach(e => {
 	// 각 e에 클릭 이벤트 리스너 추가
 	e.addEventListener("click", cate => {
+		
+		// 모든 버튼의 배경색 초기화
+        categoryButton.forEach(btn => {
+            btn.style.backgroundColor = "#f3f4f6"; // 기본 배경색으로 초기화
+        });
+
+        // 클릭된 버튼만 배경색 변경
+        cate.target.style.backgroundColor = "#DDD6FE";
+		
 		// 해당 버튼의 value 값 가져오기
 		const category = cate.target.value;
 		
