@@ -113,6 +113,7 @@
         <h1 class="ranking-title">게시글 관리</h1>
       </section>
 
+	  <form action="/adminBoard/searchBoardList" id="boardSearch">
       <section class="ranking-header">
         <select name="key" id="searchKey">
           <option value="kind">게시글 종류</option>
@@ -124,7 +125,7 @@
         <input type="text" placeholder="검색어를 입력하세요." id="searchInput" name="search">
         <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i>검색</button>
       </section>
-
+	  </form>
 	  <section class="boardList-tb">
 	    <table border="1" style="border-collapse: collapse;">
 
@@ -135,28 +136,39 @@
 	        <th>등록일</th>
 	        <th>삭제 여부</th>
 	        <th>게시글 수정</th>
-	        <th><input type="checkbox" id="checkAll" name="checking"></th>
+	        <th><input type="checkbox" id="theadCheckAll" class="checkbox"></th>
 	      </thead>
 
 	      <tbody id="tbody">
-          <th:block th:if="${#lists.isEmpty(boardList)}">
+          <th:block th:if="${#lists.isEmpty(boardList)}"> <!-- 게시글이 존재하지 않을 때. -->
             <tr><th colspan="7">게시글이 존재하지 않습니다.</th></tr>
           </th:block>
 
-          <th:block th:unless="${#lists.isEmpty(boardList)}">
-
-            <tr th:each="board, iterStat : ${boardList}" th:object="${board}">
-
-              <td th:text="*{boardNo}">게시글 번호</td>
-
-            </tr>
-
-          </th:block>
+	          <th:block th:unless="${#lists.isEmpty(boardList)}"> <!--게시글이 하나라도 있을 때. -->
+	
+	            <tr th:each="board, iterStat : ${boardList}" th:object="${board}">
+					<td th:text="*{boardCode}">게시글 종류</td>
+					<td th:text="*{boardTitle}">게시글 제목</td>
+					<td th:text="*{memberNickname}">작성자</td>
+					<td th:text="*{boardWriteDate}">등록일</td>
+					<td th:text="*{boardDelFl}">게시글 삭제 여부</td>
+					<td>
+						<button class="updateBoardBtn" data-board-id="*{boardTitle}">게시글 수정</button>
+					</td>
+					<td>
+						<input class="checkbox" type="checkbox" th:value="*{boardNo}">
+					</td>
+	            </tr>
+	          </th:block>
 	      </tbody>
 	    </table>
 
 		
-
+		
+		<div>
+			<button id="updateDelFlY">게시글 삭제</button>
+			<button id="updateDelFlN">삭제 복구</button>
+		</div>
 
 	  </section>
 

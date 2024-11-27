@@ -9,14 +9,7 @@ import edu.kh.project.member.model.dto.Member;
 
 public interface AdminService {
 
-	/** 도서 목록 조회.
-	 * @return
-	 */
-	public List<Book> selectBookList();
-
 	public Map<String, Object> selectBoardList(int boardCode, int cp);
-
-	public Map<String, Object> searchList(Map<String, Object> paramMap, int cp);
 
 	public List<Member> selectMemberList();
 
@@ -35,5 +28,21 @@ public interface AdminService {
 	public int updateStatus(List<String> memberIds, boolean updateY);
 
 	public Board selectOne(Map<String, Integer> map);
+
+	public Map<String, Object> boardList(int cp);
+
+	public Map<String, Object> boardSearchList(int cp, Map<String, Object> paramMap);
+
+	public int updateBoardStatus(List<String> boardList, boolean updateY);
+
+	public List<Board> searchBoard(Map<String, Object> paramMap);
+
+	public Map<String, Object> bookList(int cp);
+
+	public Map<String, Object> bookSearchList(int cp, Map<String, Object> paramMap);
+
+	public int updateBookStatus(List<String> bookList, boolean updateY);
+
+	public int insertNewBook(Map<String, Object> paramMap);
 
 }

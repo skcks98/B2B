@@ -55,7 +55,7 @@ function fetchMemberList() {
 		        <td>${member.enrollDate}</td>
 		        <td>${member.memberDelFl ? "탈퇴" : "활성"}</td>
 		        <td><button class="updateMemberBtn" onclick='updateMember(${member.memberId})'>회원 수정</button></td>
-		        <td><input class="checkbox" type="checkbox" value="${member.memberId}"></td>
+		        <td><input class="checkbox" type="checkbox" value="${member.memberNo}"></td>
 		    `;
 			
 		    tbody.appendChild(tr);
@@ -73,7 +73,7 @@ const checkAll = document.querySelector("#theadCheckAll");
 const key = document.querySelector("#searchKey").value;
 const query = input.value.trim();
 
-searchBookListBtn.addEventListener("click", e => {
+searchBookListBtn.addEventListener("click", () => {
 
 //  if(input.value.trim().length === 0) {
 //    alert("검색어를 입력해주세요.");

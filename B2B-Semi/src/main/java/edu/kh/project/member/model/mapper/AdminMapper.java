@@ -14,11 +14,6 @@ import edu.kh.project.member.model.dto.Member;
 @Mapper
 public interface AdminMapper {
 
-	/** 도서 목록 조회
-	 * @return
-	 */
-	List<Book> selectBookList();
-
 	/** 게시글 수 조회.
 	 * @param boardCode
 	 * @return
@@ -49,6 +44,22 @@ public interface AdminMapper {
 	int updateStatus(@Param("memberIds")List<String> memberIds, @Param("status") String status);
 
 	Board selectOne(Map<String, Integer> map);
+
+	int boardCount();
+
+	List<Board> boardList(RowBounds rowBounds);
+
+	int updateBoardStatus(@Param("boardList")List<String> boardList, @Param("status") String status);
+
+	List<Board> searchBoard(Map<String, Object> paramMap);
+
+	int bookCount();
+
+	List<Book> bookList(RowBounds rowBounds);
+
+	int updateBookStatus(@Param("bookList")List<String> bookList, @Param("status") String status);
+
+	int insertNewBook(Map<String, Object> paramMap);
 
 
 }

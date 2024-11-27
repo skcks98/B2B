@@ -95,7 +95,8 @@
 		    GENRES,
 		    PUB_DATE,
 		    CUSTOMER_REVIEW_RANK,
-		    REVIEWCOUNT
+		    REVIEWCOUNT,
+		    IS_DELETED
 		FROM 
 		(SELECT
     		BOOK_ID,

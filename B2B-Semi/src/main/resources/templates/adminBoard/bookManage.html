@@ -116,10 +116,10 @@
 		
 		<section class="ranking-header">
 			<select name="key" id="searchKey">
-				<option value="t">도서 제목</option>
-				<option value="c">내용</option>
-				<option value="tc">제목+내용</option>
-				<option value="w">작가명</option>
+				<option value="title">도서 제목</option>
+				<option value="content">내용</option>
+				<option value="name">작가명</option>
+				<option value="delfl">삭제 여부</option>
 			</select>
 			
 		  <input type="text" placeholder="검색어를 입력하세요." id="searchInput" name="search">
@@ -133,17 +133,43 @@
 	        <th>번호</th>
 	        <th>도서 제목</th>
 	        <th>작가명</th>
-	        <th>등록일</th>
+	        <th>출판일</th>
 	        <th>삭제 여부</th>
 	        <th>도서 수정</th>
-	        <th><input type="checkbox" id="checkAll" name="checking"></th>
+	        <th><input type="checkbox" id="theadCheckAll" class="checkbox"></th>
 	      </thead>
 
 	      <tbody id="tbody">
-
+			<th:block th:if="${#lists.isEmpty(bookList)}">
+				<tr><th colspan="7">없는 도서입니다.</th></tr>
+			</th:block>
+			
+			<th:block th:unless="${#lists.isEmpty(bookList)}">
+				
+				<tr th:each="book, iterStat : ${bookList}" th:object="${book}">
+					<td th:text="*{rowNum}">번호</td>
+					<td th:text="*{title}">도서 제목</td>
+					<td th:text="*{author}">작가명</td>
+					<td th:text="*{pubDate}">출판일</td>
+					<td th:text="*{isDeleted}">삭제 여부</td>
+					<td>
+						<button class="updateBookBtn" data-book-id="*{title}">도서 수정</button>
+					</td>
+					<td>
+						<input class="checkbox" type="checkbox" th:value="*{bookId}">
+					</td>
+				</tr>
+			
+			</th:block>
 	      </tbody>
 	    </table>
 
+		<div class="btn-area">
+			<button id="addBook">도서 추가</button>
+			<button id="updateDelFlY">도서 삭제</button>
+			<button id="updateDelFlN">삭제 복구</button>
+		</div>
+		
 	  </section>
 
       

@@ -22,15 +22,7 @@ public class AdminServiceImpl implements AdminService{
 
 	private final AdminMapper mapper;
 	
-	
-	@Override
-	public List<Book> selectBookList() {
 
-		return mapper.selectBookList();
-	}
-	
-	
-	
 	@Override
 	public Map<String, Object> selectBoardList(int boardCode, int cp) {
 
@@ -58,14 +50,65 @@ public class AdminServiceImpl implements AdminService{
 		return mapper.selectOne(map);
 	}
 	
-
-
 	@Override
-	public Map<String, Object> searchList(Map<String, Object> paramMap, int cp) {
+	public Map<String, Object> boardList(int cp) {
+		
+		int boardCount = mapper.boardCount();
+		
+		Pagination pagination = new Pagination(cp, boardCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Board> boardList = mapper.boardList(rowBounds);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("boardList", boardList);
+		
+		return map;
+	}
+	
+	@Override
+	public Map<String, Object> bookList(int cp) {
+
+		int bookCount = mapper.bookCount();
+		
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.bookList(rowBounds);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("bookList", bookList);
+		
+		return map;
+	}
+	
+	@Override
+	public Map<String, Object> bookSearchList(int cp, Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	
+	@Override
+	public Map<String, Object> boardSearchList(int cp, Map<String, Object> paramMap) {
+		
+		return null;
+	}
+	
+	
+	
 	
 	@Override
 	public List<Member> selectMemberList() {
@@ -114,9 +157,39 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	@Override
+	public List<Board> searchBoard(Map<String, Object> paramMap) {
+
+		return mapper.searchBoard(paramMap);
+	}
+	
+	
+	@Override
 	public int updateStatus(List<String> memberIds, boolean updateY) {
 		String status = updateY ? "Y" : "N";
 		
 		return mapper.updateStatus(memberIds, status);
 	}
+	
+	@Override
+	public int updateBoardStatus(List<String> boardList, boolean updateY) {
+		String status = updateY ? "Y" : "N";
+		
+		return mapper.updateBoardStatus(boardList, status);
+	}
+
+	
+	@Override
+	public int updateBookStatus(List<String> bookList, boolean updateY) {
+
+		String status = updateY ? "Y" : "N";
+		return mapper.updateBookStatus(bookList, status);
+	}
+	
+	
+	@Override
+	public int insertNewBook(Map<String, Object> paramMap) {
+
+		return mapper.insertNewBook(paramMap);
+	}
+	
 }
