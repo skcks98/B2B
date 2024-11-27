@@ -159,7 +159,6 @@ body {
 	}
 }
 
-/* 테이블 내용 */
 .table thead th {
 	background-color: #4F46E5;
 	color: white;
@@ -167,6 +166,7 @@ body {
 	font-weight: 500;
 	border-bottom: none;
 	white-space: nowrap;
+	cursor: pointer;
 	vertical-align: middle;
 	border: 1px solid;
 }
@@ -199,10 +199,6 @@ body {
 	word-break: break-word;
 }
 
-/* 테이블 내용 끝 */
-
-
-/* 페이지 네이션 */
 .pagination {
 	justify-content: center;
 	margin: 0;
@@ -243,8 +239,6 @@ body {
 	outline: 0;
 	box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
 }
-
-/* 페이지 네이션 끝 */
 
 /* 모달 스타일 */
 .modal-dialog-scrollable .modal-content {
@@ -380,5 +374,3 @@ body {
 	border-radius: 6px;
 	overflow: hidden;
 }
-
-/* 모달 스타일 끝 */

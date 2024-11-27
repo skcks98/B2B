@@ -10,6 +10,11 @@ import edu.kh.project.book.model.dto.Book;
 
 @Mapper
 public interface BookMapper {
+	
+	/** 주간 인기 도서
+	 * @return
+	 */
+	List<Book> mainBookList();
 
 	/** 도서 등록 (테스트 버전)
 	 * @param book
@@ -57,6 +62,37 @@ public interface BookMapper {
 	 */
 	int insertBookReview(Map<String, Object> paramMap);
 
+	/** 기존 도서 평점과 리뷰 개수 가져오기
+	 * @param ratingMap
+	 * @return
+	 */
+	Map<String, Object> getBookRatingData(Map<String, Object> ratingMap);
+
+	/** 도서 평점 수정
+	 * @param updateMap
+	 */
+	void updateBookRating(Map<String, Object> updateMap);
+
+	/** top20 도서 목록 조회
+	 * @return
+	 */
+	List<Book> topList();
+
+	/** 장르별 랭킹 목록 조회
+	 * @return
+	 */
+	List<Book> bookCategoryList();
+
+	/** 장르별 베스트 top10 페이지 장르 목록
+	 * @return
+	 */
+	List<Map<String, Object>> selectCategoryList();
+
+	/** 선택된 장르 도서 top10 조회
+	 * @param category
+	 * @return
+	 */
+	List<Book> selectCategortBestBook(String category);
 	
 	
 }

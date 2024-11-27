@@ -1,5 +1,6 @@
 package edu.kh.project.book.model.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,15 @@ public class BookServiceImpl implements BookService{
 
 	private final BookMapper mapper;
 	
-	// 도서 등록
+	
+	// 메인페이지 도서 목록 조회
+	@Override
+	public List<Book> mainBookList() {
+		return mapper.mainBookList();
+	}
+	
+	
+	// 도서 등록 (차후 사용예정)
 	@Override
 	public int insertBook() {
 		RestTemplate restTemplate = new RestTemplate();
@@ -94,7 +103,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	
-	// 도서 검색
+	// 도서 검색 (차후 사용예정)
 	@Override
 	public List<Book> srchBookList(String title) {
 		
@@ -169,6 +178,7 @@ public class BookServiceImpl implements BookService{
 		// 도서 목록 개수 조회
 		int bookCount = mapper.bookCount();
 		
+		// 페이지네이션 진행
 		Pagination pagination = new Pagination(cp, bookCount);
 		
 		int limit = pagination.getLimit();
@@ -186,6 +196,7 @@ public class BookServiceImpl implements BookService{
 		return map;
 	}
 	
+	
 	// 도서 목록 검색 조회
 	@Override
 	public Map<String, Object> bookSearchList(int cp, Map<String, Object> paramMap) {
@@ -193,6 +204,7 @@ public class BookServiceImpl implements BookService{
 		// 평점 선택이 안 비어 있을때
 		if(paramMap.get("ratingFilter") != "" && paramMap.get("ratingFilter") != null) {
 			
+			// int 형 변환후 해당 점수대 조회하기 위한 작업
 			int ratingFilter = Integer.parseInt((String) paramMap.get("ratingFilter"));
 			int nextRatingFilter = ratingFilter + 1;
 			paramMap.put("nextRatingFilter", nextRatingFilter);
@@ -202,6 +214,7 @@ public class BookServiceImpl implements BookService{
 		// 도서 목록 개수 조회
 		int bookCount = mapper.bookSearchCount(paramMap);
 		
+		// 페이지 네이션 진행
 		Pagination pagination = new Pagination(cp, bookCount);
 		
 		int limit = pagination.getLimit();
@@ -233,7 +246,7 @@ public class BookServiceImpl implements BookService{
 		
 		// 맵 객체 생성
 		Map<String, Object> map = new HashMap<>();
-		
+		Map<String, Object> updateMap = new HashMap<>();
 		
 		// 해당 map에 유저번호, 도서번호 대입
 		map.put("memberNo", paramMap.get("memberNo"));
@@ -249,11 +262,77 @@ public class BookServiceImpl implements BookService{
 		
 		} else {
 			// 리뷰가 없을경우 insert 진행
-			return mapper.insertBookReview(paramMap);
+			int insertResult = mapper.insertBookReview(paramMap);
+			
+			// insert 정상 진행시
+			if(insertResult > 0) {
+				
+				// 기존 도서 평점과 리뷰 수 조회
+		        Map<String, Object> ratingMap = new HashMap<>();
+		        ratingMap.put("bookId", paramMap.get("bookId"));
+				
+		        // 기존 도서 평점과 리뷰 수 가져오기
+				Map<String, Object> bookRatingData = mapper.getBookRatingData(ratingMap);
+		        
+				// bookRatingData에서 "AVERAGERATING" 값을 BigDecimal로 가져옴
+				BigDecimal avgRatingBigDecimal = (BigDecimal) bookRatingData.get("AVERAGERATING");
+
+				// BigDecimal을 double로 변환
+				double currentAvgRating = avgRatingBigDecimal.doubleValue();
+		        
+		        // 기존 리뷰 수
+				BigDecimal reviewCount = (BigDecimal) bookRatingData.get("REVIEWCOUNT");
+				int currentReviewCount = reviewCount.intValue();
+		        
+		        // 새로운 별점 (현재 리뷰의 별점)
+		        int newStarPoint = (int) paramMap.get("starPoint");
+		        double currentStarPoint = newStarPoint; 
+		        
+		        // 새로운 평균 계산
+		        // 새로운 평균= (기존 평균×기존 리뷰 수)+새로운 별점 / (기존 리뷰 수+1)
+		        float newAvgRating = (float) (((currentAvgRating * currentReviewCount) + currentStarPoint) / (currentReviewCount + 1));
+		        
+		        updateMap.put("bookId", paramMap.get("bookId"));
+		        updateMap.put("averageRating", newAvgRating);
+		        
+		        mapper.updateBookRating(updateMap);
+
+		        return insertResult;
+			
+			} else {
+				return -1;
+			}
 			
 		}
 		
 	}
 
+	
+	// top20 도서 목록 조회
+	@Override
+	public List<Book> topList() {
+		return mapper.topList();
+	}
 
+
+	// 장르별 랭킹 목록 조회
+	@Override
+	public List<Book> bookCategoryList() {
+		return mapper.bookCategoryList();
+	}
+
+
+	// 장르별 베스트 top10 페이지 장르 목록
+	@Override
+	public List<Map<String, Object>> selectCategoryList() {
+		return mapper.selectCategoryList();
+	}
+	
+	
+	// 선택된 장르 도서 top10 조회
+	@Override
+	public List<Book> selectCategortBestBook(String category) {
+		return mapper.selectCategortBestBook(category);
+	}
+	
 }
