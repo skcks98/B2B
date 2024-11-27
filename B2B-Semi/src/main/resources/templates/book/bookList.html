@@ -25,7 +25,6 @@
 
 			<section class="ranking-header">
 				<h1 class="ranking-title">
-					<i class="fas fa-crown me-2" style="color: #FFD700;"></i>
 					도서 목록
 				</h1>
 			</section>
@@ -77,37 +76,22 @@
 							<tr>
 								<th style="width: 8%;">
 									구분
-									<span class="sort-icon">
-										<i class="fas fa-sort"></i>
-									</span>
 								</th>
 
 								<th style="width: 35%;">
 									제목 (평점)
-									<span class="sort-icon">
-										<i class="fas fa-sort"></i>
-									</span>
 								</th>
 
 								<th style="width: 25%;">
 									작가
-									<span class="sort-icon">
-										<i class="fas fa-sort"></i>
-									</span>
 								</th>
 
 								<th style="width: 20%;">
 									장르
-									<span class="sort-icon">
-										<i class="fas fa-sort"></i>
-									</span>
 								</th>
 
 								<th style="width: 12%;">
 									출판일
-									<span class="sort-icon">
-										<i class="fas fa-sort"></i>
-									</span>
 								</th>
 							</tr>
 						</thead>
@@ -121,7 +105,7 @@
 							<th:block th:unless="${#lists.isEmpty(bookList)}">
 
 								<tr th:each="book, iterStat : ${bookList}" th:object="${book}" class="bookInfo"
-									th:data-bookId="${book.bookId}" th:data-title="${book.title}"
+									th:data-bookId="${book.bookId}" th:data-title="${book.fullTitle}"
 									th:data-coverUrl="${book.coverUrl}" th:data-author="${book.author}"
 									th:data-rating="${book.customerReviewRank}" th:data-genres="${book.genres}"
 									th:data-description="${book.description}" th:data-reviewCount="${book.reviewCount}">
@@ -241,8 +225,8 @@
 
 
 					</nav>
-
 				</div>
+			</section>
 		</main>
 
 		<!-- 도서 상세 모달 -->
@@ -335,18 +319,18 @@
 
 							<!-- 리뷰 필터 -->
 							<!--<div class="review-filters mb-3">
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-outline-primary active">최신순</button>
-									<button type="button" class="btn btn-outline-primary">평점순</button>
-									<button type="button" class="btn btn-outline-primary">인기순</button>
-								</div>
-							</div>
-							-->
+										<div class="btn-group" role="group">
+											<button type="button" class="btn btn-outline-primary active">최신순</button>
+											<button type="button" class="btn btn-outline-primary">평점순</button>
+											<button type="button" class="btn btn-outline-primary">인기순</button>
+										</div>
+									</div>
+									-->
 
 							<!-- 리뷰 목록 -->
 							<div class="review-list">
 								<!-- 리뷰 아이템 -->
-								
+
 								<!-- 추가 리뷰 아이템들... -->
 							</div>
 						</div>
@@ -355,15 +339,16 @@
 			</div>
 		</div>
 
+
 		<!-- 푸터 추가-->
 		<th:block th:replace="~{common/footer}"></th:block>
-		
+
 		<script th:inline="javascript">
-			const loginMember = /*[[${session.loginMember}]]*/ "로그인한 멤버 번호";
+			const loginMember = /*[[${session.loginMember}]]*/ "로그인한 멤버";
 		</script>
 
 		<script src="/js/book/bookList.js"></script>
-		
+
 
 	</div>
 
