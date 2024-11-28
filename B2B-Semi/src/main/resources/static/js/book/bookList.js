@@ -138,7 +138,7 @@ function selectReviewList(bookId) {
 							<p class="review-text mb-2">${COMMENT}</p>
 								<div class="review-buttons" ${memberNo === MEMBER_NO ? "" : "style='display:none;'"}> 
 									<button class="btn btn-sm btn-primary me-2 edit-btn" data-action="edit">수정</button>
-									<button class="btn btn-sm btn-danger">삭제</button>
+									<button class="btn btn-sm btn-danger" data-action="delete">삭제</button>
 								</div>
 							</th:block
 						</div>
@@ -476,9 +476,6 @@ function saveReview(reviewItem) {
         "memberNo": loginMember.memberNo
     };
 	
-	console.log(obj);
-
-	/*
     fetch("/book/updateBookReview", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -487,22 +484,69 @@ function saveReview(reviewItem) {
     .then(resp => resp.text())
     .then(result => {
         if (result > 0) {
+			
             alert("리뷰가 수정되었습니다.");
-            selectReviewList(bookId); // 리뷰 목록 다시 불러오기
+			// 페이지 리로드
+			location.reload(true);
+			
         } else {
+			
             alert("리뷰 수정에 실패했습니다.");
+			
+			// 페이지 리로드
+			location.reload(true);
+			
         }
     });
-	*/
 	
 }
 
+// 리뷰 삭제
+function deleteReview(reviewItem) {
+	
+	console.log(reviewItem);
+	const editedRating = reviewItem.querySelector('.review-actions').textContent;
+	const bookId = document.querySelector('#selectBookId').value;
+	
+	// 서버로 수정 요청
+    const obj = {
+        "bookId": bookId,
+		"starPoint": parseFloat(editedRating),
+        "memberNo": loginMember.memberNo
+    };
+	
+    fetch("/book/deleteReview", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(obj)
+    })
+    .then(resp => resp.text())
+    .then(result => {
+        if (result > 0) {
+			
+            alert("리뷰가 삭제되었습니다.");
+			// 페이지 리로드
+			location.reload(true);
+			
+        } else {
+			
+            alert("리뷰 삭제에 실패했습니다.");
+			
+			// 페이지 리로드
+			location.reload(true);
+			
+        }
+    });
+}
+ 
+// 수정 버튼 클릭시
 document.querySelector('.review-list').addEventListener('click', function(e) {
     const button = e.target.closest('button');
     
     if (button) {
         const reviewItem = button.closest('.review-item');
         const action = button.getAttribute('data-action');
+		const bookId = document.querySelector('#selectBookId').value;
 
         switch(action) {
             case 'edit':
@@ -512,9 +556,10 @@ document.querySelector('.review-list').addEventListener('click', function(e) {
                 saveReview(reviewItem);
                 break;
             case 'cancel':
-                const bookId = document.querySelector('#selectBookId').value;
                 selectReviewList(bookId);
                 break;
+			case 'delete':
+				deleteReview(reviewItem);
         }
     }
 });

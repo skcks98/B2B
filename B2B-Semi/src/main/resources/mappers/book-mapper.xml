@@ -603,10 +603,31 @@
 		    	FROM TB_STARPOINT TBS 
 		    	WHERE TBS.BOOK_ID = BOOK.BOOK_ID
 		    ) AS REVIEWCOUNT
-		FROM TB_BOOKS BOOK
+		FROM "TB_BOOKS" BOOK
 		WHERE IS_DELETED = 'N'
 		AND TO_CHAR(PUB_DATE, 'YYYY-MM-DD') BETWEEN #{startDay} AND #{endDay}
 		ORDER BY CUSTOMER_REVIEW_RANK DESC) BK
 	</select>
+	
+	
+	<!-- 리뷰 수정 -->
+	<update id="updateBookReview">
+		UPDATE "TB_STARPOINT"
+		SET
+			STAR_POINT = #{starPoint},
+			"COMMENT" = #{comment},
+			COMMENT_FIX_DATE = SYSDATE
+		WHERE BOOK_ID = #{bookId}
+		AND MEMBER_NO = #{memberNo}
+		AND COMMENT_DEL_FL = 'N'
+	</update>
+	
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="deleteReview">
+		DELETE FROM "TB_STARPOINT"
+		WHERE BOOK_ID = #{bookId}
+		AND MEMBER_NO = #{memberNo}
+	</delete>
 
 </mapper>

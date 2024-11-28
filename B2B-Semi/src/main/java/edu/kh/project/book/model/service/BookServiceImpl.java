@@ -295,9 +295,9 @@ public class BookServiceImpl implements BookService{
 		        updateMap.put("bookId", paramMap.get("bookId"));
 		        updateMap.put("averageRating", newAvgRating);
 		        
-		        mapper.updateBookRating(updateMap);
+		        int resultPoint = mapper.updateBookRating(updateMap);
 
-		        return insertResult;
+		        return resultPoint;
 			
 			} else {
 				return -1;
@@ -373,6 +373,121 @@ public class BookServiceImpl implements BookService{
 		map.put("bookList", bookList);
 		
 		return map;
+		
+	}
+
+
+	// 리뷰 수정
+	@Override
+	public int updateBookReview(Map<String, Object> paramMap) {
+		// 리뷰 수정 진행
+		int result = mapper.updateBookReview(paramMap);
+		
+		if(result > 0) {
+
+			Map<String, Object> updateMap = new HashMap<>();
+			
+			// 기존 도서 평점과 리뷰 수 조회
+	        Map<String, Object> ratingMap = new HashMap<>();
+	        ratingMap.put("bookId", paramMap.get("bookId"));
+			
+	        // 기존 도서 평점과 리뷰 수 가져오기
+			Map<String, Object> bookRatingData = mapper.getBookRatingData(ratingMap);
+	        
+			// bookRatingData에서 "AVERAGERATING" 값을 BigDecimal로 가져옴
+			BigDecimal avgRatingBigDecimal = (BigDecimal) bookRatingData.get("AVERAGERATING");
+
+			// BigDecimal을 double로 변환
+			double currentAvgRating = avgRatingBigDecimal.doubleValue();
+	        
+	        // 기존 리뷰 수
+			BigDecimal reviewCount = (BigDecimal) bookRatingData.get("REVIEWCOUNT");
+			int currentReviewCount = reviewCount.intValue();
+	        
+	        // 새로운 별점 (현재 리뷰의 별점)
+	        int newStarPoint = (int) paramMap.get("starPoint");
+	        double currentStarPoint = newStarPoint; 
+	        
+	        // 새로운 평균 계산
+	        // 새로운 평균= (기존 평균×기존 리뷰 수)+새로운 별점 / (기존 리뷰 수+1)
+	        float newAvgRating = (float) (((currentAvgRating * currentReviewCount) + currentStarPoint) / (currentReviewCount - 1));
+	        
+	        // 데이터 세팅
+	        updateMap.put("bookId", paramMap.get("bookId"));
+	        updateMap.put("averageRating", newAvgRating);
+	        
+	        // 도서 평점 수정
+	        int resultPoint = mapper.updateBookRating(updateMap);
+	        
+	        return resultPoint;
+			
+		} else {
+			return 0;
+		
+		}
+		
+	}
+
+
+	// 리뷰 삭제
+	@Override
+	public int deleteReview(Map<String, Object> paramMap) {
+		Map<String, Object> updateMap = new HashMap<>();
+		
+		// 기존 도서 평점과 리뷰 수 조회
+        Map<String, Object> ratingMap = new HashMap<>();
+        ratingMap.put("bookId", paramMap.get("bookId"));
+		
+        // 기존 도서 평점과 리뷰 수 가져오기
+		Map<String, Object> bookRatingData = mapper.getBookRatingData(ratingMap);
+        
+		// bookRatingData에서 "AVERAGERATING" 값을 BigDecimal로 가져옴
+		BigDecimal avgRatingBigDecimal = (BigDecimal) bookRatingData.get("AVERAGERATING");
+
+		// BigDecimal을 double로 변환
+		double currentAvgRating = avgRatingBigDecimal.doubleValue();
+        
+        // 기존 리뷰 수
+		BigDecimal reviewCount = (BigDecimal) bookRatingData.get("REVIEWCOUNT");
+		int currentReviewCount = reviewCount.intValue();
+        
+        // 새로운 별점 (현재 리뷰의 별점)
+        int newStarPoint = (int) paramMap.get("starPoint");
+        double currentStarPoint = newStarPoint; 
+        
+        // 새로운 평균 계산
+        // 새로운 평균= (기존 평균×기존 리뷰 수)-새로운 별점 / (기존 리뷰 수)
+        // 0일 경우를 대비해서 미리 기존 리뷰 수를 계산한다
+        int updateReviewCount = currentReviewCount - 1;
+        
+        // 별점 변수 선언
+        float newAvgRating;
+        
+        if(updateReviewCount > 0) {
+        	// 기존 리뷰 수가 1개 이상으로 있을때
+        	newAvgRating = (float) (((currentAvgRating * currentReviewCount) - currentStarPoint) / (updateReviewCount));
+        	
+        } else {
+        	// 기존 리뷰 수가 0개일때 별점은 0점으로
+        	newAvgRating = 0;
+        }
+        
+        // 데이터 세팅
+        updateMap.put("bookId", paramMap.get("bookId"));
+        updateMap.put("averageRating", newAvgRating);
+        
+        // 도서 평점 수정
+        int resultPoint = mapper.updateBookRating(updateMap);
+        
+        if(resultPoint > 0) {
+        
+	        int result = mapper.deleteReview(paramMap);
+	        return result;
+		
+		} else {
+			return 0;
+		
+		}
 		
 	}
 	

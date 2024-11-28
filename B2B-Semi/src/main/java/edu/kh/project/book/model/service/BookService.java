@@ -84,5 +84,17 @@ public interface BookService {
 	 */
 	Map<String, Object> bookDetailPeriodList(Map<String, Object> map, int cp);
 
+	/** 리뷰 수정
+	 * @param paramMap
+	 * @return
+	 */
+	int updateBookReview(Map<String, Object> paramMap);
+
+	/** 리뷰 삭제
+	 * @param paramMap
+	 * @return
+	 */
+	int deleteReview(Map<String, Object> paramMap);
+
 
 }
