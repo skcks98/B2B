@@ -334,5 +334,46 @@ public class BookServiceImpl implements BookService{
 	public List<Book> selectCategortBestBook(String category) {
 		return mapper.selectCategortBestBook(category);
 	}
+
+
+	// 월간 도서 랭킹 top10 조회
+	@Override
+	public List<Book> selectMonthPeriodList() {
+		return mapper.selectMonthPeriodList();
+	}
+
+
+	// 연간 도서 랭킹 top10 조회
+	@Override
+	public List<Book> selectYearPeriodList() {
+		return mapper.selectYearPeriodList();
+	}
+
+
+	// 상세 기간별 랭킹 조회
+	@Override
+	public Map<String, Object> bookDetailPeriodList(Map<String, Object> paramMap, int cp) {
+		
+		// 도서 목록 개수 조회
+		int bookCount = mapper.bookDetailPeriodListCount(paramMap);
+		
+		// 페이지 네이션 진행
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.bookDetailPeriodList(rowBounds, paramMap); 
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("bookList", bookList);
+		
+		return map;
+		
+	}
 	
 }

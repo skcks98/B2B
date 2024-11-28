@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Book Community</title>
 
-	<link rel="stylesheet" href="/css/book/bestCategoryList.css">
+	<link rel="stylesheet" href="/css/book/bookPeriodList.css">
 
 	<!-- templates/common/common.html 조각으로 추가 -->
 	<th:block th:replace="~{common/common}"></th:block>
@@ -25,45 +25,40 @@
 
 			<section class="ranking-header">
 				<h1 class="ranking-title">
-					장르별 베스트 TOP10
+					<i class="fas fa-crown me-2" style="color: #FFD700;"></i>
+					기간별 실시간 랭킹
 				</h1>
 			</section>
 
 			<section class="genre-section">
-			    <form th:action="@{bestCategoryList}" method="get" id="bookSearch">
-			        <div class="search-section">
-			            <div class="search-wrapper">
-			                <div class="button-grid">
-			                    <th:block th:each="category, stat : ${map}" th:object="${map}">
-			                        <button type="button" th:text="${category['FIRST_CATEGORY']}" class="categoryButton" th:value="${category['FIRST_CATEGORY']}">카테고리 이름</input>
-			                    </th:block>
-			                </div>
-			            </div>
-			        </div>
-			    </form>
-			</section>
-
-			<section class="genre-section">
+				
 				<div class="book-list" id="bookList">
-					<th:block th:unless="${#lists.isEmpty(topBooks)}">
-						<div class="book-card" th:each="book, iterStat : ${topBooks}" th:object="${topBooks}">
+					<div class="ranking-nav">
+				        <div class="ranking-nav-wrapper">
+				            <button class="ranking-tab active" data-ranking-type="monthly">
+				                <span class="ranking-icon">🏆</span>
+				                월간 랭킹 Top10
+				            </button>
+				        </div>
+				    </div>
+					<th:block th:unless="${#lists.isEmpty(monthBookList)}">
+						<div class="book-card" th:each="monthBook, iterStat : ${monthBookList}" th:object="${monthBookList}" 
+						th:data-bookId="${monthBook.bookId}" th:data-title="${monthBook.fullTitle}"
+						th:data-coverUrl="${monthBook.coverUrl}" th:data-author="${monthBook.author}"
+						th:data-rating="${monthBook.customerReviewRank}" th:data-genres="${monthBook.genres}"
+						th:data-description="${monthBook.description}" th:data-reviewCount="${monthBook.reviewCount}">
 							<div class="rank-badge" th:text="${iterStat.count}"></div>
-				            <img th:src="${book.coverUrl}" th:alt="${book.title}" class="book-cover">
-				            <div class="book-info"
-								th:data-bookId="${book.bookId}" th:data-title="${book.fullTitle}"
-								th:data-coverUrl="${book.coverUrl}" th:data-author="${book.author}"
-								th:data-rating="${book.customerReviewRank}" th:data-genres="${book.genres}"
-								th:data-description="${book.description}" th:data-reviewCount="${book.reviewCount}">
-				                <h3 class="book-title" th:text="${book.title}">
-				                </h3>
-				                <p class="book-author" th:text="${book.author}"></p>
+				            <img th:src="${monthBook.coverUrl}" th:alt="${monthBook.title}" class="book-cover">
+				            <div class="book-info">
+				                <h3 class="book-title" th:text="${monthBook.title}"></h3>
+				                <p class="book-author" th:text="${monthBook.author}"></p>
 				                <div class="book-stats">
 				                    <div class="stat-item">
-				                        <span class="stat-value" th:text="${book.customerReviewRank}"></span>
+				                        <span class="stat-value" th:text="${monthBook.customerReviewRank}"></span>
 				                        <span class="stat-label">평점</span>
 				                    </div>
 				                    <div class="stat-item">
-				                        <span class="stat-value" th:text="${book.reviewCount}"></span>
+				                        <span class="stat-value" th:text="${monthBook.reviewCount}"></span>
 				                        <span class="stat-label">리뷰</span>
 				                    </div>
 				                </div>
@@ -71,8 +66,42 @@
 						</div>
 					</th:block>
 				</div>
-				
+				<div class="book-list" id="bookList">
+					<div class="ranking-nav">
+				        <div class="ranking-nav-wrapper">
+							<button class="ranking-tab active" data-ranking-type="yearly">
+					            <span class="ranking-icon">🌟</span>
+					            연간 랭킹 Top10
+					        </button>
+				        </div>
+				    </div>
+					<th:block th:unless="${#lists.isEmpty(yearBookList)}">
+						<div class="book-card" th:each="yearBook, iterStat : ${yearBookList}" th:object="${yearBookList}" 
+						th:data-bookId="${yearBook.bookId}" th:data-title="${yearBook.fullTitle}"
+						th:data-coverUrl="${yearBook.coverUrl}" th:data-author="${yearBook.author}"
+						th:data-rating="${yearBook.customerReviewRank}" th:data-genres="${yearBook.genres}"
+						th:data-description="${yearBook.description}" th:data-reviewCount="${yearBook.reviewCount}">
+							<div class="rank-badge" th:text="${iterStat.count}"></div>
+				            <img th:src="${yearBook.coverUrl}" th:alt="${yearBook.title}" class="book-cover">
+				            <div class="book-info">
+				                <h3 class="book-title" th:text="${yearBook.title}"></h3>
+				                <p class="book-author" th:text="${yearBook.author}"></p>
+				                <div class="book-stats">
+				                    <div class="stat-item">
+				                        <span class="stat-value" th:text="${yearBook.customerReviewRank}"></span>
+				                        <span class="stat-label">평점</span>
+				                    </div>
+				                    <div class="stat-item">
+				                        <span class="stat-value" th:text="${yearBook.reviewCount}"></span>
+				                        <span class="stat-label">리뷰</span>
+				                    </div>
+				                </div>
+				            </div>
+						</div>
+					</th:block>
+				</div>
 			</section>
+			
 		</main>
 
 		<!-- 도서 상세 모달 -->
@@ -136,7 +165,7 @@
 									</span>
 								</div>
 							</div>
-
+							
 							<!-- 리뷰 작성 폼 -->
 							<th:block th:if="${session.loginMember != null}">
 								<div class="review-form mb-4">
@@ -165,13 +194,13 @@
 
 							<!-- 리뷰 필터 -->
 							<!--<div class="review-filters mb-3">
-										<div class="btn-group" role="group">
-											<button type="button" class="btn btn-outline-primary active">최신순</button>
-											<button type="button" class="btn btn-outline-primary">평점순</button>
-											<button type="button" class="btn btn-outline-primary">인기순</button>
-										</div>
-									</div>
-									-->
+												<div class="btn-group" role="group">
+													<button type="button" class="btn btn-outline-primary active">최신순</button>
+													<button type="button" class="btn btn-outline-primary">평점순</button>
+													<button type="button" class="btn btn-outline-primary">인기순</button>
+												</div>
+											</div>
+											-->
 
 							<!-- 리뷰 목록 -->
 							<div class="review-list">
@@ -193,8 +222,7 @@
 			const loginMember = /*[[${session.loginMember}]]*/ "로그인한 멤버";
 		</script>
 
-		<script src="/js/book/bestCategoryList.js"></script>
-
+		<script src="/js/book/bookPeriodList.js"></script>
 
 	</div>
 

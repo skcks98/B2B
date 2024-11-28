@@ -161,7 +161,7 @@
 	</select>
 	
 	
-	<!-- 도서 목록 조회 -->
+	<!-- 도서 목록 검색 조회 -->
 	<select id="bookSearchList" resultType="Book">
 		SELECT 
 		    ROWNUM AS ROW_NUM,
@@ -243,10 +243,12 @@
 			TO_CHAR(COMMENT_WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE,
 			STAR_POINT,
 			MEMBER_NICKNAME,
-			PROFILE_IMG
+			PROFILE_IMG,
+			MEMBER_NO
 		FROM "TB_STARPOINT"
 		JOIN "TB_MEMBER" USING(MEMBER_NO)
 		WHERE BOOK_ID = #{bookId}
+		AND COMMENT_DEL_FL = 'N'
 	</select>
 	
 	
@@ -258,6 +260,7 @@
 		JOIN "TB_MEMBER" USING(MEMBER_NO)
 		WHERE BOOK_ID = #{bookId}
 		AND MEMBER_NO = #{memberNo}
+		AND COMMENT_DEL_FL = 'N'
 	</select>
 	
 	
@@ -283,6 +286,7 @@
 			COUNT(*) AS REVIEWCOUNT
 		FROM "TB_STARPOINT"
 		WHERE BOOK_ID = #{bookId}
+		AND COMMENT_DEL_FL = 'N'
 	</select>
 	
 	
@@ -443,9 +447,166 @@
 				  	) AS REVIEWCOUNT
 				FROM "TB_BOOKS" BOOK
 				WHERE FIRST_CATEGORY LIKE '%' || #{category} || '%'
+				AND IS_DELETED = 'N'
 				ORDER BY CUSTOMER_REVIEW_RANK DESC) BK
 		WHERE ROWNUM <= 10
 		]]>
+	</select>
+	
+	
+	<!-- 월간 도서 랭킹 top10 조회 -->
+	<select id="selectMonthPeriodList">
+		<![CDATA[
+		SELECT 
+		    BOOK_ID,
+			COVER_URL,
+			TITLE,
+			FULL_TITLE,
+			AUTHOR,
+			CONCAT(FIRST_CATEGORY, CONCAT(',', SECOND_CATEGORY)) GENRES,
+			DESCRIPTION,
+			FIRST_CATEGORY,
+			SECOND_CATEGORY,
+			PUB_DATE,
+			CUSTOMER_REVIEW_RANK,
+			REVIEWCOUNT
+		FROM 
+		    (
+		        SELECT 
+		            BOOK_ID,
+								COVER_URL,
+						  	CASE 
+						     	WHEN INSTR(TITLE, '-') > 0 THEN SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1)
+						     	ELSE TITLE
+						  	END AS TITLE,
+						  	TITLE AS FULL_TITLE,
+						  	CASE 
+						      	WHEN INSTR(AUTHOR, ',') > 0 THEN SUBSTR(AUTHOR, 1, INSTR(AUTHOR, ',') - 1)
+						     	ELSE AUTHOR
+						  	END AS AUTHOR,
+						  	DESCRIPTION,
+						  	FIRST_CATEGORY,
+						  	SECOND_CATEGORY,
+						  	TO_CHAR(PUB_DATE, 'YYYY-MM-DD') AS PUB_DATE,
+						  	ROUND(CUSTOMER_REVIEW_RANK, 1) CUSTOMER_REVIEW_RANK,
+						  	(
+						  		SELECT COUNT(*) 
+						  		FROM TB_STARPOINT TBS 
+						  		WHERE TBS.BOOK_ID = BOOK.BOOK_ID
+						  	) AS REVIEWCOUNT
+		        FROM "TB_BOOKS" BOOK
+		        WHERE IS_DELETED = 'N'
+		         AND PUB_DATE BETWEEN TRUNC(SYSDATE, 'MM') AND LAST_DAY(SYSDATE)
+		        ORDER BY CUSTOMER_REVIEW_RANK DESC
+		    )
+		WHERE ROWNUM <= 10
+		]]>
+	</select>
+	
+	
+	<!-- 연간 도서 랭킹 top10 조회 -->
+	<select id="selectYearPeriodList">
+		<![CDATA[
+		SELECT 
+		    BOOK_ID,
+			COVER_URL,
+			TITLE,
+			FULL_TITLE,
+			AUTHOR,
+			CONCAT(FIRST_CATEGORY, CONCAT(',', SECOND_CATEGORY)) GENRES,
+			DESCRIPTION,
+			FIRST_CATEGORY,
+			SECOND_CATEGORY,
+			PUB_DATE,
+			CUSTOMER_REVIEW_RANK,
+			REVIEWCOUNT
+		FROM 
+		    (
+		        SELECT 
+		            BOOK_ID,
+								COVER_URL,
+						  	CASE 
+						     	WHEN INSTR(TITLE, '-') > 0 THEN SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1)
+						     	ELSE TITLE
+						  	END AS TITLE,
+						  	TITLE AS FULL_TITLE,
+						  	CASE 
+						      	WHEN INSTR(AUTHOR, ',') > 0 THEN SUBSTR(AUTHOR, 1, INSTR(AUTHOR, ',') - 1)
+						     	ELSE AUTHOR
+						  	END AS AUTHOR,
+						  	DESCRIPTION,
+						  	FIRST_CATEGORY,
+						  	SECOND_CATEGORY,
+						  	TO_CHAR(PUB_DATE, 'YYYY-MM-DD') AS PUB_DATE,
+						  	ROUND(CUSTOMER_REVIEW_RANK, 1) CUSTOMER_REVIEW_RANK,
+						  	(
+						  		SELECT COUNT(*) 
+						  		FROM TB_STARPOINT TBS 
+						  		WHERE TBS.BOOK_ID = BOOK.BOOK_ID
+						  	) AS REVIEWCOUNT
+		        FROM "TB_BOOKS" BOOK
+		        WHERE IS_DELETED = 'N'
+		         AND PUB_DATE BETWEEN TRUNC(SYSDATE, 'YY') AND ADD_MONTHS(TRUNC(SYSDATE, 'YY'), 12) - 1
+		        ORDER BY CUSTOMER_REVIEW_RANK DESC
+		    )
+		WHERE ROWNUM <= 10
+		]]>
+	</select>
+	
+	
+	<!-- 상세 기간별 랭킹 개수 조회 -->
+	<select id="bookDetailPeriodListCount">
+		SELECT COUNT(*)
+		FROM "TB_BOOKS"
+		WHERE IS_DELETED = 'N'
+		AND TO_CHAR(PUB_DATE, 'YYYY-MM-DD') BETWEEN #{startDay} AND #{endDay}
+	</select>
+	
+	
+	<!-- 상세 기간별 랭킹 조회 -->
+	<select id="bookDetailPeriodList" resultType="Book">
+		SELECT
+			ROWNUM AS ROW_NUM,
+    		BOOK_ID,
+    		COVER_URL,
+		    TITLE,
+		    FULL_TITLE,
+		    AUTHOR,
+		    DESCRIPTION,
+		    FIRST_CATEGORY,
+		    SECOND_CATEGORY,
+		    GENRES,
+		    PUB_DATE,
+		    CUSTOMER_REVIEW_RANK,
+		    REVIEWCOUNT
+		FROM 
+		(SELECT
+    		BOOK_ID,
+    		COVER_URL,
+		    CASE 
+		        WHEN INSTR(TITLE, '-') > 0 THEN SUBSTR(TITLE, 1, INSTR(TITLE, '-') - 1)
+		        ELSE TITLE
+		    END AS TITLE,
+		    TITLE AS FULL_TITLE,
+		    CASE 
+		        WHEN INSTR(AUTHOR, ',') > 0 THEN SUBSTR(AUTHOR, 1, INSTR(AUTHOR, ',') - 1)
+		        ELSE AUTHOR
+		    END AS AUTHOR,
+		    DESCRIPTION,
+		    FIRST_CATEGORY,
+		    SECOND_CATEGORY,
+		    CONCAT(FIRST_CATEGORY, CONCAT(',', SECOND_CATEGORY)) GENRES,
+		    TO_CHAR(PUB_DATE, 'YYYY-MM-DD') AS PUB_DATE,
+		    ROUND(CUSTOMER_REVIEW_RANK, 1) CUSTOMER_REVIEW_RANK,
+		    (
+		    	SELECT COUNT(*) 
+		    	FROM TB_STARPOINT TBS 
+		    	WHERE TBS.BOOK_ID = BOOK.BOOK_ID
+		    ) AS REVIEWCOUNT
+		FROM TB_BOOKS BOOK
+		WHERE IS_DELETED = 'N'
+		AND TO_CHAR(PUB_DATE, 'YYYY-MM-DD') BETWEEN #{startDay} AND #{endDay}
+		ORDER BY CUSTOMER_REVIEW_RANK DESC) BK
 	</select>
 
 </mapper>
