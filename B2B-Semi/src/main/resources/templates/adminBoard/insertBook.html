@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>내 정보</title>
+  <title>도서 등록 페이지</title>
 
   <!-- 공용 css/js 추가 -->
   <th:block th:replace="~{common/common}"></th:block>
 
-  <link rel="stylesheet" href="/B2B-Project/B2B-Semi/src/main/resources/static/css/myPage/myPage-info.css">
+  <link rel="stylesheet" href="/css/adminBoard/insertBook.css">
 
   <style>
     /* 기본 전체 설정 시작 */
@@ -215,44 +215,71 @@
           도서 등록 페이지
         </h1>
       </section>
+		<section class="ranking-header">
+			<input type="text" placeholder="검색할 책 제목을 입력하세요." id="searchInput" name="search">
+			<button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i>검색</button>
+		</section>
+		<section class="ranking-header">
+			<h1 class="ranking-title">검색된 도서 목록</h1>
+			<table>
+				<tbody id="tbody">
+	<!--책 표지-->	<tr th:each="book, iterStat : ${bookList}" th:object="${book}">
+						<td>
+							<input type="hidden" id="bookId">
+							<img src="" alt="Book cover" class="book-detail-cover">
+						</td>
+					</tr>
 
+					<tr th:each="book, iterStat : ${bookList}" th:object="${book}">
+						<td th:text="*{title}">책 제목</td>
+					</tr>
+					
+					<tr th:each="book, iterStat : ${bookList}" th:object="${book}">
+						<td th:text="*{author}">작가명</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</section>
+	  <form action="insert" method="POST" id="insertForm">
       <section class="genre-section">
+
         <div class="genre-header">
 
 		<div class="book-detail">
-			<input type="hidden" id="bookId">
-			<img src="" alt="Book cover" class="book-detail-cover">
-			<div class="book-detail-info">
-				<h2 class="book-detail-title"></h2>
-				<p class="book-detail-author"></p>
-				
-				<form action="insert" name="insertForm" id="insertForm">
-					
-					<div class="updateInfo">
-						<label>작가명 : <input type="text" placeholder="수정할 작가이름" name="author"></label>
-						<div>
-							<label>출판사 : <input type="text" placeholder="수정할 출판사명" name="publisher"></label>
-						</div>
-					</div>
-				</form>
+			<div>
+				<input type="hidden" id="bookId">
+				<img src="" alt="Book cover" class="book-detail-cover">
+			</div>
 
-				<div class="book-synopsis">
+			<div class="book-detail-info">
+				<div>
+					<h2 class="book-detail-title"></h2> <!-- 제목 -->
+				</div>
+				
+				<div>
+					<p class="book-detail-author"></p> <!-- 작가명 -->
+				</div>
+				
+				<div>
+					<div class="book-synopsis"> <!-- 디크립션 -->
 					<h3 class="section-title">작품 소개</h3>
 					<p class="book-synopsis-text">
 					</p>
+					</div>
+				</div>
+
+				<div>
+					<button id="insertBtn">도서 등록하기</button>
 				</div>
 				
 			</div>
 			
 		</div>
 
-
-
-
-
         </div>
       </section>
-
+	  </form>
 
     </main>
 
@@ -264,7 +291,7 @@
   <!-- 다음 주소 API 추가 -->
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <!-- js 추가 -->
-  <script src="/js/adminBoard/memberManage.js"></script>
+  <script src="/js/adminBoard/insertBook.js"></script>
 
 </body>
 

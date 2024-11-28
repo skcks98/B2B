@@ -1,3 +1,80 @@
+const searchMemberListBtn = document.querySelector("#searchBtn"); // 도서 관리 검색창
+const tbody = document.querySelector("#tbody");
+const input = document.querySelector("#searchInput");
+const checkAll = document.querySelector("#theadCheckAll");
+
+searchMemberListBtn.addEventListener("click", () => {
+
+	const key = document.querySelector("#searchKey").value;
+	const query = input.value.trim();
+
+	window.location.href = `/adminBoard/searchMember?key=${key}&search=${query}`;
+  
+});
+
+
+// 체크박스 전체 선택.
+document.querySelector("#theadCheckAll").addEventListener("change", e => {
+	const checkboxes = tbody.querySelectorAll(".checkbox");
+	checkboxes.forEach(checkbox => {
+		checkbox.checked = e.target.checked;
+	});
+});
+
+// 체크박스 전체 선택 동기화.
+tbody.addEventListener("change", e => {
+	if(e.target.classList.contains("checkbox")) {
+		const checkboxes = tbody.querySelectorAll(".checkbox");
+		const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+		document.querySelector("#theadCheckAll").checked = allChecked;
+	}
+})
+
+const updateDelFlYBtn = document.querySelector("#updateDelFlY").addEventListener("click", () => updateMemberStatus('탈퇴'));
+const updateDelFlNBtn = document.querySelector("#updateDelFlN").addEventListener("click", () => updateMemberStatus('복구'));
+
+function updateMemberStatus(action) {
+	
+	const checkboxes = tbody.querySelectorAll(".checkbox:checked");
+	if (checkboxes.length === 0) {
+		alert("선택된 회원이 없습니다.");
+		return;
+	}
+	
+	const memberNos = Array.from(checkboxes).map(box => box.value);
+	
+	console.log(memberNos);
+	
+	fetch("/adminBoard/updateStatus", {
+		method : "POST",
+		headers : {"Content-type" : "application/json"},
+		body : JSON.stringify({
+			memberNos: memberNos,
+			action: action
+		})
+		
+	})
+	.then(response => response.json())
+	.then(data => {
+		if(data.success) {
+			alert(`회원 상태가 ${action}으로 변경됐습니다.`);
+			location.reload();
+		}
+		else {
+			alert("상태 변경 실패:" + data.message);
+		}
+	})
+	.catch(error => console.error("Error:",error));
+}
+
+const updateMemberBtn = document.querySelectorAll("button[name='updateMemberBtn']").forEach(button => {
+	button.addEventListener("click", () => {
+		const memberNo = button.getAttribute('data-member-no');
+		
+		window.location.href = `/adminBoard/updateMember?memberNo=${memberNo}`;
+	})
+});
+
 // 다음 주소 API
 function execDaumPostcode() {
     new daum.Postcode({
@@ -30,120 +107,4 @@ const searchAddress = document.querySelector("#searchAddress");
 if(searchAddress != null) { // 화면상에 id가 searchAddress인 요소가 존재하는 경우에만.
     
     searchAddress.addEventListener("click", execDaumPostcode);
-}
-
-// 페이지 로드 시 회원 목록 자동 조회.
-document.addEventListener("DOMContentLoaded", () => {
-	const searchParams = new URLSearchParams(window.location.search);
-	if(!searchParams.has("key")|| !searchParams.has("search")) {
-		fetchMemberList();
-	}
-});
-
-// 회원 목록 조회 함수
-function fetchMemberList() {
-	fetch("/adminBoard/selectMemberList")
-	.then(resp => resp.json())
-	.then(memberList => {
-		tbody.innerHTML = ""; // 기존 내용을 초기화
-		for (let member of memberList) {
-		    const tr = document.createElement("tr");
-
-		    tr.innerHTML = `
-		        <td><a href="gotoUpdate" class=hidden>${member.memberId}</a></td>
-		        <td>${member.memberNickname}</td>
-		        <td>${member.enrollDate}</td>
-		        <td>${member.memberDelFl ? "탈퇴" : "활성"}</td>
-		        <td><button class="updateMemberBtn" onclick='updateMember(${member.memberId})'>회원 수정</button></td>
-		        <td><input class="checkbox" type="checkbox" value="${member.memberNo}"></td>
-		    `;
-			
-		    tbody.appendChild(tr);
-		}
-	}) .catch(error => {
-		    console.error("회원 목록 불러오기 중 오류:", error);
-		});
-}
-
-const searchBookListBtn = document.querySelector("#searchBtn"); // 도서 관리 검색창
-const tbody = document.querySelector("#tbody");
-const input = document.querySelector("#searchInput");
-const checkAll = document.querySelector("#theadCheckAll");
-
-const key = document.querySelector("#searchKey").value;
-const query = input.value.trim();
-
-searchBookListBtn.addEventListener("click", () => {
-
-//  if(input.value.trim().length === 0) {
-//    alert("검색어를 입력해주세요.");
-//    e.preventDefault();
-//    input.focus();
-//	return;
-//  }
-	window.location.href = `/adminBoard/searchMember?key=${key}&search=${query}`;
-  
-});
-
-
-// 회원 수정 버튼 이벤트 위임.
-tbody.addEventListener("click", e => {
-	if(e.target.classList.contains("updateMemberBtn")) {
-		const memberId = e.target.closest("tr").querySelector("a").textContent;
-		location.href = `updateMember?memberId=${memberId}`;
-	}
-});
-
-// 체크박스 전체 선택.
-document.querySelector("#theadCheckAll").addEventListener("change", e => {
-	const checkboxes = tbody.querySelectorAll(".checkbox");
-	checkboxes.forEach(checkbox => {
-		checkbox.checked = e.target.checked;
-	});
-});
-
-// 체크박스 전체 선택 동기화.
-tbody.addEventListener("change", e => {
-	if(e.target.classList.contains("checkbox")) {
-		const checkboxes = tbody.querySelectorAll(".checkbox");
-		const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-		document.querySelector("#theadCheckAll").checked = allChecked;
-	}
-})
-
-const updateDelFlYBtn = document.querySelector("#updateDelFlY").addEventListener("click", () => updateStatus('탈퇴'));
-const updateDelFlNBtn = document.querySelector("#updateDelFlN").addEventListener("click", () => updateStatus('복구'));
-
-function updateStatus(action) {
-	
-	const checkboxes = tbody.querySelectorAll(".checkbox:checked");
-	if (checkboxes.length === 0) {
-		alert("선택된 회원이 없습니다.");
-		return;
-	}
-	
-	const memberIds = Array.from(checkboxes).map(box => box.value);
-	
-	console.log(memberIds);
-	
-	fetch("/adminBoard/updateStatus", {
-		method : "POST",
-		headers : {"Content-type" : "application/json"},
-		body : JSON.stringify({
-			memberIds: memberIds,
-			action: action
-		})
-		
-	})
-	.then(response => response.json())
-	.then(data => {
-		if(data.success) {
-			alert(`회원 상태가 ${action}으로 변경됐습니다.`);
-			location.reload();
-		}
-		else {
-			alert("상태 변경 실패:" + data.message);
-		}
-	})
-	.catch(error => console.error("Error:",error));
 }

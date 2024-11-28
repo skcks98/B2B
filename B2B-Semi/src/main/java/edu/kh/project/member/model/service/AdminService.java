@@ -11,7 +11,6 @@ public interface AdminService {
 
 	public Map<String, Object> selectBoardList(int boardCode, int cp);
 
-	public List<Member> selectMemberList();
 
 	/** 회원 수정 버튼 클릭 시.
 	 * @param inputMember
@@ -21,7 +20,7 @@ public interface AdminService {
 
 	public int updateInfo(Member inputMember, String[] memberAddress);
 
-	public Member selectedMember(String memberId);
+	public Member selectedMember(int memberNo);
 
 	public List<Member> searchMember(Map<String, Object> paramMap);
 
@@ -44,5 +43,14 @@ public interface AdminService {
 	public int updateBookStatus(List<String> bookList, boolean updateY);
 
 	public int insertNewBook(Map<String, Object> paramMap);
+
+	public Map<String, Object> searchBookList(Map<String, Object> paramMap, int cp);
+
+	public Map<String, Object> memberList(int cp);
+
+	public Map<String, Object> memberSearchList(int cp, Map<String, Object> paramMap);
+
+
+	public Book selectBookDetail(Map<String, Object> paramMap);
 
 }

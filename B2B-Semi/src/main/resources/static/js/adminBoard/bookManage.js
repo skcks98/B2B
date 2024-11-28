@@ -4,6 +4,10 @@ const input = document.querySelector("#searchInput");
 const checkAll = document.querySelector("#theadCheckAll");
 
 searchBookListBtn.addEventListener("click", () => {
+	
+	const key = document.querySelector("#searchKey").value;
+	const query = input.value.trim();
+	
 	window.location.href = `/adminBoard/searchBook?key=${key}&search=${query}`;
 })
 
@@ -64,12 +68,12 @@ tbody.addEventListener("change", e => {
 	}
 })
 
-// 게시글 수정 버튼 이벤트 위임.
-tbody.addEventListener("click", e => {
-	if(e.target.classList.contains("updateBookBtn")) {
-		const boardCode = e.target.closest("tr").querySelector("a").textContent;
-		location.href = `updateBook?boardCode=${boardCode}`;
-	}
+const updateBookBtn = document.querySelectorAll("button[name='updateBookBtn']").forEach(button => {
+	button.addEventListener("click", () => {
+		const bookId = button.getAttribute('data-book-id');
+		
+		window.location.href = `/adminBoard/updateBook?bookId=${bookId}`;
+	})
 });
 
 const addBookBtn = document.querySelector("#addBook").addEventListener("click", () => {

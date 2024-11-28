@@ -41,7 +41,7 @@ bookInfoRows.forEach(row => {
 	// 각 row에 클릭 이벤트 리스너 추가
 	row.addEventListener('click', () => {
 		const modal = new bootstrap.Modal(document.getElementById('bookDetailModal'));
-		
+
 		// 아래부터 row 클릭된 요소의 데이터를 가져와 세팅작업 진행
 
 		// tr 요소에서 필요한 데이터 가져오기 (data-attributes 사용)
@@ -110,9 +110,14 @@ function selectReviewList(bookId) {
 
 			// 조회되는 댓글 목록이 있을때
 			if (result.length > 0) {
-				result.forEach(({ MEMBER_NICKNAME, COMMENT, STAR_POINT, WRITE_DATE, PROFILE_IMG }) => {
+				result.forEach(({ MEMBER_NO, MEMBER_NICKNAME, COMMENT, STAR_POINT, WRITE_DATE, PROFILE_IMG }) => {
 					// 별점은 따로 불러오기
 					const starHTML = getStarHTML(STAR_POINT);
+					let memberNo = "";
+
+					if (loginMember != null) {
+						memberNo = loginMember.memberNo;
+					}
 
 					const reviewHTML = `
 						<div class="review-item">
@@ -131,6 +136,11 @@ function selectReviewList(bookId) {
 								</div>
 							</div>
 							<p class="review-text mb-2">${COMMENT}</p>
+								<div class="review-buttons" ${memberNo === MEMBER_NO ? "" : "style='display:none;'"}> 
+									<button class="btn btn-sm btn-primary me-2 edit-btn" data-action="edit">수정</button>
+									<button class="btn btn-sm btn-danger">삭제</button>
+								</div>
+							</th:block
 						</div>
 		            `;
 
@@ -184,6 +194,7 @@ let currentRating = 0;
 
 // 별점 선택시
 function updateStars(rating) {
+	console.log(rating);
 	const starRating = rating / 2; // 10점 만점을 5점 만점으로 변환
 	stars.forEach(star => {
 		// 기존의 클래스 삭제
@@ -300,31 +311,31 @@ if (submitReview != null) {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(obj) // obj JS 객체를 JSON 으로 변경
 		})
-		.then(resp => resp.text())
-		.then(result => {
+			.then(resp => resp.text())
+			.then(result => {
 
-			if (result > 0) {
-				alert("리뷰 댓글이 등록되었습니다.");
+				if (result > 0) {
+					alert("리뷰 댓글이 등록되었습니다.");
 
-				// 페이지 리로드
-				location.reload(true);
+					// 페이지 리로드
+					location.reload(true);
 
-				/*
-				// 모달 데이터 갱신 및 다시 표시
-				selectReviewList(bookId); // 댓글 목록 다시 불러오기
-				
-				// Bootstrap Modal 재활성화
-				const modal = bootstrap.Modal.getInstance(document.getElementById('bookDetailModal'));
-				if (modal) {
-					modal.show(); // 모달 다시 표시
+					/*
+					// 모달 데이터 갱신 및 다시 표시
+					selectReviewList(bookId); // 댓글 목록 다시 불러오기
+					
+					// Bootstrap Modal 재활성화
+					const modal = bootstrap.Modal.getInstance(document.getElementById('bookDetailModal'));
+					if (modal) {
+						modal.show(); // 모달 다시 표시
+					}
+					*/
+
+				} else {
+					alert("이미 리뷰를 작성하셨습니다.");
 				}
-				*/
 
-			} else {
-				alert("이미 리뷰를 작성하셨습니다.");
-			}
-
-		});
+			});
 
 		// 폼 초기화
 		currentRating = 0;
@@ -334,3 +345,176 @@ if (submitReview != null) {
 
 	});
 }
+
+// 리뷰 수정 모드 전환 함수
+function enterReviewEditMode(reviewItem) {
+    const reviewText = reviewItem.querySelector('.review-text');
+    const reviewRating = reviewItem.querySelector('.review-rating');
+    const editBtn = reviewItem.querySelector('.edit-btn');
+    const deleteBtn = editBtn.nextElementSibling;
+
+    // 현재 리뷰의 텍스트와 별점 추출
+    const currentText = reviewText.textContent;
+    const currentStarPoint = parseFloat(reviewRating.querySelector('span').textContent);
+
+    // 수정 모드 HTML로 변경
+    reviewText.innerHTML = `
+        <textarea class="form-control edit-review-content">${currentText}</textarea>
+    `;
+
+    // 별점 수정 부분 추가
+    const ratingHTML = `
+        <div class="rating-select edit-rating" style="display: inline;">
+            <span class="star-rating" data-rating="1"></span>
+            <span class="star-rating" data-rating="2"></span>
+            <span class="star-rating" data-rating="3"></span>
+            <span class="star-rating" data-rating="4"></span>
+            <span class="star-rating" data-rating="5"></span>
+            <span class="selected-rating">${currentStarPoint}</span>
+        </div>
+    `;
+    reviewRating.innerHTML = ratingHTML;
+
+    // 버튼 변경
+    editBtn.textContent = '저장';
+    editBtn.classList.remove('edit-btn');
+    editBtn.classList.add('save-btn');
+	editBtn.setAttribute('data-action', 'save');
+	
+    deleteBtn.textContent = '취소';
+    deleteBtn.classList.add('cancel-btn');
+	deleteBtn.setAttribute('data-action', 'cancel');
+
+    // 별점 선택 로직 추가
+    setupEditRatingLogic(reviewItem, currentStarPoint);
+}
+
+// 별점 선택 로직 설정 함수
+function setupEditRatingLogic(reviewItem, currentStarPoint) {
+    const editRatingSelect = reviewItem.querySelector('.edit-rating');
+    const editStars = editRatingSelect.querySelectorAll('.star-rating');
+    const editSelectedRating = editRatingSelect.querySelector('.selected-rating');
+    let editCurrentRating = currentStarPoint;
+
+    // 초기 별점 상태 설정 함수
+    function updateEditStars(rating) {
+        const starRating = rating / 2; // 10점 만점을 5점 만점으로 변환
+        editStars.forEach(star => {
+            star.classList.remove('full', 'half');
+            const thisStarRating = parseFloat(star.dataset.rating);
+
+            if (thisStarRating <= Math.floor(starRating)) {
+                star.classList.add('full');
+            } else if (thisStarRating === Math.ceil(starRating) && starRating % 1 !== 0) {
+                star.classList.add('half');
+            }
+        });
+    }
+
+    // 초기 별점 상태로 설정
+    updateEditStars(currentStarPoint);
+
+    // 마우스 이동 이벤트 리스너 추가
+    editRatingSelect.addEventListener('mousemove', (e) => {
+        const star = e.target;
+        if (!star.classList.contains('star-rating')) return;
+
+        const rect = star.getBoundingClientRect();
+        const isLeftHalf = e.clientX - rect.left < rect.width / 2;
+        const rating = parseFloat(star.dataset.rating);
+        const displayRating = isLeftHalf ? (rating * 2 - 1) : rating * 2;
+
+        editStars.forEach(s => {
+            const sRating = parseFloat(s.dataset.rating);
+            s.classList.remove('full', 'half');
+
+            if (sRating < rating) {
+                s.classList.add('full');
+            } else if (sRating === rating) {
+                if (isLeftHalf) {
+                    s.classList.add('half');
+                } else {
+                    s.classList.add('full');
+                }
+            }
+        });
+
+        editSelectedRating.textContent = displayRating;
+    });
+
+    // 클릭 이벤트 리스너 추가
+    editRatingSelect.addEventListener('click', (e) => {
+        const star = e.target;
+        if (!star.classList.contains('star-rating')) return;
+
+        const rect = star.getBoundingClientRect();
+        const isLeftHalf = e.clientX - rect.left < rect.width / 2;
+        const rating = parseFloat(star.dataset.rating);
+
+        editCurrentRating = isLeftHalf ? (rating * 2 - 1) : rating * 2;
+        editSelectedRating.textContent = editCurrentRating;
+    });
+}
+
+// 리뷰 저장 함수
+function saveReview(reviewItem) {
+    const editedText = reviewItem.querySelector('.edit-review-content').value;
+    const editedRating = reviewItem.querySelector('.selected-rating').textContent;
+    const bookId = document.querySelector('#selectBookId').value;
+
+    // 유효성 검사
+    if (!editedText.trim()) {
+        alert('리뷰 내용을 입력해주세요.');
+        return;
+    }
+
+    // 서버로 수정 요청
+    const obj = {
+        "bookId": bookId,
+        "starPoint": parseFloat(editedRating),
+        "comment": editedText,
+        "memberNo": loginMember.memberNo
+    };
+	
+	console.log(obj);
+
+	/*
+    fetch("/book/updateBookReview", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(obj)
+    })
+    .then(resp => resp.text())
+    .then(result => {
+        if (result > 0) {
+            alert("리뷰가 수정되었습니다.");
+            selectReviewList(bookId); // 리뷰 목록 다시 불러오기
+        } else {
+            alert("리뷰 수정에 실패했습니다.");
+        }
+    });
+	*/
+	
+}
+
+document.querySelector('.review-list').addEventListener('click', function(e) {
+    const button = e.target.closest('button');
+    
+    if (button) {
+        const reviewItem = button.closest('.review-item');
+        const action = button.getAttribute('data-action');
+
+        switch(action) {
+            case 'edit':
+                enterReviewEditMode(reviewItem);
+                break;
+            case 'save':
+                saveReview(reviewItem);
+                break;
+            case 'cancel':
+                const bookId = document.querySelector('#selectBookId').value;
+                selectReviewList(bookId);
+                break;
+        }
+    }
+});

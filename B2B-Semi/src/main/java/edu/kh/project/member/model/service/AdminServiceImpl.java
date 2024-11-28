@@ -22,7 +22,28 @@ public class AdminServiceImpl implements AdminService{
 
 	private final AdminMapper mapper;
 	
+	@Override
+	public Map<String, Object> memberList(int cp) {
 
+		int memberCount = mapper.memberCount();
+		
+		Pagination pagination = new Pagination(cp, memberCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Member> memberList = mapper.memberList(rowBounds);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("memberList", memberList);
+		
+		return map;
+	}
+	
 	@Override
 	public Map<String, Object> selectBoardList(int boardCode, int cp) {
 
@@ -96,28 +117,68 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	public Map<String, Object> bookSearchList(int cp, Map<String, Object> paramMap) {
-		// TODO Auto-generated method stub
-		return null;
+
+		int bookCount = mapper.searchBookCount(paramMap);
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.bookSearchList(paramMap, rowBounds);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("pagination", pagination);
+		result.put("bookList", bookList);
+		
+		return result;
+	}
+	
+	@Override
+	public Map<String, Object> memberSearchList(int cp, Map<String, Object> paramMap) {
+
+		int memberCount = mapper.searchMemberCount(paramMap);
+		Pagination pagination = new Pagination(cp, memberCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Member> memberList = mapper.memberSearchList(paramMap, rowBounds);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("pagination", pagination);
+		result.put("memberList", memberList);
+		
+		return result;
 	}
 	
 	
 	@Override
 	public Map<String, Object> boardSearchList(int cp, Map<String, Object> paramMap) {
 		
-		return null;
-	}
-	
-	
-	
-	
-	@Override
-	public List<Member> selectMemberList() {
-
-		return mapper.selectMemberList();
+		int boardCount = mapper.searchBoardCount(paramMap);
+		Pagination pagination = new Pagination(cp, boardCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Board> boardList = mapper.boardSearchList(paramMap, rowBounds);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("pagination", pagination);
+		result.put("boardList", boardList);
+		
+		return result;
 	}
 	
 	@Override
 	public int updateMember(Member inputMember) {
+		
+		
+		
+		
 		
 		return mapper.updateMember(inputMember);
 	}
@@ -140,9 +201,9 @@ public class AdminServiceImpl implements AdminService{
 	
 	
 	@Override
-	public Member selectedMember(String memberId) {
+	public Member selectedMember(int memberNo) {
 
-		return mapper.selectedMember(memberId);
+		return mapper.selectedMember(memberNo);
 	}
 	
 	@Override
@@ -162,6 +223,24 @@ public class AdminServiceImpl implements AdminService{
 		return mapper.searchBoard(paramMap);
 	}
 	
+	@Override
+	public Map<String, Object> searchBookList(Map<String, Object> paramMap, int cp) {
+
+		int bookCount = mapper.searchBookCount(paramMap);
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.searchBookList(paramMap, rowBounds);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("pagination", pagination);
+		result.put("bookList", bookList);
+
+		return result;
+	}
 	
 	@Override
 	public int updateStatus(List<String> memberIds, boolean updateY) {
@@ -191,5 +270,12 @@ public class AdminServiceImpl implements AdminService{
 
 		return mapper.insertNewBook(paramMap);
 	}
+
+	@Override
+	public Book selectBookDetail(Map<String, Object> paramMap) {
+
+		return mapper.selectBookDetail(paramMap);
+	}
+	
 	
 }

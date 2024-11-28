@@ -27,8 +27,6 @@ public interface AdminMapper {
 	 */
 	List<Board> selectBoardList(int boardCode, RowBounds rowBounds);
 
-	List<Member> selectMemberList();
-
 	/** 회원 정보 수정(관리자)
 	 * @param inputMember
 	 * @return
@@ -37,7 +35,7 @@ public interface AdminMapper {
 
 	int updateInfo(Member inputMember);
 
-	Member selectedMember(String memberId);
+	Member selectedMember(int memberNo);
 
 	List<Member> searchMember(Map<String, Object> map);
 
@@ -60,6 +58,26 @@ public interface AdminMapper {
 	int updateBookStatus(@Param("bookList")List<String> bookList, @Param("status") String status);
 
 	int insertNewBook(Map<String, Object> paramMap);
+
+	List<Book> bookSearchList(Map<String, Object> paramMap, RowBounds rowBounds);
+
+	List<Board> boardSearchList(Map<String, Object> paramMap, RowBounds rowBounds);
+
+	List<Book> searchBookList(Map<String, Object> paramMap, RowBounds rowBounds);
+
+	int searchBookCount(Map<String, Object> paramMap);
+
+	int searchBoardCount(Map<String, Object> paramMap);
+
+	int memberCount();
+
+	List<Member> memberList(RowBounds rowBounds);
+
+	int searchMemberCount(Map<String, Object> paramMap);
+
+	List<Member> memberSearchList(Map<String, Object> paramMap, RowBounds rowBounds);
+
+	Book selectBookDetail(Map<String, Object> paramMap);
 
 
 }

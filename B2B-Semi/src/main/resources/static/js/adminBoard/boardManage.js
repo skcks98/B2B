@@ -4,10 +4,12 @@ const input = document.querySelector("#searchInput");
 const checkAll = document.querySelector("#theadCheckAll");
 
 searchBoardListBtn.addEventListener("click", () => {
+	
+	const key = document.querySelector("#searchKey").value;
+	const query = input.value.trim();
+	
 	window.location.href = `/adminBoard/searchBoard?key=${key}&search=${query}`;
 })
-
-
 
 const updateDelFlYBtn = document.querySelector("#updateDelFlY").addEventListener("click", () => updateBoardStatus('삭제'));
 const updateDelFlNBtn = document.querySelector("#updateDelFlN").addEventListener("click", () => updateBoardStatus('복구'));

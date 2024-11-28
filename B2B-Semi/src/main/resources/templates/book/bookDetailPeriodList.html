@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Book Community</title>
 
-	<link rel="stylesheet" href="/css/book/bookList.css">
+	<link rel="stylesheet" href="/css/book/bookDetailPeriodList.css">
 
 	<!-- templates/common/common.html 조각으로 추가 -->
 	<th:block th:replace="~{common/common}"></th:block>
@@ -25,43 +25,47 @@
 
 			<section class="ranking-header">
 				<h1 class="ranking-title">
-					도서 목록
+					상세 기간별 랭킹
 				</h1>
 			</section>
-
+			
 			<section class="genre-section">
-				<form th:action="@{bookList}" method="get" id="bookSearch">
+				<form th:action="@{bookDetailPeriodList}" method="get" id="bookSearch">
 					<div class="search-section">
 						<div class="search-wrapper">
 
 							<div class="input-group flex-grow-1">
-								<select class="form-select" name="searchType" style="border-radius: 8px;"
-									th:value="${searchType}">
-									<option th:value="title" th:selected="${searchType == 'title'}">제목</option>
-									<option th:value="author" th:selected="${searchType == 'author'}">작가</option>
-								</select>
-								<input type="text" class="form-control" name="searchInput" placeholder="검색어를 입력하세요"
-									style="border-radius: 8px;" th:value="${searchInput}">
+								<div class="date-input-group">
+									<span>출판일</span>
+				                    <input type="date" class="date-input" name="startDay" th:value="${startDay}">
+				                    <span>~</span>
+				                    <input type="date" class="date-input" name="endDay" th:value="${endDay}">
+				                </div>
 							</div>
 
-							<select class="form-select filter-select" name="genreFilter" th:value="${genreFilter}">
-								<option th:value="all" th:selected="${genreFilter == 'all'}">전체 장르</option>
-								<option th:value="소설" th:selected="${genreFilter == '소설'}">소설</option>
-								<option th:value="시" th:selected="${genreFilter == '시'}">시</option>
-								<option th:value="에세이" th:selected="${genreFilter == '에세이'}">에세이</option>
-								<option th:value="자기계발" th:selected="${genreFilter == '자기계발'}">자기계발</option>
-							</select>
 
-							<select class="form-select filter-select" name="ratingFilter" th:value="${ratingFilter}">
-								<option value="">전체 평점</option>
-								<option th:value="9" th:selected="${ratingFilter == '9'}">9점대</option>
-								<option th:value="8" th:selected="${ratingFilter == '8'}">8점대</option>
-								<option th:value="7" th:selected="${ratingFilter == '7'}">7점대</option>
-								<option th:value="6" th:selected="${ratingFilter == '6'}">6점대</option>
-							</select>
-
+							<button class="search-period">
+								1주일
+							</button>
+							
+							<button class="search-period">
+								1개월
+							</button>
+							
+							<button class="search-period">
+								3개월
+							</button>
+							
+							<button class="search-period">
+								6개월
+							</button>
+							
+							<button class="search-period">
+								1년
+							</button>
+							
 							<button class="search-button">
-								<i class="fas fa-search"></i>검색
+								검색
 							</button>
 
 						</div>
@@ -70,67 +74,36 @@
 			</section>
 
 			<section class="genre-section">
-				<div class="table-responsive">
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th style="width: 8%;">
-									구분
-								</th>
-
-								<th style="width: 35%;">
-									제목 (평점)
-								</th>
-
-								<th style="width: 25%;">
-									작가
-								</th>
-
-								<th style="width: 20%;">
-									장르
-								</th>
-
-								<th style="width: 12%;">
-									출판일
-								</th>
-							</tr>
-						</thead>
-						<tbody id="bookList">
-							<th:block th:if="${#lists.isEmpty(bookList)}">
-								<tr>
-									<th colspan="5">게시글이 존재하지 않습니다.</th>
-								</tr>
-							</th:block>
-
-							<th:block th:unless="${#lists.isEmpty(bookList)}">
-
-								<tr th:each="book, iterStat : ${bookList}" th:object="${book}" class="bookInfo"
-									th:data-bookId="${book.bookId}" th:data-title="${book.fullTitle}"
-									th:data-coverUrl="${book.coverUrl}" th:data-author="${book.author}"
-									th:data-rating="${book.customerReviewRank}" th:data-genres="${book.genres}"
-									th:data-description="${book.description}" th:data-reviewCount="${book.reviewCount}">
-									<td th:text="${book.rowNum}" style="text-align: center;">구분번호</td>
-									<td>
-										<div class="book-title"
-											th:data-full-text="${book.title + ' (★' + book.customerReviewRank + ')'}"
-											onmousemove="showTooltip(event, this)">
-											<span th:text="${book.title}"></span>
-											(<span class="rating" th:text="|★${book.customerReviewRank}|"></span>)
-										</div>
-									</td>
-									<td>
-										<div class="book-author" th:data-full-text="${book.author}"
-											th:text="${book.author}" onmousemove="showTooltip(event, this)">
-											작가
-										</div>
-									</td>
-									<td th:text="${book.firstCategory}">장르</td>
-									<td th:text="${book.pubDate}">출판일</td>
-								</tr>
-
-							</th:block>
-						</tbody>
-					</table>
+				
+				<div class="book-list" id="bookList">
+					<th:block th:unless="${#lists.isEmpty(bookList)}">
+						<div class="book-card" th:each="book, iterStat : ${bookList}" th:object="${bookList}" 
+						th:data-bookId="${book.bookId}" th:data-title="${book.fullTitle}"
+						th:data-coverUrl="${book.coverUrl}" th:data-author="${book.author}"
+						th:data-rating="${book.customerReviewRank}" th:data-genres="${book.genres}"
+						th:data-description="${book.description}" th:data-reviewCount="${book.reviewCount}" th:data-pubDate="${book.pubDate}">
+							<div class="rank-badge" th:text="${book.rowNum}"></div>
+				            <img th:src="${book.coverUrl}" th:alt="${book.title}" class="book-cover">
+				            <div class="book-info">
+				                <h3 class="book-title" th:text="${book.title}"></h3>
+				                <p class="book-author" th:text="${book.author}"></p>
+				                <div class="book-stats">
+				                    <div class="stat-item">
+				                        <span class="stat-value" th:text="${book.customerReviewRank}"></span>
+				                        <span class="stat-label">평점</span>
+				                    </div>
+				                    <div class="stat-item">
+				                        <span class="stat-value" th:text="${book.reviewCount}"></span>
+				                        <span class="stat-label">리뷰</span>
+				                    </div>
+				                    <div class="stat-item">
+				                        <span class="stat-value" th:text="${book.pubDate}"></span>
+				                        <span class="stat-label">출판일</span>
+				                    </div>
+				                </div>
+				            </div>
+						</div>
+					</th:block>
 					
 					<nav aria-label="Page navigation">
 					    <ul class="pagination">
@@ -139,7 +112,7 @@
 					            <a class="page-link py-1 px-2"
 					               th:href="${pagination.currentPage <= 1 || pagination.startPage == 1} 
 					                        ? '#' 
-					                        : @{/book/bookList(cp=1, searchType=${searchType}, searchInput=${searchInput}, genreFilter=${genreFilter}, ratingFilter=${ratingFilter})}"
+					                        : @{/book/bookDetailPeriodList(cp=1, startDay=${startDay}, endDay=${endDay})}"
 					               th:aria-disabled="${pagination.currentPage <= 1 || pagination.startPage == 1}">&lt;&lt;</a>
 					        </li>
 
@@ -148,7 +121,7 @@
 					            <a class="page-link py-1 px-2"
 					               th:href="${pagination.currentPage <= 1 || pagination.startPage == 1} 
 					                        ? '#' 
-					                        : @{/book/bookList(cp=${pagination.prevPage}, searchType=${searchType}, searchInput=${searchInput}, genreFilter=${genreFilter}, ratingFilter=${ratingFilter})}"
+					                        : @{/book/bookDetailPeriodList(cp=${pagination.prevPage}, startDay=${startDay}, endDay=${endDay})}"
 					               th:aria-disabled="${pagination.currentPage <= 1 || pagination.startPage == 1}">이전</a>
 					        </li>
 
@@ -159,7 +132,7 @@
 							        <a class="page-link py-1 px-2"
 							           th:href="${i == pagination.currentPage} 
 							                    ? '#' 
-							                    : @{/book/bookList(cp=${i}, searchType=${searchType}, searchInput=${searchInput}, genreFilter=${genreFilter}, ratingFilter=${ratingFilter})}"
+							                    : @{/book/bookDetailPeriodList(cp=${i}, startDay=${startDay}, endDay=${endDay})}"
 							           th:text="${i}"
 							           th:aria-current="${i == pagination.currentPage} ? 'page'">현재페이지</a>
 							    </li>
@@ -170,7 +143,7 @@
 					            <a class="page-link py-1 px-2"
 					               th:href="${pagination.currentPage >= pagination.maxPage || pagination.endPage == pagination.maxPage} 
 					                        ? '#' 
-					                        : @{/book/bookList(cp=${pagination.nextPage}, searchType=${searchType}, searchInput=${searchInput}, genreFilter=${genreFilter}, ratingFilter=${ratingFilter})}"
+					                        : @{/book/bookDetailPeriodList(cp=${pagination.nextPage}, startDay=${startDay}, endDay=${endDay})}"
 					               th:aria-disabled="${pagination.currentPage >= pagination.maxPage || pagination.endPage == pagination.maxPage}">다음</a>
 					        </li>
 
@@ -179,14 +152,15 @@
 					            <a class="page-link py-1 px-2"
 					               th:href="${pagination.currentPage >= pagination.maxPage || pagination.endPage == pagination.maxPage} 
 					                        ? '#' 
-					                        : @{/book/bookList(cp=${pagination.maxPage}, searchType=${searchType}, searchInput=${searchInput}, genreFilter=${genreFilter}, ratingFilter=${ratingFilter})}"
+					                        : @{/book/bookDetailPeriodList(cp=${pagination.maxPage}, startDay=${startDay}, endDay=${endDay})}"
 					               th:aria-disabled="${pagination.currentPage >= pagination.maxPage || pagination.endPage == pagination.maxPage}">&gt;&gt;</a>
 					        </li>
 					    </ul>
 					</nav>
-					
+
 				</div>
 			</section>
+			
 		</main>
 
 		<!-- 도서 상세 모달 -->
@@ -207,7 +181,6 @@
 								<h2 class="book-detail-title mb-2"></h2>
 								<p class="book-detail-author mb-3">
 									<i class="fas fa-pen-nib me-2"></i>
-
 								</p>
 								<div class="book-detail-stats mb-3">
 									<div class="stat-item">
@@ -224,6 +197,10 @@
 									</div>
 								</div>
 								<div class="book-detail-genres mb-3">
+								</div>
+								<div class="book-detail-pubDate mb-3">
+									출판일 : 
+									<span></span>
 								</div>
 							</div>
 						</div>
@@ -250,7 +227,7 @@
 									</span>
 								</div>
 							</div>
-
+							
 							<!-- 리뷰 작성 폼 -->
 							<th:block th:if="${session.loginMember != null}">
 								<div class="review-form mb-4">
@@ -279,13 +256,13 @@
 
 							<!-- 리뷰 필터 -->
 							<!--<div class="review-filters mb-3">
-										<div class="btn-group" role="group">
-											<button type="button" class="btn btn-outline-primary active">최신순</button>
-											<button type="button" class="btn btn-outline-primary">평점순</button>
-											<button type="button" class="btn btn-outline-primary">인기순</button>
-										</div>
-									</div>
-									-->
+												<div class="btn-group" role="group">
+													<button type="button" class="btn btn-outline-primary active">최신순</button>
+													<button type="button" class="btn btn-outline-primary">평점순</button>
+													<button type="button" class="btn btn-outline-primary">인기순</button>
+												</div>
+											</div>
+											-->
 
 							<!-- 리뷰 목록 -->
 							<div class="review-list">
@@ -307,8 +284,7 @@
 			const loginMember = /*[[${session.loginMember}]]*/ "로그인한 멤버";
 		</script>
 
-		<script src="/js/book/bookList.js"></script>
-
+		<script src="/js/book/bookDetailPeriodList.js"></script>
 
 	</div>
 

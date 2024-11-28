@@ -68,5 +68,21 @@ public interface BookService {
 	 */
 	List<Book> selectCategortBestBook(String category);
 
+	/** 월간 도서 랭킹 top10 조회
+	 * @return
+	 */
+	List<Book> selectMonthPeriodList();
+
+	/** 연간 도서 랭킹 top10 조회
+	 * @return
+	 */
+	List<Book> selectYearPeriodList();
+
+	/** 상세 기간별 랭킹 조회
+	 * @param map
+	 * @return
+	 */
+	Map<String, Object> bookDetailPeriodList(Map<String, Object> map, int cp);
+
 
 }

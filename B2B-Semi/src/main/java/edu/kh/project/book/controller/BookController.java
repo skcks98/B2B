@@ -1,5 +1,6 @@
 package edu.kh.project.book.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,8 +61,6 @@ public class BookController {
 		// 데이터 전달
 		model.addAttribute("pagination", map.get("pagination"));
 		model.addAttribute("bookList", map.get("bookList"));
-
-		log.debug("rowNum : " + map.get("bookList"));
 
 		// 검색 데이터 전달
 		model.addAttribute("paramMap", paramMap);
@@ -143,6 +142,7 @@ public class BookController {
 	
 	
 	/** 장르 선택별 베스트 top10 페이지
+	 * @param category
 	 * @param model
 	 * @return
 	 */
@@ -162,6 +162,63 @@ public class BookController {
 		
 		return "book/bestCategoryList";
 	}
+	
+	/** 기간별 랭킹
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("bookPeriodList")
+	public String bookPeriodList(Model model) {
+		
+		// 월간 랭킹 도서 top10 조회
+		List<Book> monthBookList = service.selectMonthPeriodList();
+		
+		// 연간 랭킹 도서 top10 조회
+		List<Book> yearBookList = service.selectYearPeriodList();
+		
+		model.addAttribute("monthBookList", monthBookList);
+		model.addAttribute("yearBookList", yearBookList);
+		
+		return "book/bookPeriodList";
+	}
+	
+	/** 상세 기간별 랭킹
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("bookDetailPeriodList")
+	public String bookDetailPeriodList(@RequestParam(value = "startDay", required = false) String startDayParam,
+	                                   @RequestParam(value = "endDay", required = false) String endDayParam,
+	                                   @RequestParam(value = "cp", required = false, defaultValue = "1") int cp,
+	                                   Model model) {
+	    LocalDate endDay = LocalDate.now();
+	    LocalDate startDay = endDay.minusDays(7);
+
+	    // 요청 파라미터를 LocalDate로 변환
+	    if (startDayParam != null && !startDayParam.isEmpty()) {
+	        startDay = LocalDate.parse(startDayParam);
+	    }
+	    if (endDayParam != null && !endDayParam.isEmpty()) {
+	        endDay = LocalDate.parse(endDayParam);
+	    }
+
+	    // 서비스에 전달할 데이터 구성
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("startDay", startDay);
+	    map.put("endDay", endDay);
+
+	    // 서비스 호출 및 결과 처리
+	    Map<String, Object> bookMap = service.bookDetailPeriodList(map, cp);
+
+	    // 모델에 값 추가
+	    model.addAttribute("startDay", startDay.toString());
+	    model.addAttribute("endDay", endDay.toString());
+	    model.addAttribute("pagination", bookMap.get("pagination"));
+	    model.addAttribute("bookList", bookMap.get("bookList"));
+
+	    return "book/bookDetailPeriodList";
+	}
+
 
 	
 	/**
@@ -198,6 +255,8 @@ public class BookController {
 	public List<Book> selectCategortBestBook(@RequestParam("category") String category) {
 		return service.selectCategortBestBook(category);
 	}
+	
+	
 	
 
 }

@@ -37,42 +37,88 @@ public class AdminController {
 	public String dashAdmin() {
 		return "adminBoard/dashAdmin";
 	}
-	
-	
-	@GetMapping("bookManage")
-	public String bookManage(Model model, @RequestParam(value="cp", required=false, defaultValue = "1") int cp, @RequestParam Map<String,Object> paramMap) {
+
+	@GetMapping("memberManage")
+	public String memberManage(Model model, @RequestParam(value="cp", required=false, defaultValue = "1") int cp, @RequestParam Map<String, Object> paramMap) {
 		
-		Map<String, Object> map = null;
+		Map<String, Object> map;
 		
-		if(!paramMap.isEmpty()) {
-			paramMap.remove("cp");
+		if(paramMap.get("key") == null || paramMap.get("search") == null) {
+			map = Adservice.memberList(cp);
 		}
 		
-		if(paramMap.isEmpty()) {
+		else {
+			map = Adservice.memberSearchList(cp, paramMap);
+		}
+		
+		model.addAttribute("pagination", map.get("pagination"));
+		model.addAttribute("memberList", map.get("memberList"));
+	    model.addAttribute("key", paramMap.get("key"));
+	    model.addAttribute("search", paramMap.get("search"));
+		
+	    log.debug("memberList :" + map.get("memberList"));
+	    
+		return "adminBoard/memberManage";
+	}
+	
+	@GetMapping("bookManage")
+	public String bookManage(Model model, @RequestParam(value="cp", required=false, defaultValue = "1") int cp, @RequestParam Map<String, Object> paramMap) {
+		
+		Map<String, Object> map;
+		
+		if(paramMap.get("key") == null || paramMap.get("search") == null) {
 			map = Adservice.bookList(cp);
 		}
 		else {
 			map = Adservice.bookSearchList(cp, paramMap);
 		}
 		
+		log.debug("map :" + map);
+		
 		model.addAttribute("pagination", map.get("pagination"));
 		model.addAttribute("bookList", map.get("bookList"));
+	    model.addAttribute("key", paramMap.get("key"));
+	    model.addAttribute("search", paramMap.get("search"));
 		
 		return "adminBoard/bookManage";
 	}
 	
+	@GetMapping("searchBook")
+	public String searchBook(@RequestParam Map<String, Object> paramMap, Model model,
+			@RequestParam(value="cp", required =false, defaultValue = "1") int cp) {
+		
+		Map<String, Object> map = Adservice.bookSearchList(cp, paramMap);
+		
+		model.addAttribute("bookList", map.get("bookList"));
+		model.addAttribute("pagination", map.get("pagination"));
+	    model.addAttribute("key", paramMap.get("key"));
+	    model.addAttribute("search", paramMap.get("search"));
+		
+		return "adminBoard/bookManage";
+		
+	}
+	
+	@GetMapping("searchBoardList")
+	public String searchBoardList(@RequestParam Map<String, Object> paramMap, Model model,
+									@RequestParam(value="cp", required=false, defaultValue = "1") int cp) {
+		
+		Map<String, Object> map = Adservice.boardSearchList(cp, paramMap);
+		
+		model.addAttribute("boardList", map.get("boardList"));
+		model.addAttribute("pagination", map.get("pagination"));
+	    model.addAttribute("key", paramMap.get("key"));
+	    model.addAttribute("search", paramMap.get("search"));
+		
+		return "adminBoard/boardManage";
+	}
 	
 	@GetMapping("boardManage")
 	public String boardManage(Model model, @RequestParam(value = "cp", required = false, defaultValue = "1") int cp,
-			@RequestParam Map<String, Object> paramMap) {
+										@RequestParam Map<String, Object> paramMap) {
 		
-		Map<String, Object> map = null;
+		Map<String, Object> map;
 		
-		if(!paramMap.isEmpty()) {
-			paramMap.remove("cp");
-		}
-		
-		if(paramMap.isEmpty()) {
+		if(paramMap.get("key") == null || paramMap.get("search") == null) {
 			map = Adservice.boardList(cp);
 		}
 		else {
@@ -81,32 +127,10 @@ public class AdminController {
 		
 		model.addAttribute("pagination", map.get("pagination"));
 		model.addAttribute("boardList", map.get("boardList"));
+	    model.addAttribute("key", paramMap.get("key"));
+	    model.addAttribute("search", paramMap.get("search"));
 		
 		return "adminBoard/boardManage";
-	}
-	
-	@GetMapping("memberManage")
-	public String memberManage() {
-//		List<Member> memberList = Adservice.selectMemberList();
-//		
-//		for(Member member : memberList) {
-//			model.addAttribute("memberId", member.getMemberId());
-//			model.addAttribute("memberNickname", member.getMemberNickname());
-//			model.addAttribute("enrollDate", member.getEnrollDate());
-//			model.addAttribute("memberDelFl", member.getMemberDelFl());
-//		}
-		
-		return "adminBoard/memberManage";
-	}
-	
-	@ResponseBody
-	@GetMapping("selectMemberList")
-	public List<Member> selectMemberList() {
-		
-		List<Member> memberList = Adservice.selectMemberList();
-		
-		return memberList;
-		
 	}
 	
 	
@@ -133,37 +157,25 @@ public class AdminController {
 	}
 
 	
-	
-	
 	/** 회원 정보 수정
 	 * @param memberId
 	 * @param model
 	 * @return
 	 */
 	@GetMapping("updateMember")
-	public String updateMember(@RequestParam("memberId") String memberId, Model model) {
+	public String updateMember(@RequestParam("memberNo") int memberNo, Model model) {
 		
-		Member selectedMember = Adservice.selectedMember(memberId);
+		Member selectedMember = Adservice.selectedMember(memberNo);
 		
-		log.debug("selectedMember : " + selectedMember);
+		String[] address = (selectedMember.getMemberAddress() != null) ? selectedMember.getMemberAddress().split("\\^\\^\\^") : new String[3];
 		
-		String path = null;
+		model.addAttribute("member", selectedMember);
+		model.addAttribute("memberNo", memberNo);
+		model.addAttribute("postcode", address[0]);
+		model.addAttribute("address", address[1]);
+		model.addAttribute("detailAddress", address[2]);
 		
-		if(selectedMember != null) {
-			path = "adminBoard/updateMember";
-			
-			model.addAttribute("member", selectedMember);
-			
-			String[] arr = selectedMember.getMemberAddress().split("\\^\\^\\^");
-			model.addAttribute("postcode", arr[0]);
-			model.addAttribute("address", arr[1]);
-			model.addAttribute("detailAddress", arr[2]);
-			
-		}
-		else {
-			path = "redirect:memberManage";
-		}
-		return path;
+		return "adminBoard/updateMember";
 	}
 	
 	/** 회원 정보 수정
@@ -210,18 +222,6 @@ public class AdminController {
 		return "adminBoard/memberManage";
 	}
 	
-	@GetMapping("searchBoardList")
-	public String searchBoardList(@RequestParam Map<String, Object> paramMap, Model model) {
-		
-		List<Board> boardList = Adservice.searchBoard(paramMap);
-		
-		log.debug("boardList : " + boardList);
-		
-		model.addAttribute("boardList", boardList);
-		
-		return "adminBoard/boardManage";
-	}
-	
 	/** 활성/탈퇴 복구
 	 * @param paramMap
 	 * @return
@@ -230,14 +230,14 @@ public class AdminController {
 	@PostMapping("updateStatus")
 	public ResponseEntity<?> updateStatus(@RequestBody Map<String, Object> paramMap) {
 		
-		List<String> memberIds = (List<String>)paramMap.get("memberIds");
+		List<String> memberNos = (List<String>)paramMap.get("memberNos");
 		String action = (String) paramMap.get("action");
 		
 		boolean updateY = action.equals("탈퇴");
 		
-		log.debug("memberIds :" + memberIds);
+		log.debug("memberNos :" + memberNos);
 		
-		int result = Adservice.updateStatus(memberIds, updateY);
+		int result = Adservice.updateStatus(memberNos, updateY);
 		
 		if(result > 0) {
 			return ResponseEntity.ok(Map.of("success", true));
@@ -292,30 +292,25 @@ public class AdminController {
 		
 	}
 	
-//	@GetMapping("addBook")
-//	public String addBook(@RequestParam Map<String, Object> paramMap, RedirectAttributes ra) {
-//		
-//		int result = Adservice.insertNewBook(paramMap);
-//
-//		String message = null;
-//		
-//		if(result > 0) {
-//			message = "도서가 추가되었습니다.";
-//		}
-//		else {
-//			message = "도서 추가 실패..";
-//
-//		}
-//		
-//		ra.addFlashAttribute("message", message);
-//		
-//		return "/adminBoard/bookManage";
-//	}
-	
 	@GetMapping("addBook")
 	public String addBook() {
 		
 		return "/adminBoard/insertBook";
+	}
+	
+	@GetMapping("updateBook")
+	public String updateBook(@RequestParam Map<String, Object> paramMap, Model model, RedirectAttributes ra) {
+		
+		Book bookDetail = Adservice.selectBookDetail(paramMap);
+		
+		log.debug("paramMap :" + paramMap);
+		
+		model.addAttribute("bookDetail", bookDetail);
+		
+		log.debug("bookDetail : " + bookDetail);
+		
+		return "/adminBoard/updateBook";
+		
 	}
 	
 }
