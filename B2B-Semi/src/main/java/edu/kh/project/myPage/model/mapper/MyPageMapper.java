@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import edu.kh.project.board.model.dto.Board;
@@ -44,7 +45,7 @@ public interface MyPageMapper {
 	 * @param memberNo
 	 * @return 
 	 */
-	List<Book> selectFavoriteBooks(int memberNo); //int memberNo
+	List<Book> selectFavoriteBooks(int memberNo); 
 
 
 	
@@ -59,37 +60,111 @@ public interface MyPageMapper {
 
 	
 
-	/** 작성자의 전체 게시글 조회
+	/** 작성자의 전체 게시글 수 조회
 	 * @param paramMap
 	 * @return
 	 */
 	int getBoardListCount(int memberNo);
 
 	
-	
 	/** 게시글 목록 조회
 	 * @param paramMap
 	 * @param pagination
 	 * @return
 	 */
-	List<Board> selectAllBoardList(int memberNo);
-
+	List<Board> selectAllBoardList(int memberNo, RowBounds rowBounds);
 
 	
-	/** 검색 결과 조회
+	
+	
+	
+	
+	/** 게시글 수 조회
+	 * @param paramMap
+	 * @return
+	 */
+	int getSearchBoardListCount(Map<String, Object> paramMap);
+	
+	
+	/** 게시글 검색 결과 조회
 	 * @param cp
 	 * @param paramMap
 	 * @return
 	 */
-	Map<String, Object> searchBoardList(int cp, Map<String, Object> paramMap);
+	List<Board> searchBoardList(Map<String, Object> paramMap, RowBounds rowBounds);
 
+	
+	
+	
+	
+
+	
+	
+
+
+	
+	/** 검색 조건에 따른 댓글 수 조회
+	 * @param memberNo
+	 * @return
+	 */
+	int getCommentListCount(int memberNo);
 
 	/** 댓글 목록 조회
 	 * @param memberNo
 	 * @return
 	 */
-	List<Comment> selectAllCommentList(int memberNo);
+	List<Comment> selectAllCommentList(int memberNo, RowBounds rowBounds);
 
+
+	
+	
+	
+	/** 검색 조건에 따른 댓글 수 조회
+	 * @param paramMap
+	 * @return
+	 */
+	int getSearchCommentListCount(Map<String, Object> paramMap);
+
+
+	/** 댓글 검색 결과 조회
+	 * @param paramMap
+	 * @param rowBounds
+	 * @return
+	 */
+	List<Comment> searchCommentList(Map<String, Object> paramMap, RowBounds rowBounds);
+
+
+	
+	/** 게시글 상세 정보 조회
+	 * @param boardNo
+	 * @return
+	 */
+	Board selectBoardDetail(int boardNo);
+
+
+	/** 게시글 상세정보 수정
+	 * @param inputBoard
+	 * @return
+	 */
+	int boardUpdate(Board inputBoard);
+
+
+	/** 게시글 삭제
+	 * @param map
+	 * @return
+	 */
+	int boardDelete(Map<String, Integer> map);
+
+
+
+
+	
+
+	
+
+	
+
+	
 
 	
 	
