@@ -59,7 +59,7 @@ public class BookController {
 			map = service.bookSearchList(cp, paramMap);
 
 		}
-
+		
 		// 데이터 전달
 		model.addAttribute("pagination", map.get("pagination"));
 		model.addAttribute("bookList", map.get("bookList"));
@@ -73,7 +73,7 @@ public class BookController {
 
 		return "book/bookList";
 	}
-
+	
 	/**
 	 * top20 목록 조회
 	 * 
@@ -280,6 +280,28 @@ public class BookController {
 	@DeleteMapping("deleteReview")
 	public int deleteReview(@RequestBody Map<String, Object> paramMap) {
 		return service.deleteReview(paramMap);
+	}
+	
+	
+	/** 찜하기
+	 * @param paramMap
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("steamBook")
+	public int steamBook(@RequestBody int bookId,
+			@SessionAttribute(value = "loginMember", required = false) Member loginMember) {
+		return service.steamBook(bookId, loginMember.getMemberNo());
+	}
+	
+	/** 찜 여부 조회
+	 * @param paramMap
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("isBookSteam")
+	public int isBookSteam(@RequestBody Map<String, Object> paramMap) {
+		return service.isBookSteam(paramMap);
 	}
 	
 

@@ -99,4 +99,11 @@ public class BoardServiceImpl implements BoardService{
 	public int boardDelete(Map<String, Object> paramMap) {
 		return mapper.boardDelete(paramMap);
 	}
+
+
+	// 게시글 수정
+	@Override
+	public int boardUpdate(Map<String, Object> paramMap) {
+		return mapper.boardUpdate(paramMap);
+	}
 }

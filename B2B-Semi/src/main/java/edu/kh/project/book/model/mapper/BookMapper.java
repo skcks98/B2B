@@ -128,6 +128,24 @@ public interface BookMapper {
 	 * @return
 	 */
 	int deleteReview(Map<String, Object> paramMap);
+
+	/** 찜 여부 확인
+	 * @param map
+	 * @return
+	 */
+	int selectSteamBook(Map<String, Object> map);
+
+	/** 찜 도서 삭제
+	 * @param map
+	 * @return
+	 */
+	int deleteSteamBook(Map<String, Object> map);
+
+	/** 찜 등록
+	 * @param map
+	 * @return
+	 */
+	int insertSteamBook(Map<String, Object> map);
 	
 	
 }

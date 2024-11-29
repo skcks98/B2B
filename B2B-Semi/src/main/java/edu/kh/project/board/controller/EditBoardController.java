@@ -82,11 +82,12 @@ public class EditBoardController {
 		return "redirect:" + path;
 	}
 	
-	 
+	  
 	/** 게시글 삭제
 	 * @param boardCode
 	 * @param boardNo
 	 * @param cp
+	 * @param paramMap
 	 * @param loginMember
 	 * @param ra
 	 * @return
@@ -99,6 +100,7 @@ public class EditBoardController {
 							  @SessionAttribute("loginMember") Member loginMember,
 							  RedirectAttributes ra) {
 		
+		// 데이터 세팅
 		paramMap.put("boardCode", boardCode);
 		paramMap.put("boardNo", boardNo);
 		paramMap.put("memberNo", loginMember.getMemberNo());
@@ -111,12 +113,61 @@ public class EditBoardController {
 		String searchInput = (String) paramMap.get("searchInput");
 		
 		if(result > 0) {
+			// 삭제 성공시 검색조건 유지하고 첫 페이지로 이동
 			path = String.format("/board/community/%d?cp=%d&searchType=%s&searchInput=%s", boardCode, 1, paramMap.get("searchType"), searchInput);
 			message = "삭제 되었습니다!";
 			
 		} else {
+			// 삭제 실패시 검색조건 유지한 게시글 상세정보로 이동
 			path = String.format("/board/%d/%d?cp=%d&searchType=%s&searchInput=%s", boardCode, boardNo, cp, paramMap.get("searchType"), searchInput);
 			message = "삭제 실패";
+			
+		}
+		
+		ra.addFlashAttribute("message", message);
+		
+		
+		return "redirect:" + path;
+	}
+	
+	/** 게시글 수정
+	 * @param boardCode
+	 * @param boardNo
+	 * @param cp
+	 * @param paramMap
+	 * @param loginMember
+	 * @param ra
+	 * @return
+	 */
+	@RequestMapping("{boardCode:[0-9]+}/{boardNo:[0-9]+}/update")
+	public String boardUpdate(@PathVariable("boardCode") int boardCode,
+			@PathVariable("boardNo") int boardNo,
+			@RequestParam(value="cp", required = false, defaultValue = "1") int cp,
+			@RequestParam Map<String, Object> paramMap,
+			@SessionAttribute("loginMember") Member loginMember,
+			RedirectAttributes ra) {
+		
+		// 데이터 세팅
+		paramMap.put("boardCode", boardCode);
+		paramMap.put("boardNo", boardNo);
+		paramMap.put("memberNo", loginMember.getMemberNo());
+		
+		int result = service.boardUpdate(paramMap);
+		
+		String path = null;
+		String message = null;
+		
+		String searchInput = (String) paramMap.get("searchInput");
+		
+		if(result > 0) {
+			// 수정 성공시 검색조건 유지하고 첫 페이지로 이동
+			path = String.format("/board/community/%d?cp=%d&searchType=%s&searchInput=%s", boardCode, 1, paramMap.get("searchType"), searchInput);
+			message = "수정 되었습니다!";
+			
+		} else {
+			// 수정 실패시 검색조건 유지한 게시글 상세페이지 이동
+			path = String.format("/board/%d/%d?cp=%d&searchType=%s&searchInput=%s", boardCode, boardNo, cp, paramMap.get("searchType"), searchInput);
+			message = "수정 실패";
 			
 		}
 		

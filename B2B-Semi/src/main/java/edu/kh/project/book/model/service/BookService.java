@@ -96,5 +96,18 @@ public interface BookService {
 	 */
 	int deleteReview(Map<String, Object> paramMap);
 
+	/** 찜하기
+	 * @param bookId
+	 * @param memberNo
+	 * @return
+	 */
+	int steamBook(int bookId, int memberNo);
+
+	/** 찜 여부 조회
+	 * @param paramMap
+	 * @return
+	 */
+	int isBookSteam(Map<String, Object> paramMap);
+
 
 }

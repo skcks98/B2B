@@ -51,4 +51,10 @@ public interface BoardMapper {
 	 */
 	int boardDelete(Map<String, Object> paramMap);
 
+	/** 게시글 수정
+	 * @param paramMap
+	 * @return
+	 */
+	int boardUpdate(Map<String, Object> paramMap);
+
 }

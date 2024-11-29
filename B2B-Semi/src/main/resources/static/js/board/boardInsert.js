@@ -29,6 +29,7 @@ document.querySelector("#boardWriteFrm").addEventListener("submit", e => {
 		return;
 	}
 
+	// 유효성 검사
 	if (boardContent.value.trim().length === 0) {
 		alert("내용을 작성해 주세요");
 		boardContent.focus();
