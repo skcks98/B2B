@@ -43,21 +43,19 @@ public interface MyPageService {
 	int profileImageInfo(MultipartFile profileImg, Member loginMember) throws Exception;
 
 
-	
 	/** 게시글 목록 조회
 	 * @param cp
 	 * @return
 	 */
-	List<Board> selectBoardList(int memberNo);
+	Map<String, Object> selectBoardList(int memberNo, int cp);
 
 	
-
 	/** 게시글 목록 검색 조회
 	 * @param cp
 	 * @param paramMap
 	 * @return
 	 */
-	Map<String, Object> boardSearchList(int cp, Map<String, Object> paramMap);
+	Map<String, Object> searchBoardList(int cp, Map<String, Object> paramMap);
 
 
 	
@@ -65,7 +63,7 @@ public interface MyPageService {
 	 * @param memberNo
 	 * @return
 	 */
-	List<Comment> selectCommentList(int memberNo);
+	Map<String, Object> selectCommentList(int memberNo, int cp);
 
 	
 	/** 댓글 목록 검색 조회
@@ -74,6 +72,35 @@ public interface MyPageService {
 	 * @return
 	 */
 	Map<String, Object> commentSearchList(int cp, Map<String, Object> paramMap);
+
+	
+	
+	/** 게시글 상세정보 조회
+	 * @param boardNo
+	 * @return
+	 */
+	Board selectBoardDetail(int boardNo);
+
+	
+	
+	/** 게시글 상세정보 수정
+	 * @param inputBoard
+	 * @param deleteOrderList
+	 * @return
+	 */
+	int boardUpdate(Board inputBoard);
+
+	/** 게시글 삭제
+	 * @param map
+	 * @return
+	 */
+	int boardDelete(Map<String, Integer> map);
+
+	
+	
+	
+	
+	
 	
 
 	
