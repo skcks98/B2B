@@ -51,6 +51,9 @@ public interface AdminService {
 	public Map<String, Object> memberSearchList(int cp, Map<String, Object> paramMap);
 
 
-	public Book selectBookDetail(Map<String, Object> paramMap);
+	public Book selectBookDetail(int bookId);
+
+
+	public int updateBook(Book book);
 
 }

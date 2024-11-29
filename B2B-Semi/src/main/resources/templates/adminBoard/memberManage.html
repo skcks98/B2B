@@ -173,7 +173,7 @@
 		</div>
 		
 		<!-- 페이지네이션 -->
-		<nav aria-label="Page navigation">
+		<nav aria-label="Page navigation" th:if="${pagination != null}">
 				    <ul class="pagination">
 				        <!-- 첫 페이지로 이동 -->
 				        <li class="page-item" th:classappend="${pagination.currentPage <= 1 || pagination.startPage == 1} ? 'disabled'">

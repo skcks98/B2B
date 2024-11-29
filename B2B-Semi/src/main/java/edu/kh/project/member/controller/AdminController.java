@@ -186,10 +186,12 @@ public class AdminController {
 	 * @return
 	 */
 	@PostMapping("info")
-	public String updateInfo(RedirectAttributes ra,Member inputMember, @RequestParam(value="memberId") String memberId, @RequestParam("memberAddress") String[] memberAddress) {
-
+	public String updateInfo(RedirectAttributes ra,Member inputMember, @RequestParam(value="memberNo", required =false, defaultValue="0") int memberNo, @RequestParam("memberAddress") String[] memberAddress) {
+		
 		int result = Adservice.updateInfo(inputMember, memberAddress);
-
+		
+		log.debug("memberNo : " + memberNo);
+		
 		String message = null;
 		
 		if(result > 0) {
@@ -299,18 +301,70 @@ public class AdminController {
 	}
 	
 	@GetMapping("updateBook")
-	public String updateBook(@RequestParam Map<String, Object> paramMap, Model model, RedirectAttributes ra) {
+	public Book updateBook(@RequestParam("bookId") int bookId) {
 		
-		Book bookDetail = Adservice.selectBookDetail(paramMap);
+		Book book = Adservice.selectBookDetail(bookId);
 		
-		log.debug("paramMap :" + paramMap);
+		return book;
+	}
+	
+	@GetMapping("updateBookPage/{bookId:[0-9]+}")
+	public String updateBookPage(@PathVariable int bookId, Model model) {
+		Book book = Adservice.selectBookDetail(bookId);
 		
-		model.addAttribute("bookDetail", bookDetail);
+		model.addAttribute("book", book);
 		
-		log.debug("bookDetail : " + bookDetail);
+		return "adminBoard/updateBook";
+	}
+	
+	@ResponseBody
+	@PostMapping("updateBook")
+	public Map<String, Object> updateBook(@RequestBody Book book, 
+			@RequestParam(value="key", required = false) String key,
+			@RequestParam(value="search", required = false) String search,
+			@RequestParam(value="cp", required = false, defaultValue = "1") int cp,
+			RedirectAttributes ra) {
 		
-		return "/adminBoard/updateBook";
+		Map<String,Object> map = new HashMap<>();
+		
+		try {
+			
+			int result = Adservice.updateBook(book);
+			
+			if (result > 0) {
+				map.put("success", true);
+				ra.addAttribute("key", key != null ? key : "");
+				ra.addAttribute("search", search != null ? search : "");
+				ra.addAttribute("cp", cp);
+			}
+			else {
+				map.put("success", false);
+			}
+			
+		} catch (Exception e) {
+			map.put("success", false);
+		}
+		
+		log.debug("Key: " + key + ", Search: " + search + ", CP: " + cp);
+		
+		return map;
 		
 	}
+	
+	@GetMapping("cancelUpdateBook")
+	public String cancelUpdateBook(@RequestParam(value="key", required = false) String key,
+			@RequestParam(value="search, required = false") String search,
+			@RequestParam(value="cp", required = false, defaultValue = "1") int cp,
+			RedirectAttributes ra) {
+		
+		ra.addAttribute("key", key != null ? key : "");
+		ra.addAttribute("search", search != null ? search : "");
+		ra.addAttribute("cp", cp);
+		
+		log.debug("Key: " + key + ", Search: " + search + ", CP: " + cp);
+		
+		return "redirect:/adminBoard/bookManage";
+	}
+	
 	
 }

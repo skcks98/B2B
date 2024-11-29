@@ -77,7 +77,9 @@ public interface AdminMapper {
 
 	List<Member> memberSearchList(Map<String, Object> paramMap, RowBounds rowBounds);
 
-	Book selectBookDetail(Map<String, Object> paramMap);
+	Book selectBookDetail(int bookId);
+
+	int updateBook(Book book);
 
 
 }

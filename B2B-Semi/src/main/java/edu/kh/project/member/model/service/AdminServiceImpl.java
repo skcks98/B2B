@@ -272,9 +272,16 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public Book selectBookDetail(Map<String, Object> paramMap) {
+	public Book selectBookDetail(int bookId) {
 
-		return mapper.selectBookDetail(paramMap);
+		return mapper.selectBookDetail(bookId);
+	}
+	
+	
+	@Override
+	public int updateBook(Book book) {
+
+		return mapper.updateBook(book);
 	}
 	
 	

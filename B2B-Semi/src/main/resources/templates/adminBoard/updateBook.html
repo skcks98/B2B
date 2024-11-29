@@ -217,42 +217,57 @@
       </section>
 	  <!-- 책 기본 정보 -->
 	  <div class="book-detail-header d-flex gap-4 mb-4">
-	  	<input type="hidden" id="selectBookId" />
-	  	<img src="" alt="Book cover" class="book-detail-cover">
+	  	<input type="hidden" id="selectBookId" th:value="${book.bookId}"/>
+	  	<img src="#" th:src="${book.coverUrl}" alt="Book cover" class="book-detail-cover">
 	  	<div class="book-detail-info">
-	  		<h2 class="book-detail-title mb-2"></h2>
+	  		<h2 class="book-detail-title mb-2" th:text="${book.title}">도서 제목</h2>
+
 	  		<p class="book-detail-author mb-3">
 	  			<i class="fas fa-pen-nib me-2"></i>
+				<span th:text="${book.author}">작가 이름</span>
 	  		</p>
+			
+			<div class="book-detail-genres mb-3">
+				<i class="fa-solid fa-building"></i>
+				<span th:text="${book.publisher}">출판사</span>
+			</div>
+			
+			<div class="book-detail-pubDate mb-3">
+				<i class="fa-solid fa-calendar-days"></i>
+				<span th:text="${book.pubDate}">출판일</span>
+			</div>
+				
 	  		<div class="book-detail-stats mb-3">
 	  			<div class="stat-item">
 	  				<i class="fas fa-star text-warning"></i>
-	  				<span></span>
+	  				<span th:text="${book.customerReviewRank}">별점</span>
 	  			</div>
-	  			<div class="stat-item">
-	  				<i class="fas fa-comment text-primary"></i>
-	  				<span></span>
-	  			</div>
-	  			<div class="stat-item">
-	  				<i class="fas fa-heart text-danger"></i>
-	  				<span></span>
-	  			</div>
-	  		</div>
-	  		<div class="book-detail-genres mb-3">
-	  		</div>
-	  		<div class="book-detail-pubDate mb-3">
-	  			출판일 : 
-	  			<span></span>
+			
 	  		</div>
 	  	</div>
+
+	  </div>
+	  
+	  <div>
+	  작가명 수정 : <input type="text" id="authorInput" name="author" class="form-control" th:value="${book.author}">
+	  </div>
+	  <div>
+	  출판사 수정 : <input type="text" id="publisherInput" name="publisher" class="form-control" th:value="${book.publisher}">
 	  </div>
 
 	  <!-- 책 소개 -->
 	  <div class="book-synopsis mb-4">
 	  	<h3 class="section-title">작품 소개</h3>
-	  	<p class="book-synopsis-text">
-	  	</p>
+	  	<textarea id="descriptionTextarea" name="description" class="book-synopsis-text" th:text="${book.description}" rows="5" cols="100">
+			책 소개
+	  	</textarea>
 	  </div>
+	  
+	  <div class="button-group">
+	    <button id="submitUpdate" class="myPage-submit">수정하기</button>
+	    <button id="cancelUpdate" class="myPage-submit-cancel">수정 취소</button>
+	  </div>
+	  
 
     </main>
 
