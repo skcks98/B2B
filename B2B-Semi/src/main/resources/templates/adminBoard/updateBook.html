@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>내 정보</title>
+  <title>도서 등록 페이지</title>
 
   <!-- 공용 css/js 추가 -->
   <th:block th:replace="~{common/common}"></th:block>
 
-  <link rel="stylesheet" href="/B2B-Project/B2B-Semi/src/main/resources/static/css/myPage/myPage-info.css">
+  <link rel="stylesheet" href="/css/adminBoard/updateBook.css">
 
   <style>
     /* 기본 전체 설정 시작 */
@@ -212,67 +212,62 @@
 
       <section class="ranking-header">
         <h1 class="ranking-title">
-          <i class="fas fa-crown me-2" style="color: #FFD700;"></i>
-          회원 정보 수정
+          도서 수정 페이지
         </h1>
       </section>
+	  <!-- 책 기본 정보 -->
+	  <div class="book-detail-header d-flex gap-4 mb-4">
+	  	<input type="hidden" id="selectBookId" th:value="${book.bookId}"/>
+	  	<img src="#" th:src="${book.coverUrl}" alt="Book cover" class="book-detail-cover">
+	  	<div class="book-detail-info">
+	  		<h2 class="book-detail-title mb-2" th:text="${book.title}">도서 제목</h2>
 
-      <section class="genre-section">
-        <div class="genre-header">
-
-          <div class="profile-container">
-            <div class="profile-image-container">
-              <img src="placeholder.jpg" alt="프로필 이미지" class="profile-image">
-            </div>
-
-            <form action="info" method="POST" name="myPageFrm" id="updateInfo">
-			<input type="hidden" name="memberNo" th:value="${member.memberNo}">
-              <div class="myPage-row">
-                <label>닉네임</label>
-
-                <input type="text" name="memberNickname" maxlength="10" id="memberNickname" th:value="${member.memberNickname}">
-                <!-- th:value="${session.loginMember.memberNickname}" -->
-
-                <input type="hidden" id="currentNickname"> <!-- th:value="${session.loginMember.memberNickname}" -->
-              </div>
-
-              <div class="myPage-row">
-                <label>전화번호</label>
-                <input type="text" name="memberTel" maxlength="11" id="memberTel" th:value="${member.memberTel}">
-                <!-- th:value="${session.loginMember.memberTel}" -->
-              </div>
-
-              <!-- 주소 -->
-              <div class="myPage-row info-title">
-                <span>주소</span>
-              </div>
-
-              <div class="myPage-row info-address">
-                <input type="text" name="memberAddress" placeholder="우편번호" id="postcode" th:value="${postcode}">
-
-                <button type="button" id="searchAddress">검색</button>
-              </div>
-
-              <div class="myPage-row info-address">
-                <input type="text" name="memberAddress" placeholder="도로명/지번 주소" id="address" th:value="${address}">
-              </div>
-
-              <div class="myPage-row info-address">
-                <input type="text" name="memberAddress" placeholder="상세 주소" id="detailAddress"
-                  th:value="${detailAddress}">
-              </div>
-
-              <div class="button-group">
-                <button type="submit" class="myPage-submit" id="updateMember">수정하기</button>
-                <button type="button" class="myPage-submit-cancel" id="goToList">수정 취소</button>
+	  		<p class="book-detail-author mb-3">
+	  			<i class="fas fa-pen-nib me-2"></i>
+				<span th:text="${book.author}">작가 이름</span>
+	  		</p>
+			
+			<div class="book-detail-genres mb-3">
+				<i class="fa-solid fa-building"></i>
+				<span th:text="${book.publisher}">출판사</span>
+			</div>
+			
+			<div class="book-detail-pubDate mb-3">
+				<i class="fa-solid fa-calendar-days"></i>
+				<span th:text="${book.pubDate}">출판일</span>
+			</div>
 				
-              </div>
-            </form>
-          </div>
+	  		<div class="book-detail-stats mb-3">
+	  			<div class="stat-item">
+	  				<i class="fas fa-star text-warning"></i>
+	  				<span th:text="${book.customerReviewRank}">별점</span>
+	  			</div>
+			
+	  		</div>
+	  	</div>
 
-        </div>
-      </section>
+	  </div>
+	  
+	  <div>
+	  작가명 수정 : <input type="text" id="authorInput" name="author" class="form-control" th:value="${book.author}">
+	  </div>
+	  <div>
+	  출판사 수정 : <input type="text" id="publisherInput" name="publisher" class="form-control" th:value="${book.publisher}">
+	  </div>
 
+	  <!-- 책 소개 -->
+	  <div class="book-synopsis mb-4">
+	  	<h3 class="section-title">작품 소개</h3>
+	  	<textarea id="descriptionTextarea" name="description" class="book-synopsis-text" th:text="${book.description}" rows="5" cols="100">
+			책 소개
+	  	</textarea>
+	  </div>
+	  
+	  <div class="button-group">
+	    <button id="submitUpdate" class="myPage-submit">수정하기</button>
+	    <button id="cancelUpdate" class="myPage-submit-cancel">수정 취소</button>
+	  </div>
+	  
 
     </main>
 
@@ -282,7 +277,8 @@
   </div>
 
   <!-- js 추가 -->
-  <script src="/js/adminBoard/updateMember.js"></script>
+  <script src="/js/adminBoard/updateBook.js"></script>
 
 </body>
+
 </html>
