@@ -1,5 +1,6 @@
 package edu.kh.project.book.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +8,10 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,12 +59,10 @@ public class BookController {
 			map = service.bookSearchList(cp, paramMap);
 
 		}
-
+		
 		// 데이터 전달
 		model.addAttribute("pagination", map.get("pagination"));
 		model.addAttribute("bookList", map.get("bookList"));
-
-		log.debug("rowNum : " + map.get("bookList"));
 
 		// 검색 데이터 전달
 		model.addAttribute("paramMap", paramMap);
@@ -72,7 +73,7 @@ public class BookController {
 
 		return "book/bookList";
 	}
-
+	
 	/**
 	 * top20 목록 조회
 	 * 
@@ -143,6 +144,7 @@ public class BookController {
 	
 	
 	/** 장르 선택별 베스트 top10 페이지
+	 * @param category
 	 * @param model
 	 * @return
 	 */
@@ -162,6 +164,63 @@ public class BookController {
 		
 		return "book/bestCategoryList";
 	}
+	
+	/** 기간별 랭킹
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("bookPeriodList")
+	public String bookPeriodList(Model model) {
+		
+		// 월간 랭킹 도서 top10 조회
+		List<Book> monthBookList = service.selectMonthPeriodList();
+		
+		// 연간 랭킹 도서 top10 조회
+		List<Book> yearBookList = service.selectYearPeriodList();
+		
+		model.addAttribute("monthBookList", monthBookList);
+		model.addAttribute("yearBookList", yearBookList);
+		
+		return "book/bookPeriodList";
+	}
+	
+	/** 상세 기간별 랭킹
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("bookDetailPeriodList")
+	public String bookDetailPeriodList(@RequestParam(value = "startDay", required = false) String startDayParam,
+	                                   @RequestParam(value = "endDay", required = false) String endDayParam,
+	                                   @RequestParam(value = "cp", required = false, defaultValue = "1") int cp,
+	                                   Model model) {
+	    LocalDate endDay = LocalDate.now();
+	    LocalDate startDay = endDay.minusDays(7);
+
+	    // 요청 파라미터를 LocalDate로 변환
+	    if (startDayParam != null && !startDayParam.isEmpty()) {
+	        startDay = LocalDate.parse(startDayParam);
+	    }
+	    if (endDayParam != null && !endDayParam.isEmpty()) {
+	        endDay = LocalDate.parse(endDayParam);
+	    }
+
+	    // 서비스에 전달할 데이터 구성
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("startDay", startDay);
+	    map.put("endDay", endDay);
+
+	    // 서비스 호출 및 결과 처리
+	    Map<String, Object> bookMap = service.bookDetailPeriodList(map, cp);
+
+	    // 모델에 값 추가
+	    model.addAttribute("startDay", startDay.toString());
+	    model.addAttribute("endDay", endDay.toString());
+	    model.addAttribute("pagination", bookMap.get("pagination"));
+	    model.addAttribute("bookList", bookMap.get("bookList"));
+
+	    return "book/bookDetailPeriodList";
+	}
+
 
 	
 	/**
@@ -197,6 +256,52 @@ public class BookController {
 	@GetMapping("selectCategortBestBook")
 	public List<Book> selectCategortBestBook(@RequestParam("category") String category) {
 		return service.selectCategortBestBook(category);
+	}
+	
+	
+	/** 리뷰 수정
+	 *  수정되는 리뷰 평점으로 해당 도서의 평점도 수정되야함
+	 * @param paramMap
+	 * @return
+	 */
+	@ResponseBody
+	@PutMapping("updateBookReview")
+	public int updateBookReview(@RequestBody Map<String, Object> paramMap) {
+		return service.updateBookReview(paramMap);
+	}
+	
+	
+	/** 리뷰 삭제
+	 *  삭제되는 리뷰 평점으로 해당 도서의 평점도 수정되야함
+	 * @param paramMap
+	 * @return
+	 */
+	@ResponseBody
+	@DeleteMapping("deleteReview")
+	public int deleteReview(@RequestBody Map<String, Object> paramMap) {
+		return service.deleteReview(paramMap);
+	}
+	
+	
+	/** 찜하기
+	 * @param paramMap
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("steamBook")
+	public int steamBook(@RequestBody int bookId,
+			@SessionAttribute(value = "loginMember", required = false) Member loginMember) {
+		return service.steamBook(bookId, loginMember.getMemberNo());
+	}
+	
+	/** 찜 여부 조회
+	 * @param paramMap
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("isBookSteam")
+	public int isBookSteam(@RequestBody Map<String, Object> paramMap) {
+		return service.isBookSteam(paramMap);
 	}
 	
 

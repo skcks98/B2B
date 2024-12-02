@@ -68,5 +68,46 @@ public interface BookService {
 	 */
 	List<Book> selectCategortBestBook(String category);
 
+	/** 월간 도서 랭킹 top10 조회
+	 * @return
+	 */
+	List<Book> selectMonthPeriodList();
+
+	/** 연간 도서 랭킹 top10 조회
+	 * @return
+	 */
+	List<Book> selectYearPeriodList();
+
+	/** 상세 기간별 랭킹 조회
+	 * @param map
+	 * @return
+	 */
+	Map<String, Object> bookDetailPeriodList(Map<String, Object> map, int cp);
+
+	/** 리뷰 수정
+	 * @param paramMap
+	 * @return
+	 */
+	int updateBookReview(Map<String, Object> paramMap);
+
+	/** 리뷰 삭제
+	 * @param paramMap
+	 * @return
+	 */
+	int deleteReview(Map<String, Object> paramMap);
+
+	/** 찜하기
+	 * @param bookId
+	 * @param memberNo
+	 * @return
+	 */
+	int steamBook(int bookId, int memberNo);
+
+	/** 찜 여부 조회
+	 * @param paramMap
+	 * @return
+	 */
+	int isBookSteam(Map<String, Object> paramMap);
+
 
 }

@@ -22,64 +22,64 @@ public class AdminServiceImpl implements AdminService{
 
 	private final AdminMapper mapper;
 	
-	
+	// 회원 목록 조회. (검색 x)
 	@Override
-	public List<Book> selectBookList() {
+	public Map<String, Object> memberList(int cp) {
 
-		return mapper.selectBookList();
+		int memberCount = mapper.memberCount();
+		
+		Pagination pagination = new Pagination(cp, memberCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Member> memberList = mapper.memberList(rowBounds);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("memberList", memberList);
+		
+		return map;
 	}
 	
-	
-	
+	// 회원 목록 조회. (검색 o)
 	@Override
-	public Map<String, Object> selectBoardList(int boardCode, int cp) {
+	public Map<String, Object> memberSearchList(int cp, Map<String, Object> paramMap) {
 
-		int listCount = mapper.getListCount(boardCode);
-		
-		Pagination pagination = new Pagination(cp, listCount);
+		int memberCount = mapper.searchMemberCount(paramMap);
+		Pagination pagination = new Pagination(cp, memberCount);
 		
 		int limit = pagination.getLimit();
 		int offset = (cp - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
-		List<Board> boardList = mapper.selectBoardList(boardCode, rowBounds);
+		List<Member> memberList = mapper.memberSearchList(paramMap, rowBounds);
 		
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
+		result.put("pagination", pagination);
+		result.put("memberList", memberList);
 		
-		map.put("pagination", pagination);
-		map.put("boardList", boardList);
-		
-		return map;
+		return result;
 	}
-
+	
+	// 회원 검색.
 	@Override
-	public Board selectOne(Map<String, Integer> map) {
+	public List<Member> searchMember(Map<String, Object> paramMap) {
 
-		return mapper.selectOne(map);
+		return mapper.searchMember(paramMap);
 	}
 	
-
-
+	// 선택한 회원 정보 조회.
 	@Override
-	public Map<String, Object> searchList(Map<String, Object> paramMap, int cp) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Member selectedMember(int memberNo) {
 
-	
-	@Override
-	public List<Member> selectMemberList() {
-
-		return mapper.selectMemberList();
+		return mapper.selectedMember(memberNo);
 	}
 	
-	@Override
-	public int updateMember(Member inputMember) {
-		
-		return mapper.updateMember(inputMember);
-	}
-	
-	
+	// 선택한 회원 정보 수정.
 	@Override
 	public int updateInfo(Member inputMember, String[] memberAddress) {
 
@@ -95,28 +95,171 @@ public class AdminServiceImpl implements AdminService{
 		return mapper.updateInfo(inputMember);
 	}
 	
-	
-	@Override
-	public Member selectedMember(String memberId) {
-
-		return mapper.selectedMember(memberId);
-	}
-	
-	@Override
-	public List<Member> searchMember(Map<String, Object> paramMap) {
-		
-//		Map<String, Object> map = new HashMap<>();
-//		
-//		map.put("key", paramMap.get("key"));
-//		map.put("search", paramMap.get("search"));
-
-		return mapper.searchMember(paramMap);
-	}
-	
+	// 회원 추방/탈퇴 복구.
 	@Override
 	public int updateStatus(List<String> memberIds, boolean updateY) {
 		String status = updateY ? "Y" : "N";
 		
 		return mapper.updateStatus(memberIds, status);
 	}
+	
+	// 도서 목록 조회. (검색 x)
+	@Override
+	public Map<String, Object> bookList(int cp) {
+
+		int bookCount = mapper.bookCount();
+		
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.bookList(rowBounds);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("bookList", bookList);
+		
+		return map;
+	}
+	
+	// 도서 목록 조회. (검색 o)
+	@Override
+	public Map<String, Object> bookSearchList(int cp, Map<String, Object> paramMap) {
+
+		int bookCount = mapper.searchBookCount(paramMap);
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.bookSearchList(paramMap, rowBounds);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("pagination", pagination);
+		result.put("bookList", bookList);
+		
+		return result;
+	}
+	
+	// 도서 검색.
+	@Override
+	public Map<String, Object> searchBookList(Map<String, Object> paramMap, int cp) {
+
+		int bookCount = mapper.searchBookCount(paramMap);
+		Pagination pagination = new Pagination(cp, bookCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Book> bookList = mapper.searchBookList(paramMap, rowBounds);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("pagination", pagination);
+		result.put("bookList", bookList);
+
+		return result;
+	}
+	
+	// 도서 삭제/삭제 복구.
+	@Override
+	public int updateBookStatus(List<String> bookList, boolean updateY) {
+
+		String status = updateY ? "Y" : "N";
+		return mapper.updateBookStatus(bookList, status);
+	}
+	
+	// 도서 수정 페이지 및 데이터 보내기.
+	@Override
+	public Book selectBookDetail(int bookId) {
+
+		return mapper.selectBookDetail(bookId);
+	}
+	
+	// 도서 수정.
+	@Override
+	public int updateBook(Book book) {
+
+		return mapper.updateBook(book);
+	}
+	
+	// 도서 추가.
+	@Override
+	public int insertNewBook(Map<String, Object> paramMap) {
+
+		return mapper.insertNewBook(paramMap);
+	}
+	
+	// 게시판 관리 조회. (검색 x)
+	@Override
+	public Map<String, Object> boardList(int cp) {
+		
+		int boardCount = mapper.boardCount();
+		
+		Pagination pagination = new Pagination(cp, boardCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Board> boardList = mapper.boardList(rowBounds);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("boardList", boardList);
+		
+		return map;
+	}
+	
+	// 게시글 검색.
+	@Override
+	public List<Board> searchBoard(Map<String, Object> paramMap) {
+
+		return mapper.searchBoard(paramMap);
+	}
+	
+	// 게시판 관리 조회. (검색 o)
+	@Override
+	public Map<String, Object> boardSearchList(int cp, Map<String, Object> paramMap) {
+		
+		int boardCount = mapper.searchBoardCount(paramMap);
+		Pagination pagination = new Pagination(cp, boardCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Board> boardList = mapper.boardSearchList(paramMap, rowBounds);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("pagination", pagination);
+		result.put("boardList", boardList);
+		
+		return result;
+	}
+	
+	// 게시글 상세 조회.
+	@Override
+	public Board selectOne(Map<String, Integer> map) {
+
+		return mapper.selectOne(map);
+	}
+	
+	// 게시글 삭제/삭제 복구.
+	@Override
+	public int updateBoardStatus(List<String> boardList, boolean updateY) {
+		String status = updateY ? "Y" : "N";
+		
+		return mapper.updateBoardStatus(boardList, status);
+	}
+
+
+
 }
